@@ -4,11 +4,13 @@
 // Per PROBLEM_ALIGNMENT.md §1.2 & ACCESSIBILITY.md §6
 // ============================================================
 
-import { memo, useState, useCallback } from 'react';
-import { useAppContext } from '@/context/useAppContext';
+import { memo, useState, useCallback, useRef, useEffect } from 'react';
+import { useProfileContext } from '@/context/ProfileContext';
+import { useZoneContext } from '@/context/ZoneContext';
+import { useUIContext } from '@/context/UIContext';
 import { apiService } from '@/services/apiService';
 import { generateHeuristicRoutine } from '@/lib/compute';
-import type { DailyRoutinePlan } from '@/types';
+import type { DailyRoutinePlan, PersonaProfile, UrbanZone, Language } from '@/types';
 import { RoutineTimeline } from './RoutineTimeline';
 import { PersonaSelector } from './PersonaSelector';
 import { SparklesIcon, LightbulbIcon, WarningIcon, CheckIcon } from '@/components/shared/Icons';
@@ -86,8 +88,8 @@ function DirectivesCard({ advice }: { advice: string[] }) {
         <LightbulbIcon size={16} /> Smog Defense Directives
       </h3>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-[#202B29]">
-        {advice.map((item, i) => (
-          <li key={i} className="flex items-start gap-2.5 bg-[#F6F7F2] p-3.5 rounded-2xl border border-[#E5EAE4]">
+        {advice.map((item) => (
+          <li key={item} className="flex items-start gap-2.5 bg-[#F6F7F2] p-3.5 rounded-2xl border border-[#E5EAE4]">
             <CheckIcon size={14} className="text-[#398F83] shrink-0 mt-0.5" />
             <span className="leading-relaxed text-[#202B29]">{item}</span>
           </li>
@@ -97,20 +99,41 @@ function DirectivesCard({ advice }: { advice: string[] }) {
   );
 }
 
+async function executeRoutineGeneration(
+  persona: PersonaProfile,
+  zone: UrbanZone,
+  language: Language,
+  signal: AbortSignal,
+  setPlan: (p: DailyRoutinePlan) => void,
+  setError: (msg: string) => void
+) {
+  try {
+    const plan = await apiService.generateDailyRoutine({ persona, zone, language }, signal);
+    setPlan(plan);
+  } catch (err: unknown) {
+    if (err instanceof Error && err.name === 'AbortError') return;
+    setPlan(generateHeuristicRoutine(persona, zone, language));
+    setError('Local telemetry fallback: Smart schedule generated from real-time meteorological sensor data.');
+  }
+}
+
 function useRoutineOptimizer() {
-  const { personas, activePersona, setActivePersona, selectedZone, language, routinePlan, setRoutinePlan } = useAppContext();
+  const { personas, activePersona, setActivePersona, routinePlan, setRoutinePlan } = useProfileContext();
+  const { selectedZone } = useZoneContext();
+  const { language } = useUIContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => () => { abortRef.current?.abort(); }, []);
 
   const handleGenerate = useCallback(async () => {
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
     setIsLoading(true);
     setErrorMessage(null);
     try {
-      const plan = await apiService.generateDailyRoutine({ persona: activePersona, zone: selectedZone, language });
-      setRoutinePlan(plan);
-    } catch {
-      setRoutinePlan(generateHeuristicRoutine(activePersona, selectedZone, language));
-      setErrorMessage('Local telemetry fallback: Smart schedule generated from real-time meteorological sensor data.');
+      await executeRoutineGeneration(activePersona, selectedZone, language, abortRef.current.signal, setRoutinePlan, setErrorMessage);
     } finally {
       setIsLoading(false);
     }

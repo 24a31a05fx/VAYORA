@@ -4,7 +4,7 @@
 // ============================================================
 
 import { useState, useMemo, useCallback } from 'react';
-import { useAppContext } from '@/context/useAppContext';
+import { useZoneContext } from '@/context/ZoneContext';
 import {
   dijkstraLowestExposure,
   computeModalComparisons,
@@ -41,7 +41,7 @@ function useRouteCalculations(originId: string, destinationId: string, aqi: numb
 }
 
 export function useExposureRouting() {
-  const { selectedZone } = useAppContext();
+  const { selectedZone } = useZoneContext();
   const [originId, setOriginId] = useState<string>('N-HOME');
   const [destinationId, setDestinationId] = useState<string>('N-WORK');
   const nodes = useRouteNodes(originId, destinationId);

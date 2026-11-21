@@ -1,20 +1,45 @@
 // ============================================================
 // src/App.tsx
 // Redesigned AppShell Router and Layout Orchestrator
+// Code splitting with accessible Suspense fallbacks
 // ============================================================
 
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, lazy, Suspense } from 'react';
 import { AppContextProvider } from '@/context/AppContext';
-import { useAppContext } from '@/context/useAppContext';
+import { useUIContext } from '@/context/UIContext';
+import { useCommunityContext } from '@/context/CommunityContext';
 import { TabId } from '@/types';
 import { Header } from '@/components/Navigation/Header';
 import { AlertBanner } from '@/components/shared/AlertBanner';
 import { AirTelemetryDashboard } from '@/components/Dashboard/AirTelemetryDashboard';
-import { DailyRoutineOptimizer } from '@/components/Routine/DailyRoutineOptimizer';
-import { TransitPlanner } from '@/components/Transit/TransitPlanner';
-import { IAQCenter } from '@/components/IAQ/IAQCenter';
-import { CommunityHub } from '@/components/Community/CommunityHub';
 import { LegalModal, type LegalDocType } from '@/components/Legal/LegalModal';
+
+const DailyRoutineOptimizer = lazy(() =>
+  import('@/components/Routine/DailyRoutineOptimizer').then((m) => ({ default: m.DailyRoutineOptimizer }))
+);
+const TransitPlanner = lazy(() =>
+  import('@/components/Transit/TransitPlanner').then((m) => ({ default: m.TransitPlanner }))
+);
+const IAQCenter = lazy(() =>
+  import('@/components/IAQ/IAQCenter').then((m) => ({ default: m.IAQCenter }))
+);
+const CommunityHub = lazy(() =>
+  import('@/components/Community/CommunityHub').then((m) => ({ default: m.CommunityHub }))
+);
+
+function TabLoadingFallback() {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="flex flex-col items-center justify-center p-12 bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl min-h-[320px] text-center shadow-sm shadow-[#153C35]/5"
+    >
+      <div className="w-8 h-8 rounded-full border-2 border-[#153C35] border-t-transparent animate-spin mb-3" aria-hidden="true" />
+      <span className="text-sm font-semibold text-[#153C35]">Loading environmental module...</span>
+      <span className="text-xs text-[#73817B] mt-1">Preparing hyperlocal calculations</span>
+    </div>
+  );
+}
 
 function AppViewport({ activeTab }: { activeTab: TabId }) {
   return (
@@ -25,11 +50,13 @@ function AppViewport({ activeTab }: { activeTab: TabId }) {
       tabIndex={-1}
       className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 focus:outline-none"
     >
-      {activeTab === TabId.Dashboard && <AirTelemetryDashboard />}
-      {activeTab === TabId.Routine && <DailyRoutineOptimizer />}
-      {activeTab === TabId.Transit && <TransitPlanner />}
-      {activeTab === TabId.IAQ && <IAQCenter />}
-      {activeTab === TabId.Community && <CommunityHub />}
+      <Suspense fallback={<TabLoadingFallback />}>
+        {activeTab === TabId.Dashboard && <AirTelemetryDashboard />}
+        {activeTab === TabId.Routine && <DailyRoutineOptimizer />}
+        {activeTab === TabId.Transit && <TransitPlanner />}
+        {activeTab === TabId.IAQ && <IAQCenter />}
+        {activeTab === TabId.Community && <CommunityHub />}
+      </Suspense>
     </main>
   );
 }
@@ -68,7 +95,8 @@ function AppFooter({ onOpenLegal }: { onOpenLegal: (type: LegalDocType) => void 
 }
 
 const AppShell = memo(function AppShell() {
-  const { activeTab, alerts, dismissAlert, accessibilityMode } = useAppContext();
+  const { activeTab, accessibilityMode } = useUIContext();
+  const { alerts, dismissAlert } = useCommunityContext();
   const [legalModal, setLegalModal] = useState<LegalDocType>(null);
   const handleCloseLegal = useCallback(() => setLegalModal(null), []);
   const a11yClass = accessibilityMode === 'high-contrast' ? 'high-contrast-mode contrast-125' : accessibilityMode === 'reduced-motion' ? 'reduced-motion' : '';

@@ -14,19 +14,19 @@ VAYORA enforces a strict modular standard across all source code: **every TypeSc
 
 | File Path | Verified Line Count | Architectural Decomposition & Sub-Components |
 |---|---|---|
-| `server.ts` | **59 lines** | Express routers and middleware separated into `server/routes/`, `server/validators.ts`, `server/cache.ts`. |
+| `server.ts` | **80 lines** | Express routers, compression, static caching, and middleware separated into `server/routes/`, `server/validators.ts`, `server/cache.ts`. |
 | `server/auth.ts` | **70 lines** | PBKDF2/SHA-512 password hashing, constant-time verification, and admin auth middleware. |
 | `server/routes/adminRoutes.ts` | **52 lines** | Protected admin diagnostic, status inspection, and cache purging routes. |
 | `src/components/Dashboard/AirTelemetryDashboard.tsx` | **136 lines** | Sub-divided into `AqiGauge.tsx`, `AtmosphericOverview.tsx`, `AtmosphericExposureReport.tsx`, `EmissionSourceTreemap.tsx`, `AirForecastCard.tsx`. |
-| `src/components/Navigation/Header.tsx` | **146 lines** | Sub-divided into `SidebarSectorCard.tsx` and `NavControls.tsx`. |
-| `src/components/Routine/DailyRoutineOptimizer.tsx` | **143 lines** | Persona selector and timeline view separated into `PersonaSelector.tsx` and `RoutineTimeline.tsx`. |
-| `src/components/IAQ/IAQCenter.tsx` | **116 lines** | Ventilations and purifier blueprints modularized into `DIYHackGrid.tsx` and `WindowSchedule.tsx`. |
-| `src/components/Community/CommunityHub.tsx` | **138 lines** | Modularized individual pledge actions into `PledgeCard.tsx`. |
+| `src/components/Navigation/Header.tsx` | **162 lines** | Sub-divided into `SidebarSectorCard.tsx`, `NavControls.tsx`, and lazy chunk preloading tab triggers. |
+| `src/components/Routine/DailyRoutineOptimizer.tsx` | **166 lines** | Persona selector and timeline view separated into `PersonaSelector.tsx` and `RoutineTimeline.tsx`. |
+| `src/components/IAQ/IAQCenter.tsx` | **118 lines** | Ventilations and purifier blueprints modularized into `DIYHackGrid.tsx` and `WindowSchedule.tsx`. |
+| `src/components/Community/CommunityHub.tsx` | **163 lines** | Modularized individual pledge actions into `PledgeCard.tsx`. |
 | `src/components/Transit/TransitPlanner.tsx` | **112 lines** | Modal metrics matrix isolated into `TransitComparisonTable.tsx`. |
 | `src/services/storageService.ts` | **193 lines** | Safe JSON deserialization with memory-backed fallback storage engine. |
-| `src/context/AppContext.tsx` | **39 lines** | State slices extracted into `src/context/hooks/` and types into `types.ts`. |
+| `src/context/AppContext.tsx` | **30 lines** | Decomposed into 5 focused domain providers (`UIProvider`, `ZoneProvider`, `ProfileProvider`, `IAQProvider`, `CommunityProvider`). |
 
-**Result:** **100% of codebase files (93 of 93)** satisfy the 200-line limit. Monolithic source files have been completely eliminated.
+**Result:** **100% of codebase files (112 of 112)** satisfy the 200-line limit. Monolithic source files have been completely eliminated.
 
 ---
 
@@ -72,11 +72,11 @@ TypeScript compilation is executed via `tsc -b && tsc -p tsconfig.test.json --no
 
 Automated testing is powered by **Vitest v3.2.7** and **JSDOM**:
 
-- **Total Test Suites**: 10 suites
-- **Total Automated Tests**: 104 tests
-- **Pass Rate**: 100% (104 passed, 0 failed)
+- **Total Test Suites**: 11 suites
+- **Total Automated Tests**: 109 tests
+- **Pass Rate**: 100% (109 passed, 0 failed)
 - **Code Coverage**: >90% statements and lines, >84% branches, >84% functions
-- **Execution Duration**: ~4 seconds
+- **Execution Duration**: ~5 seconds
 - **Deterministic Isolation**: External network APIs mocked; zero flaky tests.
 
 ---
@@ -95,9 +95,14 @@ Automated testing is powered by **Vitest v3.2.7** and **JSDOM**:
 Production bundle generated via `npm run build` (`tsc -b && vite build`):
 
 ```text
-dist/index.html                   1.79 kB │ gzip:  0.90 kB
-dist/assets/index-DGvuumyz.css   40.16 kB │ gzip:  8.13 kB
-dist/assets/index-2hPpuK67.js   100.09 kB │ gzip: 27.95 kB
-dist/assets/vendor-DJiRVR1m.js  223.22 kB │ gzip: 69.24 kB
-✓ built in 1.16s
+dist/index.html                                  2.05 kB │ gzip:  0.88 kB
+dist/assets/index-CRkF7eKW.css                  45.96 kB │ gzip:  8.90 kB
+dist/assets/apiService-CrUlWBGe.js               0.89 kB │ gzip:  0.41 kB
+dist/assets/TransitPlanner-BKjqNWQ1.js           9.13 kB │ gzip:  3.12 kB
+dist/assets/CommunityHub-JtEGaKJo.js             9.94 kB │ gzip:  3.17 kB
+dist/assets/IAQCenter-CVOrgHar.js               11.72 kB │ gzip:  3.63 kB
+dist/assets/DailyRoutineOptimizer-D6BRXp9S.js   12.89 kB │ gzip:  4.41 kB
+dist/assets/index-BKK0Z0HV.js                   86.67 kB │ gzip: 24.81 kB
+dist/assets/react-vendor-BDmvAUEV.js           223.19 kB │ gzip: 69.24 kB
+✓ built in 940ms
 ```

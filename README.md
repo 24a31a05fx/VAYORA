@@ -134,7 +134,7 @@ flowchart TD
     end
 
     subgraph Client["4. Client Presentation & State"]
-        H & J & K & E & F --> L["AppContext Reactive State"]
+        H & J & K & E & F --> L["Focused Reactive Contexts (UI, Zone, Profile, IAQ, Comm)"]
         L --> M["Memoized UI Shell (React 19 + Tailwind v4)"]
         L --> N["Resilient Storage Service (LocalStorage + Fallback)"]
     end
@@ -152,7 +152,7 @@ VAYORA is structured as a decoupled, multi-tiered architecture:
 │                                                                        │
 │   ┌────────────────────────────────────────────────────────────────┐   │
 │   │                 AppShell (React 19 + TypeScript)               │   │
-│   │      AppContext (Language, AccessibilityMode, Zones, Tab)      │   │
+│   │    Focused Context Providers (UI, Zone, Profile, IAQ, Comm)    │   │
 │   └────────────────────────────────────────────────────────────────┘   │
 │                 │                                  │                   │
 │                 ▼                                  ▼                   │
@@ -219,7 +219,7 @@ VAYORA is structured as a decoupled, multi-tiered architecture:
 | **Backend Gateway** | Express | 5.0.1 | REST API, security headers, routing, and asset serving |
 | **AI Orchestration** | Google Generative AI | 0.24.1 | Server-side Gemini 3.1 Flash Lite integration |
 | **Static Analysis** | Oxlint | 1.94.0 | High-speed linting with zero-warning enforcement |
-| **Test Framework** | Vitest + JSDOM | 3.2.7 | Multi-tier unit, DOM, rendering, and API test execution |
+| **Test Framework** | Vitest + JSDOM | 3.2.7 | Multi-tier unit, DOM, rendering, and API test execution (109 tests) |
 | **DOM Testing** | Testing Library | 16.2.0 | User-centric DOM testing and accessibility assertions |
 
 ---
@@ -237,10 +237,12 @@ vayora/
 │   └── PLAN.md                  # Engineering specifications and roadmap
 ├── server/
 │   ├── routes/
+│   │   ├── adminRoutes.ts       # Protected admin diagnostic and cache purge routes
 │   │   ├── advisoryRoutes.ts    # Emergency smog advisory route handler
 │   │   ├── healthRoutes.ts      # Health check and telemetry status route
 │   │   └── routineRoutes.ts     # Personalized routine insight route handler
 │   ├── aiService.ts             # Gemini AI integration with heuristic fallback
+│   ├── auth.ts                  # PBKDF2/SHA-512 authentication & constant-time verify
 │   ├── cache.ts                 # In-memory SHA-256 LRU response cache (100 entries)
 │   ├── cacheOrCompute.ts        # Unified validation, caching, and AI orchestration
 │   ├── logger.ts                # Structured server logging utility
@@ -260,12 +262,14 @@ vayora/
 │   │   │   ├── DIYHackGrid.tsx  # Corsi-Rosenthal & low-cost filtration designs
 │   │   │   ├── IAQCenter.tsx    # Room CADR calculator & 4 ACH sizing
 │   │   │   └── WindowSchedule.tsx # Inversion-aware window opening timetable
+│   │   ├── Legal/
+│   │   │   └── LegalModal.tsx   # Privacy Policy & Terms of Service dialog
 │   │   ├── Navigation/
-│   │   │   ├── Header.tsx       # Desktop sidebar & mobile navigation
+│   │   │   ├── Header.tsx       # Desktop sidebar & mobile navigation with chunk preloading
 │   │   │   ├── NavControls.tsx  # Language & accessibility mode switchers
 │   │   │   └── SidebarSectorCard.tsx # Quick-switch sector widget
 │   │   ├── Routine/
-│   │   │   ├── DailyRoutineOptimizer.tsx # GenAI daily schedule container
+│   │   │   ├── DailyRoutineOptimizer.tsx # GenAI daily schedule container with AbortSignal
 │   │   │   ├── PersonaSelector.tsx # Vulnerability profile selection chips
 │   │   │   └── RoutineTimeline.tsx # Hour-by-hour exposure schedule
 │   │   ├── shared/
@@ -276,13 +280,16 @@ vayora/
 │   │       ├── TransitComparisonTable.tsx # Multi-modal health risk table
 │   │       └── TransitPlanner.tsx # Dijkstra clean-corridor route planner
 │   ├── context/
-│   │   ├── hooks/               # Extracted state slice hooks (tabs, zones, routines, etc.)
-│   │   ├── AppContext.tsx       # Centralized global application state provider
+│   │   ├── hooks/               # Domain-specific typed hooks (useUIContext, etc.)
+│   │   ├── providers/           # Focused domain providers (UIProvider, ZoneProvider, etc.)
+│   │   ├── AppContext.tsx       # Root composition provider uniting all domain contexts
 │   │   ├── appContextInstance.ts # Shared React Context instance definition
-│   │   ├── types.ts             # Context value interface definitions
-│   │   └── useAppContext.ts     # Type-safe global context consumption hook
+│   │   ├── contextInstances.ts  # Domain React Context instance definitions
+│   │   ├── types.ts             # Domain state and action interface definitions
+│   │   └── useAppContext.ts     # Backward-compatible unified state access hook
 │   ├── hooks/
 │   │   ├── useAirAnalytics.ts   # AQI categories, pollutant breakdown, simulation
+│   │   ├── useDebounce.ts       # Debounced callback execution with unmount cleanup
 │   │   └── useExposureRouting.ts # Dijkstra pathfinding & commute comparisons
 │   ├── lib/
 │   │   ├── compute/
@@ -295,17 +302,19 @@ vayora/
 │   │   │   ├── heuristicRoutine.ts # Client deterministic fallback schedule generator
 │   │   │   ├── index.ts         # Compute engine barrel export
 │   │   │   └── meteorology.ts   # Lapse-rate inversion modeling & emission offsets
-│   │   └── constants/
-│   │       ├── community.ts     # Baseline nodes, graphs, pledges, alerts
-│   │       ├── iaq.ts           # Room baselines & DIY hack specifications
-│   │       ├── index.ts         # Constants barrel export
-│   │       ├── personas.ts      # Vulnerability profile definitions
-│   │       ├── translations.ts  # Multilingual strings (EN, HI, AR, ES)
-│   │       └── zones.ts         # Municipal telemetry baseline sectors
+│   │   ├── constants/
+│   │   │   ├── community.ts     # Baseline nodes, graphs, pledges, alerts
+│   │   │   ├── iaq.ts           # Room baselines & DIY hack specifications
+│   │   │   ├── index.ts         # Constants barrel export
+│   │   │   ├── personas.ts      # Vulnerability profile definitions
+│   │   │   ├── translations.ts  # Multilingual strings (EN, HI, AR, ES)
+│   │   │   └── zones.ts         # Municipal telemetry baseline sectors
+│   │   └── tabPreload.ts        # Intent-driven dynamic route chunk preloader
 │   ├── services/
-│   │   ├── apiService.ts        # Client HTTP API client communicating with backend
+│   │   ├── apiService.ts        # Client HTTP API client with AbortSignal cancellation
 │   │   └── storageService.ts    # Resilient persistence with memory store fallback
 │   ├── test/
+│   │   ├── adminAuth.test.ts    # Tier 5: Authentication, token verification, admin endpoints
 │   │   ├── api.test.ts          # Tier 5: Live backend HTTP, security & cache tests
 │   │   ├── aqiBreakpoints.test.ts # Tier 1: EPA breakpoint & sub-index calculations
 │   │   ├── aqiCommute.test.ts   # Tier 1: Exposure dose & transit metrics
@@ -315,24 +324,25 @@ vayora/
 │   │   ├── routineStorage.test.ts # Tier 1: Heuristic routines & storage persistence
 │   │   ├── routing.test.ts      # Tier 2: Dijkstra pathfinding & hook transitions
 │   │   ├── serverAndCompute.test.ts # Tier 1: Cache, logger, and pure pollutant compute
+│   │   ├── serverPerformanceHeaders.test.ts # Tier 5: Compression, ETag, static caching
 │   │   └── setup.ts             # Vitest DOM polyfills & matchers
 │   ├── types/
 │   │   ├── community.ts         # Waypoints, room configs, community pledges
 │   │   ├── index.ts             # Primary types barrel export
 │   │   ├── routine.ts           # Personas, hourly schedule, routine plan
 │   │   └── telemetry.ts         # AQI categories, pollutants, transit modes, zones
-│   ├── App.tsx                  # AppShell router, layout orchestrator, landmarks
+│   ├── App.tsx                  # AppShell router, lazy route chunks, accessible fallback
 │   ├── index.css                # CSS design tokens & focus-visible styles
 │   ├── main.tsx                 # React 19 application entry point
 │   └── vite-env.d.ts            # Vite client environment type declarations
 ├── .nvmrc                       # Node runtime pin (v20)
 ├── .oxlintrc.json               # Oxlint static analysis configuration (152 rules)
-├── index.html                   # HTML template, font preconnects, skip-link
+├── index.html                   # HTML template, font preconnects, swap display
 ├── package.json                 # Dependencies, project metadata, scripts
 ├── server.ts                    # Express 5 entry point, routes, static asset hosting
 ├── tsconfig.json                # Strict TypeScript configuration
 ├── tsconfig.test.json           # Test TypeScript configuration (Vite & Node types)
-└── vite.config.ts               # Vite build configuration, proxy, Vitest setup
+└── vite.config.ts               # Vite build configuration, proxy, manual chunk splitting
 ```
 
 ---
@@ -401,8 +411,11 @@ Access the application at `http://localhost:3001`.
 VAYORA maintains a multi-tier test suite executed via Vitest and Oxlint:
 
 ```bash
-# Run all 94 automated unit, DOM, rendering, and API tests
+# Run all 109 automated unit, DOM, rendering, and API tests
 npm run test:run
+
+# Run test suite with strict coverage enforcement
+npm run test:coverage
 
 # Run static code analysis with zero-warning enforcement
 npm run lint
@@ -412,9 +425,9 @@ npm run build
 ```
 
 ### Verified Test Results Summary
-- **Test Suites:** 9 passed (9 total)
-- **Tests:** 94 passed (94 total)
-- **Execution Time:** ~3.3 seconds
+- **Test Suites:** 11 passed (11 total)
+- **Tests:** 109 passed (109 total)
+- **Execution Time:** ~5.1 seconds
 - **Pass Rate:** 100%
 
 ---

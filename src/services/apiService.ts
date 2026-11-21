@@ -1,7 +1,7 @@
 // ============================================================
 // src/services/apiService.ts
 // Frontend API client communicating with backend Express routes
-// Per ARCHITECTURE_PATTERNS.md §1 & SECURITY_STANDARDS.md §1
+// Supports AbortSignal for request cancellation on component unmount
 // ============================================================
 
 import type {
@@ -27,19 +27,20 @@ export interface CommuteRequestPayload {
 const API_BASE = (import.meta.env.VITE_API_BASE_URL as string) || '';
 
 export const apiService = {
-  async fetchHealth(): Promise<{ status: string; uptime: number }> {
-    const res = await fetch(`${API_BASE}/api/health`);
+  async fetchHealth(signal?: AbortSignal): Promise<{ status: string; uptime: number }> {
+    const res = await fetch(`${API_BASE}/api/health`, { signal });
     if (!res.ok) {
       throw new Error(`Health check failed with status ${res.status}`);
     }
     return (await res.json()) as { status: string; uptime: number };
   },
 
-  async generateDailyRoutine(payload: RoutineRequestPayload): Promise<DailyRoutinePlan> {
+  async generateDailyRoutine(payload: RoutineRequestPayload, signal?: AbortSignal): Promise<DailyRoutinePlan> {
     const res = await fetch(`${API_BASE}/api/routine-insights`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+      signal,
     });
 
     if (!res.ok) {
@@ -50,11 +51,12 @@ export const apiService = {
     return (await res.json()) as DailyRoutinePlan;
   },
 
-  async generateEmergencyAdvisory(zone: UrbanZone, language: Language): Promise<string> {
+  async generateEmergencyAdvisory(zone: UrbanZone, language: Language, signal?: AbortSignal): Promise<string> {
     const res = await fetch(`${API_BASE}/api/emergency-advisory`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ zone, language }),
+      signal,
     });
 
     if (!res.ok) {

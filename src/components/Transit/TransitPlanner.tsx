@@ -6,7 +6,7 @@
 
 import { memo } from 'react';
 import { useExposureRouting } from '@/hooks/useExposureRouting';
-import { useAppContext } from '@/context/useAppContext';
+import { useZoneContext } from '@/context/ZoneContext';
 import type { TransitNode, TransitRouteComparison, UrbanZone } from '@/types';
 import type { DijkstraResult } from '@/lib/compute';
 import { TransitComparisonTable } from './TransitComparisonTable';
@@ -89,7 +89,7 @@ function TransitRouteComparisonSection({ selectedZone, routeDistanceKm, modalCom
 }
 
 export const TransitPlanner = memo(function TransitPlanner() {
-  const { selectedZone } = useAppContext();
+  const { selectedZone } = useZoneContext();
   const { nodes, originId, destinationId, setOrigin, setDestination, lowestExposureResult, pathNodes, routeDistanceKm, modalComparisons } = useExposureRouting();
 
   return (

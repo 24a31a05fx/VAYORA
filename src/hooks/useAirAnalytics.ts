@@ -4,7 +4,7 @@
 // ============================================================
 
 import { useMemo, useCallback } from 'react';
-import { useAppContext } from '@/context/useAppContext';
+import { useZoneContext } from '@/context/ZoneContext';
 import type { UrbanZone } from '@/types';
 import {
   calculateAQICategory,
@@ -27,7 +27,7 @@ function useAirSimulations(zone: UrbanZone, updateZone: (id: string, u: Partial<
 }
 
 export function useAirAnalytics() {
-  const { zones, selectedZoneId, setSelectedZoneId, updateZone, selectedZone: currentZone } = useAppContext();
+  const { zones, selectedZoneId, setSelectedZoneId, updateZone, selectedZone: currentZone } = useZoneContext();
 
   const aqiCategory = useMemo(() => calculateAQICategory(currentZone.aqi), [currentZone.aqi]);
   const aqiColor = useMemo(() => getAQIColor(currentZone.aqi), [currentZone.aqi]);

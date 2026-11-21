@@ -5,7 +5,8 @@
 // ============================================================
 
 import { memo, useState, useMemo, useCallback } from 'react';
-import { useAppContext } from '@/context/useAppContext';
+import { useIAQContext } from '@/context/IAQContext';
+import { useZoneContext } from '@/context/ZoneContext';
 import { calculateRoomVolume, calculateRequiredCADR, estimatePurificationTime } from '@/lib/compute';
 import type { IAQRoomConfig } from '@/types';
 import { DEFAULT_ROOMS } from '@/lib/constants';
@@ -77,7 +78,8 @@ function CadrDeficitBanner({ cadrDeficit }: { cadrDeficit: number }) {
 }
 
 function useRoomDiagnostics() {
-  const { rooms, updateRoom, selectedZone } = useAppContext();
+  const { rooms, updateRoom } = useIAQContext();
+  const { selectedZone } = useZoneContext();
   const [selectedRoomId, setSelectedRoomId] = useState<string>(() => rooms[0]?.roomId ?? DEFAULT_ROOMS[0].roomId);
   const activeRoom = useMemo(() => rooms.find((r) => r.roomId === selectedRoomId) ?? rooms[0] ?? DEFAULT_ROOMS[0], [rooms, selectedRoomId]);
   const roomVolumeM3 = useMemo(() => calculateRoomVolume(activeRoom.areaSqMeters, activeRoom.ceilingHeightMeters), [activeRoom.areaSqMeters, activeRoom.ceilingHeightMeters]);

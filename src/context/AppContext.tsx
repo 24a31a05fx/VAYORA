@@ -1,38 +1,29 @@
 // ============================================================
 // src/context/AppContext.tsx
-// Cross-cutting global state management Provider for VAYORA
+// Composable Root Context Provider wrapping focused state slices
 // ============================================================
 
-import { useMemo, type ReactNode } from 'react';
-import { DEFAULT_PERSONAS } from '@/lib/constants';
-import { AppContext } from './appContextInstance';
-import type { AppContextValue } from './types';
-import { useTabState } from './hooks/useTabState';
-import { useZoneState } from './hooks/useZoneState';
-import { useLanguageState } from './hooks/useLanguageState';
-import { useRoutineState } from './hooks/useRoutineState';
-import { usePledgeState } from './hooks/usePledgeState';
-import { useAlertState } from './hooks/useAlertState';
+import type { ReactNode } from 'react';
+import { UIProvider } from './providers/UIProvider';
+import { ZoneProvider } from './providers/ZoneProvider';
+import { ProfileProvider } from './providers/ProfileProvider';
+import { IAQProvider } from './providers/IAQProvider';
+import { CommunityProvider } from './providers/CommunityProvider';
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
-  const tab = useTabState();
-  const zone = useZoneState();
-  const lang = useLanguageState();
-  const routine = useRoutineState();
-  const pledge = usePledgeState();
-  const alert = useAlertState();
-
-  const value = useMemo<AppContextValue>(() => ({
-    ...tab,
-    ...zone,
-    personas: DEFAULT_PERSONAS,
-    ...routine,
-    ...lang,
-    ...pledge,
-    ...alert,
-  }), [tab, zone, routine, lang, pledge, alert]);
-
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return (
+    <UIProvider>
+      <ZoneProvider>
+        <ProfileProvider>
+          <IAQProvider>
+            <CommunityProvider>
+              {children}
+            </CommunityProvider>
+          </IAQProvider>
+        </ProfileProvider>
+      </ZoneProvider>
+    </UIProvider>
+  );
 }
 
 export default AppContextProvider;

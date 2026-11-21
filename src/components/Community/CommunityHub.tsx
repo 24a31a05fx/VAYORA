@@ -4,12 +4,14 @@
 // Per PROBLEM_ALIGNMENT.md §1.5 & ACCESSIBILITY.md §7
 // ============================================================
 
-import { memo, useState, useMemo, useCallback } from 'react';
-import { useAppContext } from '@/context/useAppContext';
+import { memo, useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useCommunityContext } from '@/context/CommunityContext';
+import { useZoneContext } from '@/context/ZoneContext';
+import { useUIContext } from '@/context/UIContext';
 import { calculateCommunityOffset } from '@/lib/compute';
 import { apiService } from '@/services/apiService';
 import { TRANSLATIONS } from '@/lib/constants';
-import type { CommunityAlert, CommunityPledge } from '@/types';
+import type { CommunityAlert, CommunityPledge, UrbanZone, Language } from '@/types';
 import { PledgeCard } from './PledgeCard';
 import { WarningIcon, ShieldAlertIcon, BroadcastIcon, LeafIcon } from '@/components/shared/Icons';
 
@@ -98,27 +100,50 @@ function PledgesGrid({ pledges, onToggle, pledgedLabel }: { pledges: CommunityPl
   );
 }
 
-function useCommunityHubState() {
-  const { pledges, togglePledge, alerts, dismissAlert, selectedZone, language } = useAppContext();
-  const [aiAdvisory, setAiAdvisory] = useState<string | null>(null);
-  const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const t = TRANSLATIONS[language] || TRANSLATIONS.en;
-
-  const collectiveMetrics = useMemo(() => {
+function useCollectiveMetrics(pledges: CommunityPledge[]) {
+  return useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of pledges) counts[p.category] = p.currentParticipants;
     return calculateCommunityOffset(counts);
   }, [pledges]);
+}
 
-  const handleGenerateAdvisory = useCallback(async () => {
-    setIsGenerating(true);
-    try {
-      setAiAdvisory(await apiService.generateEmergencyAdvisory(selectedZone, language));
-    } catch {
-      setAiAdvisory(`URGENT NOTICE for ${selectedZone.zoneName}: AQI is ${selectedZone.aqi}. Please activate indoor filtration, seal doors, and assist vulnerable neighbors.`);
-    } finally {
-      setIsGenerating(false);
-    }
+async function executeAdvisory(
+  zone: UrbanZone,
+  lang: Language,
+  abortRef: { current: AbortController | null },
+  setLoading: (v: boolean) => void,
+  setResult: (v: string) => void
+) {
+  abortRef.current?.abort();
+  const ctrl = new AbortController();
+  abortRef.current = ctrl;
+  setLoading(true);
+  try {
+    const adv = await apiService.generateEmergencyAdvisory(zone, lang, ctrl.signal);
+    setResult(adv);
+  } catch {
+    if (ctrl.signal.aborted) return;
+    setResult(`URGENT NOTICE for ${zone.zoneName}: AQI is ${zone.aqi}. Please activate indoor filtration, seal doors, and assist vulnerable neighbors.`);
+  } finally {
+    if (!ctrl.signal.aborted) setLoading(false);
+  }
+}
+
+function useCommunityHubState() {
+  const { pledges, togglePledge, alerts, dismissAlert } = useCommunityContext();
+  const { selectedZone } = useZoneContext();
+  const { language } = useUIContext();
+  const [aiAdvisory, setAiAdvisory] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const abortRef = useRef<AbortController | null>(null);
+  const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+  const collectiveMetrics = useCollectiveMetrics(pledges);
+
+  useEffect(() => () => { abortRef.current?.abort(); }, []);
+
+  const handleGenerateAdvisory = useCallback(() => {
+    executeAdvisory(selectedZone, language, abortRef, setIsGenerating, setAiAdvisory);
   }, [selectedZone, language]);
 
   return { pledges, togglePledge, alerts, dismissAlert, language, t, aiAdvisory, isGenerating, collectiveMetrics, handleGenerateAdvisory };
