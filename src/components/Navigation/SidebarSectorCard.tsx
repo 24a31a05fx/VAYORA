@@ -1,0 +1,62 @@
+// ============================================================
+// src/components/Navigation/SidebarSectorCard.tsx
+// Quick-switch municipal sector telemetry widget for desktop sidebar
+// ============================================================
+
+import { memo } from 'react';
+import type { UrbanZone } from '@/types';
+
+interface SidebarSectorCardProps {
+  selectedZone: UrbanZone;
+  zones: UrbanZone[];
+  onSelectZone: (zoneId: string) => void;
+  aqiColor: string;
+}
+
+export const SidebarSectorCard = memo(function SidebarSectorCard({
+  selectedZone,
+  zones,
+  onSelectZone,
+  aqiColor,
+}: SidebarSectorCardProps) {
+  return (
+    <div className="hidden lg:flex flex-col gap-2 p-3.5 bg-[#F6F7F2] rounded-2xl border border-[#E5EAE4]">
+      <div className="flex items-center justify-between text-xs">
+        <span className="text-[#73817B] font-medium">Selected Sector:</span>
+        <span
+          className="px-2 py-0.5 rounded-full text-[11px] font-black border"
+          style={{
+            backgroundColor: `${aqiColor}15`,
+            borderColor: `${aqiColor}50`,
+            color: aqiColor,
+          }}
+        >
+          AQI {selectedZone.aqi}
+        </span>
+      </div>
+      <div className="flex items-center justify-between">
+        <label htmlFor="sidebar-zone-select" className="sr-only">
+          Quick switch sector
+        </label>
+        <select
+          id="sidebar-zone-select"
+          value={selectedZone.zoneId}
+          onChange={(e) => onSelectZone(e.target.value)}
+          className="w-full text-xs font-bold text-[#202B29] bg-transparent border-none p-0 focus:outline-none focus:ring-0 cursor-pointer"
+        >
+          {zones.map((z) => (
+            <option key={z.zoneId} value={z.zoneId}>
+              {z.zoneName}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="flex items-center justify-between text-[11px] text-[#73817B] pt-2 border-t border-[#E5EAE4]/80">
+        <span>
+          {selectedZone.temperatureC}°C • {selectedZone.humidityPercent}% RH
+        </span>
+        <span>Wind {selectedZone.windSpeedKmh} km/h</span>
+      </div>
+    </div>
+  );
+});
