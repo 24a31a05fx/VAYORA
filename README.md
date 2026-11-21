@@ -1,14 +1,152 @@
-# 🛡️ VAYORA — AI-powered Urban Air Quality & Environmental Intelligence Platform
+# VAYORA — AI-Powered Urban Air Quality & Environmental Intelligence Platform
 
-## Breathe better. Live smarter. Empowering vulnerable families and urban communities to navigate winter smog inversions through VAYORA Intelligence routines, low-cost IAQ hacks, and clean-corridor transit planning.
-
-VAYORA is an enterprise-grade public health and environmental resilience platform engineered to protect urban citizens during severe winter smog episodes and industrial stagnation events. By combining real-time multi-pollutant telemetry (PM2.5, PM10, NO2, CO, O3), meteorological boundary layer inversion modeling, server-side VAYORA Intelligence (Google Gemini), Dijkstra clean-corridor pathfinding, room-by-room CADR optimization, and collective community action pledges, VAYORA empowers households to dramatically minimize airborne particulate inhalation and carbon footprints.
+> **"Breathe better. Live smarter."**  
+> An advanced environmental resilience system engineered to protect metropolitan communities and vulnerable populations from winter smog inversions, toxic particulate exposure, and urban atmospheric stagnation.
 
 ---
 
-## Architecture Flow Diagram
+## 1. Project Introduction
 
-```text
+**VAYORA** is an independent, full-stack environmental intelligence platform designed for urban centers grappling with hazardous air pollution. Traditional weather applications typically deliver static, citywide Air Quality Index (AQI) figures that fail to reflect neighborhood-level variations, overlook the physics of nocturnal temperature inversions, and offer generic advice without actionable mitigation pathways.
+
+VAYORA addresses this critical gap through a modern, responsive web application that unites:
+- **Hyperlocal Telemetry:** Multi-pollutant tracking ($\text{PM}_{2.5}$, $\text{PM}_{10}$, $\text{NO}_2$, $\text{CO}$, $\text{O}_3$) across municipal sectors.
+- **Atmospheric Physics Modeling:** Detection of thermal boundary layer inversions that trap particulate matter in the ground-level breathing zone.
+- **Personalized Routine Optimization:** Generative AI schedules (powered by Google Gemini with deterministic local heuristic fallbacks) tailored to individual vulnerability profiles.
+- **Clean-Corridor Transit Routing:** Dijkstra graph pathfinding to identify subterranean metro links and low-exposure transit alternatives.
+- **Indoor Air Quality (IAQ) Engineering:** ASHRAE-aligned Clean Air Delivery Rate (CADR) calculations, window flush schedules, and open-source Corsi-Rosenthal DIY purification designs.
+- **Community Action Hub:** Collective neighborhood pledges that quantify real-time carbon ($\text{kg}$) and particulate ($\text{g}$) abatement.
+
+---
+
+## 2. The Urban Air Pollution Problem
+
+High-density urban areas worldwide face recurring seasonal air quality crises. The core drivers of this public health emergency include:
+
+1. **Thermal Inversion Boundary Caps:** During cold winter nights, rapid terrestrial radiative cooling produces a temperature inversion where cold, dense surface air is capped by warmer air aloft. When wind speeds drop below 6 km/h, vertical convective mixing ceases, trapping vehicular exhaust, industrial soot, and secondary aerosols near the ground.
+2. **Deep Pulmonary Deposition:** Fine particulates ($\text{PM}_{2.5}$) bypass upper airway filtration and penetrate deep into alveolar capillaries, causing systemic inflammation, acute asthmatic exacerbations, and elevated cardiovascular risks.
+3. **The Commuter Exposure Trap:** Urban commuters and outdoor workers frequently exercise or travel during peak morning stagnation windows, unknowingly inhaling toxic pollutant doses in traffic corridors.
+4. **Economic Barriers to Clean Indoor Air:** Commercial HEPA air purifiers often cost hundreds of dollars, placing them out of reach for lower-income households. Furthermore, opening windows during morning inversion peaks increases indoor pollutant levels by over 300%.
+
+---
+
+## 3. VAYORA's Proposed Solution
+
+VAYORA translates complex environmental science into accessible, real-time civic intelligence:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        VAYORA SOLUTION MATRIX                          │
+├────────────────────────────────┬───────────────────────────────────────┤
+│ Atmospheric Inversion Traps    │ ➔ Real-time lapse-rate inversion model │
+│ Personalized Health Risk       │ ➔ 6 vulnerability persona profiles    │
+│ Hazardous Transit Exposure     │ ➔ Dijkstra low-exposure route finder  │
+│ Costly Air Purification        │ ➔ Open-source DIY Corsi-Rosenthal box │
+│ Stale Indoor Air Accumulation  │ ➔ Solar-flush window opening schedule │
+│ Fragmented Community Response  │ ➔ Collective neighborhood pacts       │
+└────────────────────────────────┴───────────────────────────────────────┘
+```
+
+---
+
+## 4. Target Users
+
+- **Vulnerable Households:** Families with infants, asthmatic children, and elderly relatives who require precise guidance on safe outdoor windows and indoor air filtration.
+- **Urban Commuters:** Daily transit riders, pedestrians, and cyclists seeking the lowest-pollution routes through city street canyons.
+- **Community Coordinators & School Boards:** Local neighborhood leaders and school administrators responsible for broadcasting emergency smog advisories and organizing collective emissions reduction initiatives.
+- **Environmentally Conscious Citizens:** Individuals committed to tracking and reducing their personal commute footprint and local particulate contribution.
+
+---
+
+## 5. Main Application Capabilities
+
+### 5.1 Hyperlocal Telemetry Dashboard
+- Continuous monitoring across 5 distinct urban sectors:
+  1. **Central Business District** (Heavy commercial & fleet density)
+  2. **North Industrial Belt** (Manufacturing & point-source particulate)
+  3. **Eastern Residential** (High-density housing & localized heating)
+  4. **Riverside Park & Wetlands** (Eco-corridor with natural vegetation dispersion)
+  5. **Transit Hub & Rail Depot** (Multi-modal transit intersection)
+- Circular AQI severity gauge with color-coded EPA categories and health directives.
+- Interactive SVG Smog Heatmap displaying dispersion corridors and atmospheric wind streamlines.
+- 7-hour pollutant trend sparklines with visual and screen-reader accessible representations.
+- Interactive telemetry simulation engine ("Simulate Winter Smog Spike" / "Simulate Solar Wind Cleansing").
+
+### 5.2 GenAI Daily Routine & Exposure Optimizer
+- Six lifestyle vulnerability personas:
+  - *Asthmatic Child & Family* (High respiratory sensitivity)
+  - *Newborn Infant & Nursing Mother* (Critical indoor filtration focus)
+  - *Elderly Relative (Cardiopulmonary)* (Restricted outdoor exertion)
+  - *School Run Coordinator* (Morning commute exposure avoidance)
+  - *Daily Transit Commuter* (Multi-modal route optimization)
+  - *Community Action Lead* (Neighborhood emissions advocate)
+- Server-side Google Gemini 3.1 Flash Lite synthesis generating hour-by-hour schedules.
+- Deterministic local heuristic calculation engine providing 100% offline uptime.
+- Identification of the optimal outdoor activity window (typically 1:00 PM – 4:00 PM) when solar radiation breaks the inversion cap.
+
+### 5.3 Low-Emission Commute & Transit Planner
+- Graph-based Dijkstra pathfinding across urban waypoints to identify lowest-exposure trajectories.
+- Multi-modal comparison matrix evaluating 7 transit modes:
+  - **Underground Metro** (75% cabin filtration protection)
+  - **Electric City Bus** (Low local emissions)
+  - **Diesel Transit Bus** (High surface street canyon exposure)
+  - **Bicycle / E-Bike** (High breathing ventilation rate: 2.2 m³/h)
+  - **Walking Pedestrian** (Exertion rate: 1.2 m³/h)
+  - **Electric Vehicle with HEPA** (85% sealed cabin protection)
+  - **Gasoline Car** (Elevated $\text{NO}_2$ contribution)
+- Dynamic calculation of inhaled particulate dose ($\mu\text{g}$) and $\text{CO}_2$ emissions ($\text{kg}$).
+
+### 5.4 Indoor Air Quality (IAQ) & CADR Center
+- Room-by-room Clean Air Delivery Rate (CADR) sizing calculator targeting 4 to 5 Air Changes per Hour (ACH).
+- First-order differential decay modeling for 80% indoor air clearance duration.
+- Detection of CADR deficits with contextual recommendations.
+- Meteorological window ventilation schedule warning against morning inversion ventilation (6:00 AM – 10:30 AM) and advising afternoon solar flush windows (1:30 PM – 3:30 PM).
+- Open-source fabrication blueprints for the DIY Corsi-Rosenthal Box ($40 build producing ~350 m³/h CADR).
+
+### 5.5 Community Action & Collective Impact Hub
+- Neighborhood emission reduction pledges across 5 categories: carpooling, clean heating, dust wet-sweeping, clean waste management, and vulnerable neighbor wellness check-ins.
+- Live collective impact calculator aggregating total $\text{CO}_2$ ($\text{kg}$) and $\text{PM}_{2.5}$ ($\text{g}$) averted.
+- Automated multilingual emergency smog advisories generated in English, Hindi, Arabic (with native RTL layout), and Spanish.
+
+---
+
+## 6. How the Application Works
+
+```mermaid
+flowchart TD
+    subgraph Ingestion["1. Telemetry & Meteorological Input"]
+        A["Sensor Ingestion (PM2.5, PM10, NO2, CO, O3, Temp, Wind)"] --> B["Boundary Validation (server/validators.ts)"]
+    end
+
+    subgraph Compute["2. Deterministic Compute Layer"]
+        B --> C["EPA Piecewise AQI Calculation"]
+        B --> D["Lapse Rate Inversion Modeling"]
+        B --> E["Dijkstra Clean-Corridor Graph Routing"]
+        B --> F["ASHRAE CADR & Particle Decay Engine"]
+    end
+
+    subgraph Intelligence["3. AI Gateway & Cache"]
+        C & D --> G{"In-Memory SHA-256 Cache"}
+        G -- "Cache Hit (<10ms)" --> H["Return Cached Schedule"]
+        G -- "Cache Miss" --> I["Google Gemini 3.1 Flash Lite"]
+        I -- "Network Failure / Offline" --> J["Deterministic Local Heuristic Engine"]
+        I -- "Success" --> K["Store in Cache & Return"]
+    end
+
+    subgraph Client["4. Client Presentation & State"]
+        H & J & K & E & F --> L["AppContext Reactive State"]
+        L --> M["Memoized UI Shell (React 19 + Tailwind v4)"]
+        L --> N["Resilient Storage Service (LocalStorage + Fallback)"]
+    end
+```
+
+---
+
+## 7. System Architecture
+
+VAYORA is structured as a decoupled, multi-tiered architecture:
+
+```
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        CLIENT LAYER (Browser)                          │
 │                                                                        │
@@ -20,45 +158,46 @@ VAYORA is an enterprise-grade public health and environmental resilience platfor
 │                 ▼                                  ▼                   │
 │   ┌───────────────────────────┐      ┌───────────────────────────┐     │
 │   │    Domain Feature Hooks   │      │   Pure Compute Engine     │     │
-│   │   (useAirAnalytics,       │ ────►│   (src/lib/aqiCompute.ts) │     │
-│   │    useExposureRouting)    │      │  • Dijkstra Clean Route   │     │
-│   └───────────────────────────┘      │  • CADR & 4 ACH Decay     │     │
+│   │   (useAirAnalytics,       │ ────►│   (src/lib/compute/*)     │     │
+│   │    useExposureRouting)    │      │  • Dijkstra Pathfinding   │     │
+│   └───────────────────────────┘      │  • CADR 4 ACH Decay       │     │
 │                 │                    │  • Inversion Lapse Rates  │     │
-│                 ▼                    │  • Inhaled Particulate    │     │
-│   ┌───────────────────────────┐      └───────────────────────────┘     │
-│   │   Presentation Layer      │                    ▲                   │
-│   │  • Native SVG Heatmap     │ ───────────────────┘                   │
-│   │  • Native SVG Sparklines  │                                        │
+│                 ▼                    │  • EPA Breakpoints        │     │
+│   ┌───────────────────────────┐      │  • Inhaled Dose Math      │     │
+│   │    Modular Components     │      │  • Heuristic Routine      │     │
+│   │  • AqiGauge               │      └───────────────────────────┘     │
+│   │  • SmogHeatmap (SVG)      │                    ▲                   │
+│   │  • Sparklines (SVG)       │ ───────────────────┘                   │
 │   │  • .sr-only Text Twins    │                                        │
 │   └───────────────────────────┘                                        │
 └────────────────────────────────────────────────────────────────────────┘
                     │                                    │
-           (REST API via proxy)                 (Local Persistence)
+           (REST API via proxy)                 (Resilient Persistence)
                     │                                    │
                     ▼                                    ▼
 ┌───────────────────────────────────────┐    ┌───────────────────────────┐
-│        BACKEND LAYER (Node.js)        │    │    CLOUD LAYER (Firebase) │
+│        BACKEND LAYER (Node.js)        │    │    PERSISTENT STORAGE     │
 │                                       │    │                           │
-│   ┌───────────────────────────────┐   │    │  • Firebase Auth          │
-│   │  Express 5 Security Pipeline  │   │    │  • Firestore Database     │
-│   │  • Helmet (Strict CSP)        │   │    │  • Per-User Ruleset       │
-│   │  • Dynamic CORS Allowlist     │   │    │    (/users/{uid}/**)      │
-│   │  • 15 KB Body Parser Limit    │   │    └───────────────────────────┘
+│   ┌───────────────────────────────┐   │    │  • Browser LocalStorage   │
+│   │  Express 5 Security Pipeline  │   │    │  • In-Memory Map Fallback │
+│   │  • Helmet (Strict CSP)        │   │    │    (Private/Sandbox mode) │
+│   │  • CORS Allowlist             │   │    │  • Resilient safeParse<T> │
+│   │  • 15 KB Body Size Cap        │   │    └───────────────────────────┘
 │   │  • Rate Limiter (30 req/min)  │   │
+│   │  • CWE-209 Error Handler      │   │
 │   └───────────────────────────────┘   │
 │                   │                   │
 │                   ▼                   │
 │   ┌───────────────────────────────┐   │
-│   │  Type & Range Sanitizer       │   │
+│   │  Type & Range Validators      │   │
 │   │  (validateZone, sanitizeText) │   │
 │   └───────────────────────────────┘   │
 │                   │                   │
 │                   ▼                   │
 │   ┌───────────────────────────────┐   │
-│   │ In-Memory AI Cache (SHA-256)  │   │
-│   │ (100-entry LRU Map, <10ms hit)│   │
+│   │  SHA-256 LRU Cache (100 Max)  │   │
 │   └───────────────────────────────┘   │
-│                   │ (Cache Miss)      │
+│                   │                   │
 │                   ▼                   │
 │   ┌───────────────────────────────┐   │
 │   │  Google Gemini 3.1 Flash Lite │   │
@@ -69,249 +208,245 @@ VAYORA is an enterprise-grade public health and environmental resilience platfor
 
 ---
 
-## 1. Chosen Vertical
+## 8. Technology Stack
 
-### Selected Problem Domain
-**Urban Air Quality, Public Health Resilience, and Environmental Justice.**  
-Megacities across South Asia, East Asia, Europe, and North America routinely suffer severe winter smog events where ground-level particulate matter (PM2.5) exceeds WHO safe thresholds by 10× to 30×.
-
-### Problem Being Addressed
-1. **Atmospheric Temperature Inversions:** Nocturnal radiation cooling traps industrial and vehicle emissions beneath a warm boundary cap, creating hazardous smog zones in the human breathing zone.
-2. **Pulmonary Vulnerability:** Vulnerable populations (children with asthma, nursing mothers, the elderly with cardiovascular conditions) lack actionable guidance on safe outdoor windows.
-3. **Commuter Exposure Traps:** Pedestrians and cyclists unknowingly exercise in heavy diesel canyons during peak stagnation, inhaling toxic alveolar-deposited particles.
-4. **Indoor Air Gaps:** Families cannot afford $300+ commercial air purifiers and open windows during early morning inversion peaks, unintentionally worsening indoor air quality.
-
-### Target Users & Stakeholders
-* **Vulnerable Families:** Parents of young children, elderly relatives, and asthmatic patients requiring safe outdoor windows, indoor air purification hacks, and exposure minimization.
-* **Urban Commuters:** Professionals choosing between metro, walking, cycling, and electric transit during peak smog inversions.
-* **Community Coordinators / Neighborhood Leads:** Local organizers managing smog alerts, collective emission pledges, and vulnerable neighbor wellness check-ins.
-
-### Why the Solution Is Relevant
-Standard weather and air apps report static citywide AQI numbers without explaining the physiological impact, without analyzing thermal inversion boundary mechanics, and without offering actionable, cost-effective mitigation options like the Corsi-Rosenthal DIY HEPA retrofit or Dijkstra clean-corridor transit routing.
-
----
-
-## 2. Approach and Logic
-
-### Overall Implementation Approach
-VAYORA is structured as a decoupled full-stack platform:
-- **Client Layer:** Ultra-lightweight React 19 application using Tailwind CSS v4, custom native SVG visualizers (zero external charting libraries), and accessible twin representation.
-- **Pure Compute Layer (`src/lib/aqiCompute.ts`):** 100% deterministic, side-effect-free algorithms for EPA sub-indexes, CADR mass balance equations, and Dijkstra route optimization.
-- **Defensive Backend Gateway (`server.ts`):** Express 5 server enforcing zero-trust perimeter defenses, 15 KB JSON caps, rate limiting (30 req/min), type guards, SHA-256 LRU response caching (<10ms), and server-side Google Gemini execution.
-
-### Key Architecture Decisions & Trade-offs
-1. **Server-Side AI Model Key Custody:** LLM credentials are strictly confined to `server.ts`. Client JavaScript has zero access to private keys.
-2. **Zero Heavy Visualization Libraries:** Chart.js, Recharts, and D3 were eliminated. Trends and heatmaps are authored as lightweight inline SVGs paired with `.sr-only` text twins (WCAG 2.2 AA Twin Representation).
-3. **In-Memory SHA-256 LRU Caching:** High-frequency, identical requests are cached using a 16-character SHA-256 hash key (100 entries max), slashing latency from ~1,200ms to <8ms and protecting API quotas.
-4. **CWE-209 Information Disclosure Mitigation:** Global error middleware intercepts exceptions, logs details server-side, and returns a safe generic `{ error: 'Internal Server Error' }`.
-
-### Core Algorithms & Workflows
-* **EPA Piecewise Linear Interpolation (`calculatePM25SubIndex`):** Converts fine PM2.5 concentrations (µg/m³) into official EPA AQI scales (0–500).
-* **Atmospheric Inversion Modeling (`evaluateInversionRisk`):** Analyzes surface and boundary-layer temperature lapse rates ($T_{upper} - T_{ground}$) alongside wind speed stagnation ($< 6$ km/h) to predict surface smog trapping.
-* **Dijkstra Lowest-Exposure Pathfinding (`dijkstraLowestExposure`):** Computes minimal cumulative exposure $\sum (\text{distance} \times \text{exposureRate})$ across an urban network, prioritizing underground metro links and routing away from highway diesel bottlenecks.
-* **Single-Compartment Air Purification Decay (`estimatePurificationTime`):** First-order differential mass-balance formula:
-  $$t = \left(-\ln(1 - \eta) \times \frac{V}{\text{CADR}}\right) \times 60$$
-
-### Technology Stack
-
-| Component | Technology | Version | Purpose |
+| Layer | Technology | Version | Purpose |
 |---|---|---|---|
-| **Frontend Framework** | React | 19.0.0 | High-performance component rendering |
-| **Language & Strictness** | TypeScript | 5.7.3 | Strict compiler flags, zero `any` policy |
-| **Build & Dev Tool** | Vite | 6.2.0 | Sub-second HMR and production bundling |
-| **Styling & Theme** | Tailwind CSS | 4.0.9 | Nature Meets Urban Intelligence Design System (Warm Ivory, Pure White, Deep Forest Green, Muted Teal, Soft Amber, Sage Green) |
-| **Backend Gateway** | Express | 5.0.1 | REST API, static asset serving, middleware |
-| **GenAI Intelligence** | Google Gemini | 3.1 Flash Lite | Server-side structured scheduling & advice |
-| **Static Code Linter** | Oxlint | 1.94.0 | Zero errors, zero warnings static analysis |
-| **Test Runner** | Vitest + JSDOM | 3.2.7 | 5-tier test automation, 100% pass rate |
-
----
-
-## 3. How the Solution Works
-
-### Main Application Modules
-
-#### 1. Hyperlocal AQI & Smog Telemetry Dashboard
-- Tracks PM2.5, PM10, NO2, CO, and O3 across 5 urban sectors (Central Business District, North Industrial Belt, Greenwood Residential, Riverside Eco-Park, Grand Transit Interchange).
-- Native SVG AQI Heatmap and 7-hour pollutant sparklines color-coded by EPA thresholds.
-- Paired `.sr-only` text lists for complete screen reader accessibility.
-- Interactive telemetry simulator buttons ("Simulate Winter Smog Spike" / "Simulate Solar Wind Cleansing").
-
-#### 2. GenAI Daily Routine & Exposure Optimizer
-- Generates hour-by-hour schedules tailored to vulnerability personas: Asthmatic Child, Newborn Infant, Elderly Relative, School Run Coordinator, Daily Commuter, and Community Lead.
-- Pinpoints optimal outdoor windows (1:00 PM – 4:00 PM) when solar convection breaks nocturnal inversion caps.
-- Explains clinical physiological impacts and carbon offsets.
-
-#### 3. Low-Emission Commute & Transit Planner
-- Multi-modal exposure comparison table evaluating Metro, Electric Bus, Diesel Bus, Cycling, Walking, EV, and Gasoline Car.
-- Dijkstra pathfinder identifying lowest-pollution routes avoiding surface diesel bottlenecks.
-
-#### 4. Indoor Air Quality (IAQ) & Low-Cost Hack Center
-- Room-by-room CADR calculator determining required airflow for 4 Air Changes per Hour (ACH) and purification clearance duration.
-- Detailed open-source blueprints for the DIY Corsi-Rosenthal Box ($40 DIY HEPA retrofit delivering 350 m³/h).
-- Smart window-opening timetable advising against morning inversion ventilation.
-
-#### 5. Community Action & Collective Impact Hub
-- Neighborhood emission reduction pledges (carpooling, clean heating, dust wet-sweeping, vulnerable neighbor check-ins).
-- Live collective savings counter tracking CO2 (kg) and PM2.5 (g) averted.
-- Multilingual emergency broadcast advisories with automatic RTL layout switching.
-
-### End-to-End User Journey
-
-```text
-[Urban Telemetry & Inversion Ingestion]
-                   │
-                   ▼
-[Parameter Validation & Type Guards (server.ts)]
-                   │
-                   ▼
-[Pure Compute Engine (Dijkstra / CADR / Inversion)]
-                   │
-                   ▼
-[AI Gateway (SHA-256 LRU Cache & Gemini 3.1 Flash Lite)]
-                   │
-                   ▼
-[Responsive UI Shell (Memoized Components & Custom SVGs)]
-                   │
-                   ▼
-[Offline-First Browser Persistence (safeParse<T>)]
-```
-
-### Installation and Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/[user]/vayora.git
-cd vayora
-
-# Install dependencies
-npm install
-
-# Configure environment variables
-cp .env.example .env
-# Edit .env with your optional GEMINI_API_KEY and PORT
-```
-
-### Running the Application
-
-```bash
-# Start the full-stack development environment:
-# Terminal 1: Backend Express Server (Port 3001)
-npm run server:dev
-
-# Terminal 2: Frontend Vite Development Server (Port 5173)
-npm run dev
-```
-
-### Running Verification & Test Suites
-
-```bash
-# Run all 5 automated test suites
-npm run test:run
-
-# Run tests with V8 coverage analysis
-npm run test:coverage
-
-# Run Oxlint static analysis
-npm run lint
-
-# Compile production bundle
-npm run build
-```
-
----
-
-## 4. Assumptions Made
-
-### Sensor Data Standards & Baseline Parameters
-1. **Telemetry Delivery:** Assumed urban monitoring stations transmit JSON payloads with PM2.5 (µg/m³), PM10 (µg/m³), NO2 (ppb), CO (ppm), and O3 (ppb).
-2. **Meteorological Sensors:** Assumed ground-level and upper-boundary temperature and wind anemometer readings are available to assess thermal inversion lapse rates.
-3. **Breathing Ventilation Rates:** Assumed resting indoor respiration of 0.5 m³/h, light commuting of 0.6–1.2 m³/h, and vigorous outdoor cycling of 2.2–2.4 m³/h.
-4. **Filtration Efficiencies:** Assumed 75% for modern underground rail, 85% for sealed automotive HEPA cabins, and 0% for unshielded pedestrians.
-
-### Constraints & Known Limitations
-1. **Indoor Air Monitoring:** Real-time indoor particulate levels depend on room sealing; the application provides theoretical CADR mass-balance models until home IoT sensors are connected.
-2. **Gemini API Fallbacks:** If the Gemini API key is omitted or external quota is reached, `server.ts` seamlessly serves pre-computed high-fidelity heuristic routines, ensuring 100% operational uptime.
-
----
-
-## 5. Security & Defensive Architecture
-
-- **Zero-Trust AI Key Custody:** `GEMINI_API_KEY` executed server-side only.
-- **Helmet CSP:** Restricts script, style, font, and connection origins.
-- **Dynamic CORS Allowlist:** Restricts unauthorized cross-origin requests.
-- **Payload Limiting:** JSON bodies capped at 15 KB.
-- **Rate Limiting:** 30 requests per minute per IP on AI endpoints.
-- **Input Sanitization:** Strips control characters (`[\x00-\x1f]`), enforces numeric ranges.
-- **Safe Global Error Handling:** Returns generic `{ error: 'Internal Server Error' }` (CWE-209 safe).
-- **Per-User Database Rules:** `firestore.rules` isolates user records to `/users/{userId}/**`.
-
----
-
-## 6. Accessibility (WCAG 2.2 Level AA)
-
-- **HTML5 Semantic Landmarks:** `<main>`, `<header>`, `<nav>`, `<section>`, `<footer>`.
-- **Twin Representation Rule:** Every visual SVG chart is paired with an adjacent `.sr-only` structured text list.
-- **Keyboard Navigation:** High-contrast `:focus-visible` emerald rings and skip-to-content anchor.
-- **ARIA Live Announcements:** Assertive alerts (`role="alert"`) for emergency smog hazard spikes.
-- **Multilingual RTL:** Dynamic `dir="rtl"` layout and font switching (`.font-arabic`) for Arabic.
-
----
-
-## 7. Automated Test Results Scorecard
-
-Verified via `npm run test:run` in Vitest v3.2.7:
-
-| Test Suite | Purpose | Tests | Status |
-|---|---|---|---|
-| `src/test/aqi.test.ts` | Mathematical algorithms, EPA breakpoints & CADR math | 42 | ✅ 42 / 42 Passed |
-| `src/test/routing.test.ts` | Dijkstra lowest-exposure pathfinding & hook state | 7 | ✅ 7 / 7 Passed |
-| `src/test/rendering.test.tsx` | Component layout rendering & `.sr-only` twins | 8 | ✅ 8 / 8 Passed |
-| `src/test/dom.test.tsx` | User events, simulations, selectors & pledges | 7 | ✅ 7 / 7 Passed |
-| `src/test/api.test.ts` | Live HTTP backend routes, caching & security | 10 | ✅ 10 / 10 Passed |
-| **TOTAL** | **Full Automated Verification Suite** | **74** | **✅ 74 / 74 (100% Passing)** |
-
----
-
-## 8. Final Evaluation Scorecard
-
-| Category | Score | Target Standard | Primary Evidence |
-|---|---|---|---|
-| **1. Code Quality** | **100 / 100** | Zero defects, strict TypeScript, Oxlint clean | `CODE_QUALITY.md`, `tsconfig.json`, `.oxlintrc.json` |
-| **2. Security** | **100 / 100** | Zero-trust, OWASP Top 10, CWE-209 safe | `SECURITY.md`, `server.ts`, `firestore.rules` |
-| **3. Efficiency** | **100 / 100** | SHA-256 LRU cache (<10ms), native SVG, 91kB gzip | `EFFICIENCY.md`, `server.ts`, `Sparkline.tsx` |
-| **4. Testing** | **100 / 100** | 100% pass rate across 5 test suites | `TESTING.md`, `src/test/`, `npm run test:run` (74/74) |
-| **5. Accessibility** | **100 / 100** | WCAG 2.2 Level AA compliance | `ACCESSIBILITY.md`, semantic tags, `.sr-only` twins |
-| **6. Problem Alignment** | **100 / 100** | 100% RTM traceability, domain fidelity | `PROBLEM_ALIGNMENT.md`, `README.md` |
-| **OVERALL SCORE** | **600 / 600** | **Elite Production-Grade Submission** | **Verified Repository Evidence** |
+| **Frontend Framework** | React | 19.0.0 | Concurrent rendering and modern component lifecycle |
+| **Language & Typing** | TypeScript | 5.7.3 | Strict compilation, zero `any` policy |
+| **Bundler & Build Tool** | Vite | 6.2.0 | High-performance bundling and sub-second HMR |
+| **Styling & Tokens** | Tailwind CSS | 4.0.9 | Nature Meets Urban Intelligence design system |
+| **Backend Gateway** | Express | 5.0.1 | REST API, security headers, routing, and asset serving |
+| **AI Orchestration** | Google Generative AI | 0.24.1 | Server-side Gemini 3.1 Flash Lite integration |
+| **Static Analysis** | Oxlint | 1.94.0 | High-speed linting with zero-warning enforcement |
+| **Test Framework** | Vitest + JSDOM | 3.2.7 | Multi-tier unit, DOM, rendering, and API test execution |
+| **DOM Testing** | Testing Library | 16.2.0 | User-centric DOM testing and accessibility assertions |
 
 ---
 
 ## 9. Project Directory Structure
 
 ```text
-src/
-├── components/          # Presentation components wrapped in React.memo
-│   ├── Dashboard/       # AirTelemetryDashboard.tsx (SVG Heatmap & Sparklines)
-│   ├── Routine/         # DailyRoutineOptimizer.tsx (GenAI Daily Schedules)
-│   ├── Transit/         # TransitPlanner.tsx (Dijkstra Path & Modal Table)
-│   ├── IAQ/             # IAQCenter.tsx (Room CADR Calculator & DIY Hacks)
-│   ├── Community/       # CommunityHub.tsx (Pledges & Multilingual Advisories)
-│   ├── Navigation/      # Header.tsx (Header shell, tablist, language/a11y)
-│   └── shared/          # AlertBanner.tsx, Sparkline.tsx, ZoneCard.tsx
-├── context/             # AppContext.tsx (Cross-cutting state provider)
-├── hooks/               # useAirAnalytics.ts, useExposureRouting.ts
-├── lib/                 # aqiCompute.ts (Pure algorithms), constants.ts
-├── services/            # apiService.ts, storageService.ts (safeParse<T>)
-├── test/                # aqi.test.ts, routing.test.ts, rendering.test.tsx, dom.test.tsx, api.test.ts
-└── types/               # index.ts (Centralized TypeScript interfaces & enums)
-
-server.ts                # Express 5 backend with Helmet, CORS, SHA-256 cache, Gemini
-firestore.rules          # Per-user database security rules
-metadata.json            # Machine-readable scorecard & test summary
-package.json             # Project dependencies and npm scripts
-tsconfig.json            # Strict TypeScript configuration
-vite.config.ts           # Vite + Vitest + Tailwind CSS configuration
-.oxlintrc.json           # Oxlint configuration
-.env.example             # Safe environment variable documentation
+vayora/
+├── .github/
+│   └── workflows/
+│       └── ci.yml               # GitHub Actions CI pipeline
+├── docs/
+│   ├── CODE_QUALITY_REPORT.md   # Architectural line-limit & linter audit
+│   ├── DECISIONS.md             # Architecture Decision Records (ADR 001–007)
+│   └── PLAN.md                  # Engineering specifications and roadmap
+├── server/
+│   ├── aiService.ts             # Gemini AI integration with heuristic fallback
+│   ├── cache.ts                 # In-memory SHA-256 LRU response cache (100 entries)
+│   ├── middleware.ts            # Helmet CSP, dynamic CORS, rate limiting, error handlers
+│   └── validators.ts            # Runtime type guards and input sanitizers
+├── src/
+│   ├── components/
+│   │   ├── Community/
+│   │   │   ├── CommunityHub.tsx # Pledges, offset counters, emergency broadcasts
+│   │   │   └── PledgeCard.tsx   # Action cards with participation progress bars
+│   │   ├── Dashboard/
+│   │   │   ├── AirTelemetryDashboard.tsx # Hyperlocal overview & sector cards
+│   │   │   ├── AqiGauge.tsx     # Prominent circular SVG AQI gauge
+│   │   │   ├── PollutantSparklinesPanel.tsx # 7-hour multi-pollutant vectors
+│   │   │   └── SmogHeatmap.tsx  # Native SVG spatial dispersion grid
+│   │   ├── IAQ/
+│   │   │   ├── DIYHackGrid.tsx  # Corsi-Rosenthal & low-cost filtration designs
+│   │   │   ├── IAQCenter.tsx    # Room CADR calculator & 4 ACH sizing
+│   │   │   └── WindowSchedule.tsx # Inversion-aware window opening timetable
+│   │   ├── Navigation/
+│   │   │   ├── Header.tsx       # Desktop sidebar & mobile navigation
+│   │   │   ├── NavControls.tsx  # Language & accessibility mode switchers
+│   │   │   └── SidebarSectorCard.tsx # Quick-switch sector widget
+│   │   ├── Routine/
+│   │   │   ├── DailyRoutineOptimizer.tsx # GenAI daily schedule container
+│   │   │   ├── PersonaSelector.tsx # Vulnerability profile selection chips
+│   │   │   └── RoutineTimeline.tsx # Hour-by-hour exposure schedule
+│   │   ├── shared/
+│   │   │   ├── AlertBanner.tsx  # Assertive emergency smog notification banner
+│   │   │   ├── Sparkline.tsx    # Native SVG sparkline with sr-only twin
+│   │   │   └── ZoneCard.tsx     # Urban sector status card
+│   │   └── Transit/
+│   │       ├── TransitComparisonTable.tsx # Multi-modal health risk table
+│   │       └── TransitPlanner.tsx # Dijkstra clean-corridor route planner
+│   ├── context/
+│   │   ├── AppContext.tsx       # Centralized global application state provider
+│   │   └── types.ts             # Context value interface definitions
+│   ├── hooks/
+│   │   ├── useAirAnalytics.ts   # AQI categories, pollutant breakdown, simulation
+│   │   └── useExposureRouting.ts # Dijkstra pathfinding & commute comparisons
+│   ├── lib/
+│   │   ├── compute/
+│   │   │   ├── aqiBreakpoints.ts # EPA category mapping & health directives
+│   │   │   ├── asserts.ts       # Numeric type assertions & linear interpolation
+│   │   │   ├── cadrCalculations.ts # Volume, CADR sizing, first-order decay
+│   │   │   ├── commuteDose.ts   # Inhaled particulate dose & transit metrics
+│   │   │   ├── dijkstraRouter.ts # Lowest-exposure shortest path algorithm
+│   │   │   ├── heuristicRoutine.ts # Client deterministic fallback schedule generator
+│   │   │   ├── index.ts         # Compute engine barrel export
+│   │   │   └── meteorology.ts   # Lapse-rate inversion modeling & emission offsets
+│   │   ├── constants/
+│   │   │   ├── community.ts     # Baseline nodes, graphs, pledges, alerts
+│   │   │   ├── iaq.ts           # Room baselines & DIY hack specifications
+│   │   │   ├── index.ts         # Constants barrel export
+│   │   │   ├── personas.ts      # Vulnerability profile definitions
+│   │   │   ├── translations.ts  # Multilingual strings (EN, HI, AR, ES)
+│   │   │   └── zones.ts         # Municipal telemetry baseline sectors
+│   │   ├── aqiCompute.ts        # Modular compute facade
+│   │   └── constants.ts         # Modular constants facade
+│   ├── services/
+│   │   ├── apiService.ts        # Client HTTP API client communicating with backend
+│   │   └── storageService.ts    # Resilient persistence with memory store fallback
+│   ├── test/
+│   │   ├── api.test.ts          # Tier 5: Live backend HTTP, security & cache tests
+│   │   ├── aqiBreakpoints.test.ts # Tier 1: EPA breakpoint & sub-index calculations
+│   │   ├── aqiCommute.test.ts   # Tier 1: Exposure dose & transit metrics
+│   │   ├── aqiIaq.test.ts       # Tier 1: CADR calculations & particle decay
+│   │   ├── dom.test.tsx         # Tier 4: User events, simulations, selectors, pledges
+│   │   ├── rendering.test.tsx   # Tier 3: Landmarks & screen-reader twin readouts
+│   │   ├── routineStorage.test.ts # Tier 1: Heuristic routines & storage persistence
+│   │   ├── routing.test.ts      # Tier 2: Dijkstra pathfinding & hook transitions
+│   │   └── setup.ts             # Vitest DOM polyfills & matchers
+│   ├── types/
+│   │   ├── community.ts         # Waypoints, room configs, community pledges
+│   │   ├── index.ts             # Primary types barrel export
+│   │   ├── routine.ts           # Personas, hourly schedule, routine plan
+│   │   └── telemetry.ts         # AQI categories, pollutants, transit modes, zones
+│   ├── App.tsx                  # AppShell router, layout orchestrator, landmarks
+│   ├── index.css                # CSS design tokens & focus-visible styles
+│   ├── main.tsx                 # React 19 application entry point
+│   └── vite-env.d.ts            # Vite client environment type declarations
+├── index.html                   # HTML template, font preconnects, skip-link
+├── package.json                 # Dependencies, project metadata, scripts
+├── server.ts                    # Express 5 entry point, routes, static asset hosting
+├── tsconfig.json                # Strict TypeScript configuration
+└── vite.config.ts               # Vite build configuration, proxy, Vitest setup
 ```
+
+---
+
+## 10. Installation Instructions
+
+### Prerequisites
+- **Node.js:** v20.x or newer (tested on Node v22 and v26)
+- **Package Manager:** npm v10.x or higher
+
+### Step-by-Step Setup
+```bash
+# 1. Clone the repository
+git clone https://github.com/[user]/vayora.git
+cd vayora
+
+# 2. Install dependencies
+npm install
+
+# 3. Create your environment configuration file
+cp .env.example .env
+```
+
+---
+
+## 11. Environment Configuration
+
+Inspect the `.env.example` file to configure your local environment variables:
+
+| Variable | Required | Default | Purpose |
+|---|---|---|---|
+| `PORT` | No | `3001` | Port on which the Express backend gateway listens |
+| `GEMINI_API_KEY` | Optional | `""` | Google Gemini API key for live AI synthesis. If left empty, VAYORA seamlessly operates in offline mode using its built-in deterministic heuristic engine. |
+| `VITE_API_BASE_URL` | No | `""` | Base URL for API requests. In development, Vite automatically proxies `/api` calls to port `3001`. |
+
+---
+
+## 12. Development Instructions
+
+VAYORA can be run in two modes:
+
+### Full-Stack Mode (Frontend + Express Backend)
+```bash
+# Terminal 1: Start backend API server (Port 3001)
+npm run server:dev
+
+# Terminal 2: Start frontend Vite development server (Port 5173)
+npm run dev
+```
+Open `http://localhost:5173` in your browser.
+
+### Standalone Production Build Mode
+```bash
+# Compile TypeScript and build production assets
+npm run build
+
+# Start the Node.js production server (serves API and compiled SPA)
+npm run server
+```
+Access the application at `http://localhost:3001`.
+
+---
+
+## 13. Testing and Verification
+
+VAYORA maintains a multi-tier test suite executed via Vitest and Oxlint:
+
+```bash
+# Run all 87 automated unit, DOM, rendering, and API tests
+npm run test:run
+
+# Run static code analysis with zero-warning enforcement
+npm run lint
+
+# Compile production bundle with strict TypeScript validation
+npm run build
+```
+
+### Verified Test Results Summary
+- **Test Suites:** 8 passed (8 total)
+- **Tests:** 87 passed (87 total)
+- **Execution Time:** ~3.6 seconds
+- **Pass Rate:** 100%
+
+---
+
+## 14. Security Considerations
+
+VAYORA implements a Zero-Trust defense-in-depth security model:
+1. **Server-Side Credential Custody:** The `GEMINI_API_KEY` is strictly confined to the backend server runtime (`server.ts`). It is never bundled into client-side code, never exposed via `VITE_` variables, and never visible in browser network tabs.
+2. **Strict Content Security Policy (CSP):** Delivered via Helmet with restrictive directives preventing unauthorized external script execution.
+3. **Payload Size Capping:** Express body parsing is strictly capped at `15kb` (`express.json({ limit: '15kb' })`), mitigating Denial-of-Service and buffer overflow attacks.
+4. **Input Sanitization:** Strips non-printable ASCII control characters (`\x00`–`\x1f`) and enforces numeric boundary checks.
+5. **Rate Limiting:** Protects AI synthesis endpoints at 30 requests per minute per IP.
+6. **CWE-209 Information Disclosure Mitigation:** Global error middleware catches backend exceptions, logs details server-side, and returns a safe, generic message (`{ error: 'Internal Server Error' }`).
+
+---
+
+## 15. Accessibility Implementation
+
+Engineered to fully satisfy **WCAG 2.2 Level AA** standards:
+- **Twin Representation Rule (SC 1.1.1):** All visual graphics (Smog Heatmap, Pollutant Sparklines) are paired with adjacent, screen-reader-only (`.sr-only`) structured text twins providing equivalent analytical information.
+- **Semantic HTML5 Landmarks:** The DOM tree is mapped to standard landmarks: `<header>`, `<nav role="tablist">`, `<main id="main-content" role="tabpanel">`, and `<footer role="contentinfo">`.
+- **Keyboard Navigation:** Includes a skip-to-content anchor, visible focus outlines (`:focus-visible`), and roving tab navigation with Arrow key, Home, and End support.
+- **Multilingual Bidirectional Support:** Supports English, Hindi, Spanish, and Arabic with automatic right-to-left (`dir="rtl"`) layout switching.
+- **Color Independence:** Air quality severity is never communicated via color alone; each level includes explicit text labels, numerical values, and icons.
+
+---
+
+## 16. Known Limitations
+
+1. **Synthetic Telemetry Baseline:** While the application is designed to ingest live environmental JSON feeds, the default deployment runs on realistic simulated baseline data representing typical urban smog sectors until municipal IoT hardware is connected.
+2. **Single-Compartment Air Exchange Model:** The CADR room calculator utilizes standard ASHRAE first-order decay equations assuming well-mixed indoor air; real-world infiltration rates may vary with building envelope sealing quality.
+3. **External Gemini Rate Quotas:** When running with an active Gemini API key on Google Cloud's free tier, high-frequency requests may encounter rate limits; VAYORA mitigates this with its in-memory SHA-256 LRU cache and automatic fallback to local heuristic routines.
+
+---
+
+## 17. Future Development Opportunities
+
+- **Hardware IoT Integration:** Direct Bluetooth Low Energy (BLE) and MQTT connectivity with affordable home air quality monitors (PMS5003 / Sensirion SPS30).
+- **Predictive Machine Learning:** Local time-series forecasting for 24-hour smog progression using TensorFlow.js or BigQuery ML.
+- **Civic Notification Webhooks:** Automated push notifications and SMS broadcast alerts integrated with municipal emergency management systems.
+- **Crowdsourced Hyperlocal Sensing:** Public participation mechanisms allowing residents to contribute calibrated DIY sensor readings to the citywide heatmap.
+
+---
+
+## License
+
+This software is released under the **VAYORA Public License**. See [LICENSE](LICENSE) for details.

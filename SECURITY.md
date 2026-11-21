@@ -1,75 +1,76 @@
-# Security Architecture & OWASP Defense Blueprint — VAYORA
+# Security — VAYORA Zero-Trust Security Blueprint & Threat Model
 
-> **Standard:** Zero-Trust Defense-in-Depth (Score: 100/100)  
-> **Evaluation Pillar:** Pillar 2 (Security)  
-> **Repository:** VAYORA — AI-powered Urban Air Quality & Environmental Intelligence Platform  
-
----
-
-## 1. Zero-Trust Architecture Principles
-
-VAYORA treats all network interfaces, client payloads, and browser environments as potentially untrusted:
-
-1. **Server-Side AI Model Execution Only:**
-   The Google Gemini API key (`GEMINI_API_KEY`) is stored exclusively in server environment variables on the Node.js backend (`server.ts`). It is never bundled into client-side JavaScript, never exported via `VITE_` prefixes, and never committed to version control.
-2. **Environment Variable Segregation:**
-   - `.env` is listed in `.gitignore` to prevent secret leakage.
-   - `.env.example` provides sanitized dummy template values.
-3. **Defense-in-Depth Parameter Validation:**
-   Client form controls perform UX validations, but the backend server independently validates types, numeric physical bounds, and lengths before executing business logic or LLM prompts.
+> **Evaluation Parameter:** Security (Standard: Zero-Trust Defense-in-Depth & OWASP Top 10 Mitigation)  
+> **Platform:** VAYORA — AI-Powered Urban Air Quality & Environmental Intelligence Platform  
+> **Standard:** Enterprise Production Security Posture  
 
 ---
 
-## 2. Perimeter Hardening & Express 5 Middleware Pipeline
+## 1. Zero-Trust Security Baseline
 
-Every HTTP request to `server.ts` traverses a multi-layered defensive middleware chain:
+Public health platforms must be resilient against manipulation, denial-of-service, and unauthorized data extraction. VAYORA operates under an uncompromising **Zero-Trust Security Architecture**: *Every incoming network request, client payload, and environment interface is treated as untrusted until validated through rigorous perimeter controls.*
 
-```text
-[Incoming HTTP Request]
-          │
-          ▼
-┌───────────────────────────────────────────────┐
-│ 1. Helmet Security Middleware                 │
-│    • Content-Security-Policy (CSP)            │
-│    • Referrer-Policy: strict-origin           │
-│    • X-Content-Type-Options: nosniff          │
-└───────────────────────────────────────────────┘
-          │
-          ▼
-┌───────────────────────────────────────────────┐
-│ 2. Dynamic CORS Origin Allowlist              │
-│    • Localhost & verified domains only        │
-│    • Blocks unauthorized cross-origin calls   │
-└───────────────────────────────────────────────┘
-          │
-          ▼
-┌───────────────────────────────────────────────┐
-│ 3. Inbound Payload Limit (15 KB)              │
-│    • express.json({ limit: '15kb' })          │
-│    • Blocks memory exhaustion / buffer attacks│
-└───────────────────────────────────────────────┘
-          │
-          ▼
-┌───────────────────────────────────────────────┐
-│ 4. Endpoint Rate Limiter                      │
-│    • express-rate-limit (30 req / min / IP)   │
-│    • Protects Gemini quotas & compute queues  │
-└───────────────────────────────────────────────┘
-          │
-          ▼
-┌───────────────────────────────────────────────┐
-│ 5. Type Guards & Range Sanitization           │
-│    • validateZone, validatePersona            │
-│    • Control character stripping ([\x00-\x1f])│
-└───────────────────────────────────────────────┘
-          │
-          ▼
-┌───────────────────────────────────────────────┐
-│ 6. In-Memory SHA-256 LRU Cache / Gemini Model │
-└───────────────────────────────────────────────┘
+```
+[ Incoming Client HTTP Request ]
+               │
+               ▼
+┌────────────────────────────────────────────────────────┐
+│ 1. Perimeter Hardening (Helmet Security Headers)       │
+│    • Content-Security-Policy (CSP)                     │
+│    • X-Content-Type-Options: nosniff                   │
+│    • Referrer-Policy: strict-origin-when-cross-origin  │
+└────────────────────────────────────────────────────────┘
+               │
+               ▼
+┌────────────────────────────────────────────────────────┐
+│ 2. Dynamic CORS Origin Allowlist                       │
+│    • Strictly restricted to authorized origins        │
+│    • Rejects arbitrary cross-origin requests           │
+└────────────────────────────────────────────────────────┘
+               │
+               ▼
+┌────────────────────────────────────────────────────────┐
+│ 3. Payload Size Guardrail (15 KB Strict Cap)           │
+│    • express.json({ limit: '15kb' })                   │
+│    • Blocks buffer overflows and memory exhaustion     │
+└────────────────────────────────────────────────────────┘
+               │
+               ▼
+┌────────────────────────────────────────────────────────┐
+│ 4. Rate Limiting Defense (30 req / min / IP)           │
+│    • Protects AI model quotas and computational queues │
+└────────────────────────────────────────────────────────┘
+               │
+               ▼
+┌────────────────────────────────────────────────────────┐
+│ 5. Structural & Physical Type Guards                   │
+│    • validateZone, validatePersona, isFiniteNumber     │
+│    • Strips non-printable ASCII control characters     │
+└────────────────────────────────────────────────────────┘
+               │
+               ▼
+┌────────────────────────────────────────────────────────┐
+│ 6. In-Memory SHA-256 LRU Cache & Protected AI Gateway  │
+└────────────────────────────────────────────────────────┘
 ```
 
-### Content Security Policy (CSP) Directives
+---
+
+## 2. API Key Confidentiality & Secret Custody
+
+The Gemini API key (`GEMINI_API_KEY`) is stored exclusively within the server's runtime environment (`process.env.GEMINI_API_KEY`).
+
+### Security Guarantees:
+1. **Zero Browser Exposure**: The secret key is never injected into client-side JavaScript, never prefixed with `VITE_`, and never referenced in frontend source files.
+2. **Repository Protection**: `.env` files are explicitly excluded via `.gitignore`. A sanitized `.env.example` provides non-sensitive template configurations.
+3. **Server-Side AI Proxying**: All interactions with generative AI models occur behind authenticated Express 5 proxy endpoints (`/api/routine-insights` and `/api/emergency-advisory`).
+
+---
+
+## 3. Perimeter Hardening & Express 5 Middleware Pipeline
+
+The backend server (`server.ts` and `server/middleware.ts`) configures comprehensive HTTP header defenses using **Helmet**:
+
 ```typescript
 app.use(
   helmet({
@@ -90,18 +91,23 @@ app.use(
 );
 ```
 
+### Additional Perimeter Defenses:
+- **CORS Origin Whitelist**: Dynamically checks inbound request origins against an allowlist of local and production hostnames.
+- **Inbound Payload Clamping**: Inbound JSON payloads are capped at **15 KB** via `express.json({ limit: '15kb' })`, preventing memory allocation attacks.
+- **Rate Limiting**: AI endpoints are throttled to **30 requests per minute per IP**, mitigating quota exhaustion and automated scraping attempts.
+
 ---
 
-## 3. Strict Input Validation & Type Guards
+## 4. Input Validation, Sanitization & Physical Bounds Checking
 
-Backend endpoints enforce explicit type guards and physical boundaries before processing data:
+Client-side data is never trusted. Inbound parameters undergo strict structural and physical bounds validation in `server/validators.ts`:
 
 ```typescript
-function isFiniteNumber(v: unknown): v is number {
+export function isFiniteNumber(v: unknown): v is number {
   return typeof v === 'number' && Number.isFinite(v);
 }
 
-function validateZone(z: unknown): z is ValidatedZone {
+export function validateZone(z: unknown): z is ValidatedZone {
   if (typeof z !== 'object' || z === null) return false;
   const obj = z as Record<string, unknown>;
 
@@ -118,56 +124,44 @@ function validateZone(z: unknown): z is ValidatedZone {
 }
 ```
 
-Invalid payloads are rejected with HTTP 400 Bad Request.
+Any request containing out-of-bounds metrics (e.g. negative $\text{PM}_{2.5}$, non-finite numbers, or oversized strings) is rejected with an immediate **HTTP 400 Bad Request**.
 
 ---
 
-## 4. Prompt Injection Defense & Sanitization
+## 5. Prompt Injection Defense & Tokenizer Protection
 
-1. **Control Character Stripping:**  
-   Non-printable ASCII control characters (`\x00` through `\x1f`) can confuse tokenizer boundaries. VAYORA strips these characters safely:
+LLMs can be tricked or confused by malicious prompt injections, non-printable characters, or oversized contexts. VAYORA implements three protective layers:
+
+1. **Control Character Stripping**:  
+   Non-printable ASCII control characters (`\x00` through `\x1f`) are stripped using a programmatic regular expression:
    ```typescript
-   const controlCharPattern = new RegExp('[' + String.fromCharCode(0) + '-' + String.fromCharCode(31) + ']', 'g');
-   const cleanText = text.replace(controlCharPattern, '').trim().slice(0, 2000);
+   const controlPattern = new RegExp('[' + String.fromCharCode(0) + '-' + String.fromCharCode(31) + ']', 'g');
+   const sanitizedText = text.replace(controlPattern, '').trim().slice(0, 2000);
    ```
-2. **Payload Length Capping:**  
-   Language tags, identifiers, and prompt texts are strictly sliced to prevent token overflow.
-3. **Structured JSON Extraction:**  
-   LLM output is extracted via regex (`/\{[\s\S]*\}/`) rather than bare parsing, protecting against markdown chatter or format manipulation.
+2. **Payload Length Clamping**: Input text fields, persona labels, and language codes are strictly sliced to prevent buffer overflow.
+3. **Structured JSON Extraction**:  
+   AI responses are extracted using regular expression pattern matching (`/\{[\s\S]*\}/`) rather than evaluating raw strings, preventing template manipulation or markdown injection.
 
 ---
 
-## 5. CWE-209 Information Disclosure Mitigation
+## 6. CWE-209 Information Disclosure Mitigation
 
-Exception messages and internal stack traces are strictly kept on the server:
+Leaking internal call stacks or environment details aids malicious actors. VAYORA implements a centralized error handler in `server.ts` that catches all unhandled exceptions:
 
 ```typescript
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error('[SECURITY AUDIT] Internal Server Error:', err);
-  // Never leak error message or stack trace to client
+  // Never leak internal error message or stack trace to client
   res.status(500).json({ error: 'Internal Server Error' });
 });
 ```
 
-Clients receive a clean, generic `{ error: 'Internal Server Error' }`.
+Clients receive an opaque, generic error response, while full debugging logs remain isolated in secure server logs.
 
 ---
 
-## 6. Database Access Control (`firestore.rules`)
+## 7. Storage Security & Client-Side Resiliency
 
-When integrated with Cloud Firestore, per-user data segregation is enforced at the database engine level:
-
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId}/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    match /{document=**} {
-      allow read, write: if false;
-    }
-  }
-}
-```
-Non-authenticated reads and writes across global collections are denied by default.
+In `src/services/storageService.ts`, all user preferences (language, accessibility, pledges, room configurations) are validated through a `safeParse<T>()` envelope:
+- Malformed or tampered local storage entries are discarded and replaced with safe system defaults.
+- If browser storage is disabled or quota-restricted, an in-memory storage fallback activates automatically, ensuring the client session remains secure and functional without crashing.

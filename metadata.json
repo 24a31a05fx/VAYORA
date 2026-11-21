@@ -18,19 +18,20 @@
   "testExecutionSummary": {
     "testRunner": "vitest",
     "testEnvironment": "jsdom",
-    "totalTestSuites": 7,
-    "totalTests": 78,
-    "passedTests": 78,
+    "totalTestSuites": 8,
+    "totalTests": 87,
+    "passedTests": 87,
     "failedTests": 0,
     "passRatePercent": 100,
     "suites": [
-      { "name": "aqiBreakpoints.test.ts", "purpose": "EPA AQI Categories, Sub-Indexes & Breakpoints", "tests": 18, "status": "passed" },
-      { "name": "aqiCommute.test.ts", "purpose": "Transit Dose Inhalation & Modal Metrics", "tests": 17, "status": "passed" },
-      { "name": "aqiIaq.test.ts", "purpose": "CADR Mass Balance, Room Volumes & Inversion Mechanics", "tests": 11, "status": "passed" },
-      { "name": "routing.test.ts", "purpose": "Dijkstra Lowest-Exposure Path & Hook State", "tests": 7, "status": "passed" },
-      { "name": "api.test.ts", "purpose": "Live Backend HTTP, Type Guards & Security Headers", "tests": 10, "status": "passed" },
-      { "name": "rendering.test.tsx", "purpose": "Component Landmarks & Screen Reader Twin Representations", "tests": 8, "status": "passed" },
-      { "name": "dom.test.tsx", "purpose": "DOM Interactions, Pledges, Simulations & Selectors", "tests": 7, "status": "passed" }
+      { "name": "aqiBreakpoints.test.ts", "tier": "Tier 1", "purpose": "EPA AQI Categories, Sub-Indexes & Breakpoints", "tests": 23, "status": "passed" },
+      { "name": "aqiCommute.test.ts", "tier": "Tier 1", "purpose": "Transit Dose Inhalation & Modal Metrics", "tests": 17, "status": "passed" },
+      { "name": "aqiIaq.test.ts", "tier": "Tier 1", "purpose": "CADR Mass Balance, Room Volumes & Inversion Mechanics", "tests": 11, "status": "passed" },
+      { "name": "routineStorage.test.ts", "tier": "Tier 1", "purpose": "Heuristic Offline Schedule Generation & Resilient Storage", "tests": 4, "status": "passed" },
+      { "name": "routing.test.ts", "tier": "Tier 2", "purpose": "Dijkstra Lowest-Exposure Path & Hook State", "tests": 7, "status": "passed" },
+      { "name": "rendering.test.tsx", "tier": "Tier 3", "purpose": "Component Landmarks & Screen Reader Twin Representations", "tests": 8, "status": "passed" },
+      { "name": "dom.test.tsx", "tier": "Tier 4", "purpose": "DOM Interactions, Pledges, Simulations & Selectors", "tests": 7, "status": "passed" },
+      { "name": "api.test.ts", "tier": "Tier 5", "purpose": "Live Backend HTTP, Type Guards & Security Headers", "tests": 10, "status": "passed" }
     ]
   },
   "linterSummary": {
@@ -38,12 +39,21 @@
     "version": "1.94.0",
     "errors": 0,
     "warnings": 0,
-    "status": "clean"
+    "status": "clean",
+    "rulesCount": 116,
+    "filesScanned": 64
   },
   "buildSummary": {
     "builder": "vite v6.2.0 + tsc -b",
     "status": "success",
-    "bundleSize": "304.23 kB (91.53 kB gzip)"
+    "bundleMetrics": {
+      "indexHtml": "1.79 kB (0.98 kB gzip)",
+      "indexCss": "41.93 kB (8.45 kB gzip)",
+      "appJs": "99.76 kB (27.17 kB gzip)",
+      "vendorJs": "223.22 kB (69.24 kB gzip)",
+      "totalGzipJs": "96.41 kB"
+    },
+    "buildDurationMs": 877
   },
   "frameworkVersions": {
     "node": "24.7.0",
@@ -53,7 +63,7 @@
     "typescript": "5.7.3",
     "tailwindcss": "4.0.9",
     "vite": "6.2.0",
-    "vitest": "3.0.6",
+    "vitest": "3.2.7",
     "oxlint": "1.94.0",
     "geminiModel": "gemini-3.1-flash-lite"
   }

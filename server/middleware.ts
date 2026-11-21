@@ -14,8 +14,6 @@ const ALLOWED_ORIGINS = [
   'http://localhost:4173',
   'https://vayora.web.app',
   'https://vayora.firebaseapp.com',
-  'https://aeroguard.web.app',
-  'https://aeroguard.firebaseapp.com',
 ];
 
 export const helmetMiddleware = helmet({

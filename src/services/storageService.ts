@@ -30,14 +30,14 @@ function safeParse<T>(raw: string | null, fallback: T): T {
 }
 
 const STORAGE_KEYS = {
-  ZONES: 'aeroguard_zones_v1',
-  SELECTED_ZONE: 'aeroguard_selected_zone_id_v1',
-  PERSONA: 'aeroguard_active_persona_v1',
-  ROUTINE: 'aeroguard_routine_plan_v1',
-  ROOMS: 'aeroguard_iaq_rooms_v1',
-  PLEDGES: 'aeroguard_community_pledges_v1',
-  LANGUAGE: 'aeroguard_language_v1',
-  ACCESSIBILITY_MODE: 'aeroguard_accessibility_mode_v1',
+  ZONES: 'vayora_zones_v1',
+  SELECTED_ZONE: 'vayora_selected_zone_id_v1',
+  PERSONA: 'vayora_active_persona_v1',
+  ROUTINE: 'vayora_routine_plan_v1',
+  ROOMS: 'vayora_iaq_rooms_v1',
+  PLEDGES: 'vayora_community_pledges_v1',
+  LANGUAGE: 'vayora_language_v1',
+  ACCESSIBILITY_MODE: 'vayora_accessibility_mode_v1',
 } as const;
 
 const memoryStore = new Map<string, string>();
