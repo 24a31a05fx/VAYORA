@@ -74,7 +74,7 @@ By combining real-time multi-pollutant telemetry, atmospheric inversion modeling
 
 ## 4. Quality Assurance & Continuous Verification
 
-- **Linting & Code Hygiene**: Oxlint v1.94.0 enforcing 116 rules with zero errors and zero warnings across 64 files.
-- **Type Checking**: Strict TypeScript compiler (`tsc -b`) with zero implicit or explicit `any`.
-- **Automated Test Harness**: Vitest v3.2.7 and JSDOM executing 87 automated tests across 8 suites with 100% pass rate.
-- **Production Asset Footprint**: Total compressed application JavaScript under 28 kB gzipped (total JS under 97 kB gzipped).
+- **Linting & Code Hygiene**: Oxlint v1.94.0 enforcing 152 rules with zero errors and zero warnings across 77 files.
+- **Type Checking**: Strict TypeScript compiler (`tsc -b && tsc -p tsconfig.test.json --noEmit`) with `noUncheckedIndexedAccess: true` and zero implicit or explicit `any`.
+- **Automated Test Harness**: Vitest v3.2.7 and JSDOM executing 94 automated tests across 9 suites with 100% pass rate.
+- **Production Asset Footprint**: Total compressed application JavaScript at 27.95 kB gzipped (total JS at 97.19 kB gzipped).

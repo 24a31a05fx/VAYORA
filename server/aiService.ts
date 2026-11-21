@@ -5,49 +5,81 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { ValidatedPersona, ValidatedZone } from './validators';
+import { logger } from './logger';
 
 const geminiApiKey = process.env.NODE_ENV === 'test' ? '' : (process.env.GEMINI_API_KEY || '');
 const aiClient = geminiApiKey ? new GoogleGenerativeAI(geminiApiKey) : null;
+
+type RecommendationType = 'safe-outdoor' | 'moderate-caution' | 'indoor-only' | 'mask-required';
+
+interface SlotDetail {
+  recommendation: RecommendationType;
+  activity: string;
+  healthNote: string;
+}
+
+function getEarlySlotDetails(zone: ValidatedZone, isHighRisk: boolean, isMorning: boolean, isMidday: boolean): SlotDetail | null {
+  if (isMorning) {
+    return {
+      recommendation: 'indoor-only',
+      activity: 'High-efficiency indoor routine (HEPA active)',
+      healthNote: `Severe morning inversion: AQI ${zone.aqi}. Alveolar lung irritation risk. Avoid door openings.`,
+    };
+  }
+  if (isMidday && zone.aqi < 200) {
+    return {
+      recommendation: isHighRisk ? 'moderate-caution' : 'safe-outdoor',
+      activity: isHighRisk ? 'Gentle outdoor walk with N95' : 'Safe outdoor errands / travel window',
+      healthNote: 'Solar radiation has broken thermal boundary layer. Optimum daily air dispersion.',
+    };
+  }
+  return null;
+}
+
+function getSlotDetails(h: number, zone: ValidatedZone, isHighRisk: boolean, isMorning: boolean, isMidday: boolean): SlotDetail {
+  const early = getEarlySlotDetails(zone, isHighRisk, isMorning, isMidday);
+  if (early) return early;
+
+  if (h >= 17) {
+    return {
+      recommendation: isHighRisk ? 'indoor-only' : 'mask-required',
+      activity: 'Evening indoor recreation & meal preparation',
+      healthNote: 'Evening traffic peak and settling cold air elevate surface PM2.5.',
+    };
+  }
+  return {
+    recommendation: 'moderate-caution',
+    activity: 'Indoor productive work / rest',
+    healthNote: 'Maintain HEPA filtration and seal drafts.',
+  };
+}
+
+function createHourlySlot(h: number, zone: ValidatedZone, isHighRisk: boolean, safeStart: number, safeEnd: number) {
+  const isMorning = h >= 7 && h <= 10 && zone.inversionRisk;
+  const isMidday = h >= safeStart && h <= safeEnd;
+  const details = getSlotDetails(h, zone, isHighRisk, isMorning, isMidday);
+
+  return {
+    hour: h,
+    timeLabel: `${h.toString().padStart(2, '0')}:00`,
+    activity: details.activity,
+    recommendation: details.recommendation,
+    predictedAQI: Math.max(30, Math.round(isMorning ? zone.aqi * 1.15 : isMidday ? zone.aqi * 0.7 : zone.aqi)),
+    smogDispersionFactor: isMidday ? 0.85 : 0.35,
+    inversionLikelihood: isMorning ? 'high' : isMidday ? 'low' : 'moderate',
+    healthImpactNotes: details.healthNote,
+    environmentalOffsetNotes: 'Shifted travel to public electric transit, avoiding 1.8 kg CO2.',
+  };
+}
 
 function buildHourlySlots(persona: ValidatedPersona, zone: ValidatedZone) {
   const isHighRisk = persona.sensitivityLevel === 'high' || zone.aqi > 150;
   const safeStart = zone.inversionRisk ? 13 : 11;
   const safeEnd = zone.inversionRisk ? 16 : 17;
 
-  return [7, 8, 9, 12, 14, 17, 19, 21].map((h) => {
-    const isMorningInversion = h >= 7 && h <= 10 && zone.inversionRisk;
-    const isMiddaySafe = h >= safeStart && h <= safeEnd;
-
-    let recommendation: 'safe-outdoor' | 'moderate-caution' | 'indoor-only' | 'mask-required' = 'moderate-caution';
-    let activity = 'Indoor productive work / rest';
-    let healthNote = 'Maintain HEPA filtration and seal drafts.';
-
-    if (isMorningInversion) {
-      recommendation = 'indoor-only';
-      activity = 'High-efficiency indoor routine (HEPA active)';
-      healthNote = `Severe morning inversion: AQI ${zone.aqi}. Alveolar lung irritation risk. Avoid door openings.`;
-    } else if (isMiddaySafe && zone.aqi < 200) {
-      recommendation = isHighRisk ? 'moderate-caution' : 'safe-outdoor';
-      activity = isHighRisk ? 'Gentle outdoor walk with N95' : 'Safe outdoor errands / travel window';
-      healthNote = 'Solar radiation has broken thermal boundary layer. Optimum daily air dispersion.';
-    } else if (h >= 17) {
-      recommendation = isHighRisk ? 'indoor-only' : 'mask-required';
-      activity = 'Evening indoor recreation & meal preparation';
-      healthNote = 'Evening traffic peak and settling cold air elevate surface PM2.5.';
-    }
-
-    return {
-      hour: h,
-      timeLabel: `${h.toString().padStart(2, '0')}:00`,
-      activity,
-      recommendation,
-      predictedAQI: Math.max(30, Math.round(isMorningInversion ? zone.aqi * 1.15 : isMiddaySafe ? zone.aqi * 0.7 : zone.aqi)),
-      smogDispersionFactor: isMiddaySafe ? 0.85 : 0.35,
-      inversionLikelihood: isMorningInversion ? 'high' : isMiddaySafe ? 'low' : 'moderate',
-      healthImpactNotes: healthNote,
-      environmentalOffsetNotes: 'Shifted travel to public electric transit, avoiding 1.8 kg CO2.',
-    };
-  });
+  return [7, 8, 9, 12, 14, 17, 19, 21].map((h) =>
+    createHourlySlot(h, zone, isHighRisk, safeStart, safeEnd)
+  );
 }
 
 export function generateHeuristicRoutine(persona: ValidatedPersona, zone: ValidatedZone, language: string) {
@@ -93,7 +125,7 @@ Return ONLY a strict valid JSON object matching this structure:
       const jsonMatch = aiResponse.response.text().match(/\{[\s\S]*\}/);
       if (jsonMatch) return JSON.parse(jsonMatch[0]);
     } catch (err) {
-      console.error('[AI GATEWAY LOG] Routine generation fallback triggered:', err);
+      logger.error('[AI GATEWAY LOG] Routine generation fallback triggered:', err);
     }
   }
   return generateHeuristicRoutine(persona, zone, cleanLang);
@@ -108,7 +140,7 @@ export async function getEmergencyAdvisoryText(zone: ValidatedZone, cleanLang: s
       const text = aiResponse.response.text().trim();
       if (text) return text;
     } catch (err) {
-      console.error('[AI ADVISORY LOG] Falling back to default advisory:', err);
+      logger.error('[AI ADVISORY LOG] Falling back to default advisory:', err);
     }
   }
   return `EMERGENCY SMOG ADVISORY: ${zone.zoneName} is reporting AQI ${zone.aqi} (PM2.5: ${zone.pm25} µg/m³). Severe boundary layer inversion detected. All schools should suspend outdoor recreation. High-risk residents must seal room perimeters and run HEPA air filtration. Commuters should avoid open-air cycling and switch to underground metro lines.`;

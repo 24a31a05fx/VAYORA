@@ -5,7 +5,7 @@
 
 import type { PersonaProfile } from '@/types';
 
-export const DEFAULT_PERSONAS: PersonaProfile[] = [
+export const DEFAULT_PERSONAS: [PersonaProfile, ...PersonaProfile[]] = [
   {
     id: 'persona-asthma',
     name: 'Asthmatic Child & Family',

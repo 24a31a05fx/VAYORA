@@ -114,3 +114,39 @@ Build all dashboard visualizations using native inline SVGs with responsive view
 ### Consequences
 - Zero external charting runtime dependencies.
 - Total application JavaScript bundle kept under 97 kB gzipped.
+
+---
+
+## ADR-008: Backend Modularization & Router Partitioning
+
+### Context
+`server.ts` previously combined middleware orchestration, static file serving, error handling, and multiple API routes inline, violating separation of concerns and single responsibility principles.
+
+### Decision
+Partition server routes into independent Express 5 routers under `server/routes/`:
+- `healthRoutes.ts`: Health check probe endpoint (`/api/health`).
+- `routineRoutes.ts`: Routine insight generation endpoint (`/api/routine-insights`).
+- `advisoryRoutes.ts`: Emergency community advisory broadcasting (`/api/emergency-advisory`).
+- Extract the repeated validation, language sanitization, SHA-256 cache lookup, AI call, and cache pruning into a generic `cacheOrCompute<T>()` orchestrator (`server/cacheOrCompute.ts`).
+- Standardize server diagnostic events through a dedicated `logger.ts` utility.
+
+### Consequences
+- `server.ts` is reduced to 56 lines of purely high-level middleware and router mounting.
+- Testable, isolated route modules with strongly-typed request bodies.
+
+---
+
+## ADR-009: Strict Function Length (≤ 25 Lines) and File Length (≤ 200 Lines) Governance
+
+### Context
+Long, deeply nested component render methods and functions reduce readability, elevate cyclomatic complexity, and make isolated testing difficult.
+
+### Decision
+- Enforce `max-lines: 200` and `max-lines-per-function: 25` (with `skipComments` and `skipBlankLines` enabled) along with `complexity: 10` globally via `.oxlintrc.json`.
+- Extract composite views into focused, declarative sub-components and extract complex multi-state logic into custom hooks (`useRoomDiagnostics`, `useCommunityHubState`, `useRoutineOptimizer`, `useAirAnalytics`, `useExposureRouting`).
+- Validate compliance in automated CI using `npm run lint` with `--deny-warnings`.
+
+### Consequences
+- Zero functions exceeding 25 lines across all application components and backend code.
+- Cyclomatic complexity strictly bounded at $\le 10$ across all 77 codebase files.
+

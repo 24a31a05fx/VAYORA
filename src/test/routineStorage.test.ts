@@ -4,7 +4,7 @@
 // ============================================================
 
 import { describe, it, expect } from 'vitest';
-import { generateHeuristicRoutine } from '@/lib/aqiCompute';
+import { generateHeuristicRoutine } from '@/lib/compute';
 import { storageService } from '@/services/storageService';
 import { DEFAULT_PERSONAS, DEFAULT_ZONES } from '@/lib/constants';
 import { Language, AccessibilityMode } from '@/types';

@@ -10,3 +10,4 @@ export * from './commuteDose';
 export * from './dijkstraRouter';
 export * from './meteorology';
 export * from './heuristicRoutine';
+export * from './aqiPollutantsCompute';

@@ -9,9 +9,9 @@ import {
   type UrbanZone,
   type TransitNode,
 } from '@/types';
-import type { PathEdge } from '@/lib/aqiCompute';
+import type { PathEdge } from '@/lib/compute';
 
-export const DEFAULT_ZONES: UrbanZone[] = [
+export const DEFAULT_ZONES: [UrbanZone, ...UrbanZone[]] = [
   {
     zoneId: 'Z-CENTRAL',
     zoneName: 'Central Business District',
@@ -114,7 +114,7 @@ export const DEFAULT_ZONES: UrbanZone[] = [
   },
 ];
 
-export const TRANSIT_NODES: TransitNode[] = [
+export const TRANSIT_NODES: [TransitNode, ...TransitNode[]] = [
   { id: 'N-HOME', name: 'Residential Heights (Origin)', zoneId: 'Z-RESIDENTIAL', isMetro: false, isCleanCorridor: true },
   { id: 'N-PARK', name: 'Riverside Park Green-Link', zoneId: 'Z-RIVERSIDE', isMetro: false, isCleanCorridor: true },
   { id: 'N-METRO-EAST', name: 'East Gate Metro Station', zoneId: 'Z-RESIDENTIAL', isMetro: true, isCleanCorridor: true },

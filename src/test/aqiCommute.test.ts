@@ -9,7 +9,7 @@ import {
   calculateCommuteMetrics,
   evaluateInversionRisk,
   calculateCommunityOffset,
-} from '@/lib/aqiCompute';
+} from '@/lib/compute';
 import { TransitMode } from '@/types';
 
 describe('calculateExposureDose', () => {

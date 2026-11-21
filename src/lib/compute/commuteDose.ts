@@ -8,7 +8,6 @@ import { assertFiniteNumber } from './asserts';
 
 /**
  * Calculates inhaled PM2.5 exposure dose in micrograms (ug).
- * Formula: Dose = Concentration (ug/m3) * Time (hours) * BreathingRate (m3/h) * (1 - InfiltrationProtection)
  */
 export function calculateExposureDose(
   pm25UgM3: number,
@@ -58,6 +57,22 @@ function getAdvisory(mode: TransitMode, ambientAQI: number): string {
   return 'Normal commute conditions.';
 }
 
+function getHealthRiskRating(dose: number): 'minimal' | 'low' | 'moderate' | 'severe' {
+  if (dose > 60) return 'severe';
+  if (dose > 30) return 'moderate';
+  if (dose > 10) return 'low';
+  return 'minimal';
+}
+
+function isModeRecommended(mode: TransitMode, ambientAQI: number, distanceKm: number): boolean {
+  return (
+    (mode === TransitMode.Metro && ambientAQI > 100) ||
+    (mode === TransitMode.Cycling && ambientAQI <= 50) ||
+    (mode === TransitMode.Walking && ambientAQI <= 50 && distanceKm <= 3) ||
+    (mode === TransitMode.ElectricBus && ambientAQI > 50 && ambientAQI <= 150)
+  );
+}
+
 /**
  * Computes multi-modal commute trade-offs for a given travel distance and ambient air quality index.
  */
@@ -72,33 +87,37 @@ export function calculateCommuteMetrics(
   if (distanceKm <= 0) throw new RangeError(`Distance must be > 0. Received: ${distanceKm}`);
   if (ambientAQI < 0) throw new RangeError(`AQI cannot be negative. Received: ${ambientAQI}`);
 
-  const pm25UgM3 = Math.max(5, (ambientAQI / 500) * 250);
   const config = MODE_CONFIGS[mode];
   const durationHours = distanceKm / config.speed;
-  const durationMinutes = Math.max(1, Math.round(durationHours * 60));
+  const pm25UgM3 = Math.max(5, (ambientAQI / 500) * 250);
   const dose = calculateExposureDose(pm25UgM3, durationHours, config.breathingRate, config.protection);
-  const co2 = Math.round(distanceKm * config.co2PerKm * 100) / 100;
-
-  let healthRiskRating: 'minimal' | 'low' | 'moderate' | 'severe' = 'minimal';
-  if (dose > 60) healthRiskRating = 'severe';
-  else if (dose > 30) healthRiskRating = 'moderate';
-  else if (dose > 10) healthRiskRating = 'low';
-
-  const isRecommended =
-    (mode === TransitMode.Metro && ambientAQI > 100) ||
-    (mode === TransitMode.Cycling && ambientAQI <= 50) ||
-    (mode === TransitMode.Walking && ambientAQI <= 50 && distanceKm <= 3) ||
-    (mode === TransitMode.ElectricBus && ambientAQI > 50 && ambientAQI <= 150);
 
   return {
     mode,
     modeLabel: config.label,
-    durationMinutes,
+    durationMinutes: Math.max(1, Math.round(durationHours * 60)),
     distanceKm,
     pm25ExposureDoseUg: dose,
-    co2EmissionsKg: co2,
-    healthRiskRating,
-    isRecommended,
+    co2EmissionsKg: Math.round(distanceKm * config.co2PerKm * 100) / 100,
+    healthRiskRating: getHealthRiskRating(dose),
+    isRecommended: isModeRecommended(mode, ambientAQI, distanceKm),
     advisory: getAdvisory(mode, ambientAQI),
   };
+}
+
+const ALL_TRANSIT_MODES: readonly TransitMode[] = [
+  TransitMode.Metro,
+  TransitMode.ElectricBus,
+  TransitMode.DieselBus,
+  TransitMode.Cycling,
+  TransitMode.Walking,
+  TransitMode.EV,
+  TransitMode.GasCar,
+];
+
+/**
+ * Computes commute comparisons for all supported transit modes.
+ */
+export function computeModalComparisons(distanceKm: number, ambientAQI: number): TransitRouteComparison[] {
+  return ALL_TRANSIT_MODES.map((mode) => calculateCommuteMetrics(distanceKm, mode, ambientAQI));
 }

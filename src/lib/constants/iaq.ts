@@ -5,7 +5,7 @@
 
 import type { IAQRoomConfig } from '@/types';
 
-export const DEFAULT_ROOMS: IAQRoomConfig[] = [
+export const DEFAULT_ROOMS: [IAQRoomConfig, ...IAQRoomConfig[]] = [
   {
     roomId: 'room-nursery',
     roomName: 'Infant Nursery / Children Bedroom',
@@ -98,3 +98,6 @@ export const DIY_HACKS = [
     efficiencyBonus: 'Reduces draft infiltration rate by 35%',
   },
 ];
+
+export type DIYHack = (typeof DIY_HACKS)[number];
+

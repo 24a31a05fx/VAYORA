@@ -3,7 +3,7 @@
 // Multilingual localized strings (EN, HI, AR, ES)
 // ============================================================
 
-export const TRANSLATIONS: Record<string, Record<string, string>> = {
+export const TRANSLATIONS: Record<string, Record<string, string>> & { en: Record<string, string> } = {
   en: {
     appTitle: 'VAYORA',
     appSubtitle: 'AI-powered Urban Air Quality & Environmental Intelligence Platform',

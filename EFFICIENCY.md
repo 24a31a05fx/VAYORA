@@ -131,20 +131,21 @@ build: {
 
 ### Verified Production Build Output (`npm run build`)
 ```text
-vite v6.2.0 building for production...
+vite v6.4.6 building for production...
 transforming...
-✓ 48 modules transformed.
+✓ 81 modules transformed.
 rendering chunks...
 computing gzip size...
-dist/index.html                   1.79 kB │ gzip:  0.98 kB
-dist/assets/index-D8Y3jCj4.css   41.93 kB │ gzip:  8.45 kB
-dist/assets/index-C8Jg2u9o.js    99.76 kB │ gzip: 27.17 kB
-dist/assets/vendor-BAwLz8u2.js  223.22 kB │ gzip: 69.24 kB
-✓ built in 877ms
+dist/index.html                   1.79 kB │ gzip:  0.90 kB
+dist/assets/index-DGvuumyz.css   40.16 kB │ gzip:  8.13 kB
+dist/assets/index-2hPpuK67.js   100.09 kB │ gzip: 27.95 kB
+dist/assets/vendor-DJiRVR1m.js  223.22 kB │ gzip: 69.24 kB
+✓ built in 1.01s
 ```
 
 ### Key Efficiency Highlights:
-- **Application Logic**: Main bundle is just **27.17 kB gzipped** (99.76 kB minified).
-- **Core Framework (React 19)**: Isolated vendor chunk is **69.24 kB gzipped**.
-- **Total Compressed JavaScript**: **96.41 kB** — well beneath the 100 kB performance budget.
-- **Build Speed**: Complete production compilation and typecheck in **877 milliseconds**.
+- **Application Logic**: Main bundle is just **27.95 kB gzipped** (100.09 kB minified).
+- **Core Framework (React 19)**: Isolated vendor chunk is **69.24 kB gzipped** (223.22 kB minified).
+- **Total Compressed JavaScript**: **97.19 kB** — well beneath the 100 kB performance budget.
+- **CSS Footprint**: Compressed stylesheet is **8.13 kB gzipped** (40.16 kB minified).
+- **Build Speed**: Complete production compilation and typecheck in **~1.0 second**.

@@ -120,7 +120,9 @@ describe('Community Pledge Action', () => {
     const pledgeButtons = screen.getAllByRole('button', { name: /Take the Pledge|Cancel Pledge/i });
     expect(pledgeButtons.length).toBeGreaterThan(0);
 
-    const firstPledgeBtn = pledgeButtons[0];
+    const [firstPledgeBtn] = pledgeButtons;
+    expect(firstPledgeBtn).toBeDefined();
+    if (!firstPledgeBtn) return;
     const initialText = firstPledgeBtn.textContent;
     fireEvent.click(firstPledgeBtn);
 

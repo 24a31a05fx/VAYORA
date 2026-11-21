@@ -18,20 +18,11 @@ jobs:
       - name: Setup Node.js Runtime
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version-file: '.nvmrc'
           cache: 'npm'
 
       - name: Install Project Dependencies
-        run: npm ci || npm install
+        run: npm ci
 
-      - name: Static Code Analysis (Oxlint)
-        run: npm run lint
-
-      - name: Strict TypeScript Compilation
-        run: npx tsc -b
-
-      - name: Execute Vitest Test Suite (Tiers 1-5)
-        run: npm run test:run
-
-      - name: Production Bundle Compilation
-        run: npm run build
+      - name: Full Verification Suite (Lint, Typecheck, Test, Build)
+        run: npm run verify

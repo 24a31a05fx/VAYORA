@@ -30,7 +30,7 @@ export interface HealthDirective {
   badgeClass: string;
 }
 
-export function getPrimaryHealthAdvice(aqi: number): HealthDirective {
+function getElevatedHealthAdvice(aqi: number): HealthDirective | null {
   if (aqi > 200) {
     return {
       title: 'Emergency Smog Advisory',
@@ -47,6 +47,10 @@ export function getPrimaryHealthAdvice(aqi: number): HealthDirective {
       badgeClass: 'bg-rose-50 text-rose-700 border-rose-200',
     };
   }
+  return null;
+}
+
+function getModerateOrFairHealthAdvice(aqi: number): HealthDirective {
   if (aqi > 100) {
     return {
       title: 'Sensitive Group Warning',
@@ -69,6 +73,11 @@ export function getPrimaryHealthAdvice(aqi: number): HealthDirective {
     badge: 'Optimal Quality',
     badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
   };
+}
+
+export function getPrimaryHealthAdvice(aqi: number): HealthDirective {
+  const elevated = getElevatedHealthAdvice(aqi);
+  return elevated || getModerateOrFairHealthAdvice(aqi);
 }
 
 /**

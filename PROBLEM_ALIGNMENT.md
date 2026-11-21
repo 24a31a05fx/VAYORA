@@ -111,11 +111,12 @@ The following matrix documents the complete technical realization of all twelve 
 
 ## 4. Verification & Validation Protocol
 
-All twelve functional parameters are systematically protected against regressions through an automated test suite comprising 87 tests across 8 suites:
+All twelve functional parameters are systematically protected against regressions through an automated test suite comprising 94 tests across 9 suites:
 - `src/test/aqiBreakpoints.test.ts`: Mathematical rigor of EPA sub-index and concentration calculations.
 - `src/test/aqiCommute.test.ts`: Commute dose equations and transit modal emission metrics.
 - `src/test/aqiIaq.test.ts`: CADR volume requirements, clearance times, and atmospheric lapse rate modeling.
 - `src/test/routineStorage.test.ts`: Heuristic fallback generation and resilient local storage persistence.
+- `src/test/serverAndCompute.test.ts`: Server cacheOrCompute, logger, and pollutant compute diagnostics.
 - `src/test/routing.test.ts`: Dijkstra pathfinding convergence, obstacle avoidance, and hook reactivity.
 - `src/test/api.test.ts`: Express 5 routes, security headers, rate limiting, and SHA-256 LRU cache hits.
 - `src/test/rendering.test.tsx`: Semantic HTML5 landmarks, component trees, and screen-reader twin elements.

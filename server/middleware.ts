@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import type { Request, Response, NextFunction } from 'express';
+import { logger } from './logger';
 
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
@@ -59,7 +60,10 @@ export const aiRateLimiter = rateLimit({
   message: { error: 'Too many requests, please try again in a minute.' },
 });
 
+/**
+ * Centralized error handler ensuring no internal traces leak to clients.
+ */
 export function safeErrorHandler(err: unknown, _req: Request, res: Response, _next: NextFunction): void {
-  console.error('[SECURITY AUDIT] Internal Server Error:', err);
+  logger.error('[SECURITY AUDIT] Internal Server Error:', err);
   res.status(500).json({ error: 'Internal Server Error' });
 }

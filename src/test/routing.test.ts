@@ -6,7 +6,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { dijkstraLowestExposure, type PathEdge } from '@/lib/aqiCompute';
+import { dijkstraLowestExposure, type PathEdge } from '@/lib/compute';
 import { useExposureRouting } from '@/hooks/useExposureRouting';
 import { AppContextProvider } from '@/context/AppContext';
 import { TRANSIT_GRAPH } from '@/lib/constants';

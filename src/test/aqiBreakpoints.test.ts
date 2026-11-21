@@ -9,7 +9,7 @@ import {
   getAQIColor,
   calculatePM25SubIndex,
   getPrimaryHealthAdvice,
-} from '@/lib/aqiCompute';
+} from '@/lib/compute';
 import { AQICategory } from '@/types';
 
 describe('calculateAQICategory', () => {

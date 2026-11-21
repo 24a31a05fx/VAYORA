@@ -8,7 +8,7 @@ import {
   calculateRoomVolume,
   calculateRequiredCADR,
   estimatePurificationTime,
-} from '@/lib/aqiCompute';
+} from '@/lib/compute';
 
 describe('calculateRoomVolume', () => {
   it('computes room volume correctly', () => {

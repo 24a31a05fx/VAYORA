@@ -230,14 +230,20 @@ VAYORA is structured as a decoupled, multi-tiered architecture:
 vayora/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml               # GitHub Actions CI pipeline
+│       └── ci.yml               # GitHub Actions CI pipeline (Node.js 20 from .nvmrc)
 ├── docs/
 │   ├── CODE_QUALITY_REPORT.md   # Architectural line-limit & linter audit
-│   ├── DECISIONS.md             # Architecture Decision Records (ADR 001–007)
+│   ├── DECISIONS.md             # Architecture Decision Records (ADR 001–009)
 │   └── PLAN.md                  # Engineering specifications and roadmap
 ├── server/
+│   ├── routes/
+│   │   ├── advisoryRoutes.ts    # Emergency smog advisory route handler
+│   │   ├── healthRoutes.ts      # Health check and telemetry status route
+│   │   └── routineRoutes.ts     # Personalized routine insight route handler
 │   ├── aiService.ts             # Gemini AI integration with heuristic fallback
 │   ├── cache.ts                 # In-memory SHA-256 LRU response cache (100 entries)
+│   ├── cacheOrCompute.ts        # Unified validation, caching, and AI orchestration
+│   ├── logger.ts                # Structured server logging utility
 │   ├── middleware.ts            # Helmet CSP, dynamic CORS, rate limiting, error handlers
 │   └── validators.ts            # Runtime type guards and input sanitizers
 ├── src/
@@ -270,14 +276,18 @@ vayora/
 │   │       ├── TransitComparisonTable.tsx # Multi-modal health risk table
 │   │       └── TransitPlanner.tsx # Dijkstra clean-corridor route planner
 │   ├── context/
+│   │   ├── hooks/               # Extracted state slice hooks (tabs, zones, routines, etc.)
 │   │   ├── AppContext.tsx       # Centralized global application state provider
-│   │   └── types.ts             # Context value interface definitions
+│   │   ├── appContextInstance.ts # Shared React Context instance definition
+│   │   ├── types.ts             # Context value interface definitions
+│   │   └── useAppContext.ts     # Type-safe global context consumption hook
 │   ├── hooks/
 │   │   ├── useAirAnalytics.ts   # AQI categories, pollutant breakdown, simulation
 │   │   └── useExposureRouting.ts # Dijkstra pathfinding & commute comparisons
 │   ├── lib/
 │   │   ├── compute/
 │   │   │   ├── aqiBreakpoints.ts # EPA category mapping & health directives
+│   │   │   ├── aqiPollutantsCompute.ts # Pollutant breakdown and inversion telemetry
 │   │   │   ├── asserts.ts       # Numeric type assertions & linear interpolation
 │   │   │   ├── cadrCalculations.ts # Volume, CADR sizing, first-order decay
 │   │   │   ├── commuteDose.ts   # Inhaled particulate dose & transit metrics
@@ -285,15 +295,13 @@ vayora/
 │   │   │   ├── heuristicRoutine.ts # Client deterministic fallback schedule generator
 │   │   │   ├── index.ts         # Compute engine barrel export
 │   │   │   └── meteorology.ts   # Lapse-rate inversion modeling & emission offsets
-│   │   ├── constants/
-│   │   │   ├── community.ts     # Baseline nodes, graphs, pledges, alerts
-│   │   │   ├── iaq.ts           # Room baselines & DIY hack specifications
-│   │   │   ├── index.ts         # Constants barrel export
-│   │   │   ├── personas.ts      # Vulnerability profile definitions
-│   │   │   ├── translations.ts  # Multilingual strings (EN, HI, AR, ES)
-│   │   │   └── zones.ts         # Municipal telemetry baseline sectors
-│   │   ├── aqiCompute.ts        # Modular compute facade
-│   │   └── constants.ts         # Modular constants facade
+│   │   └── constants/
+│   │       ├── community.ts     # Baseline nodes, graphs, pledges, alerts
+│   │       ├── iaq.ts           # Room baselines & DIY hack specifications
+│   │       ├── index.ts         # Constants barrel export
+│   │       ├── personas.ts      # Vulnerability profile definitions
+│   │       ├── translations.ts  # Multilingual strings (EN, HI, AR, ES)
+│   │       └── zones.ts         # Municipal telemetry baseline sectors
 │   ├── services/
 │   │   ├── apiService.ts        # Client HTTP API client communicating with backend
 │   │   └── storageService.ts    # Resilient persistence with memory store fallback
@@ -306,6 +314,7 @@ vayora/
 │   │   ├── rendering.test.tsx   # Tier 3: Landmarks & screen-reader twin readouts
 │   │   ├── routineStorage.test.ts # Tier 1: Heuristic routines & storage persistence
 │   │   ├── routing.test.ts      # Tier 2: Dijkstra pathfinding & hook transitions
+│   │   ├── serverAndCompute.test.ts # Tier 1: Cache, logger, and pure pollutant compute
 │   │   └── setup.ts             # Vitest DOM polyfills & matchers
 │   ├── types/
 │   │   ├── community.ts         # Waypoints, room configs, community pledges
@@ -316,10 +325,13 @@ vayora/
 │   ├── index.css                # CSS design tokens & focus-visible styles
 │   ├── main.tsx                 # React 19 application entry point
 │   └── vite-env.d.ts            # Vite client environment type declarations
+├── .nvmrc                       # Node runtime pin (v20)
+├── .oxlintrc.json               # Oxlint static analysis configuration (152 rules)
 ├── index.html                   # HTML template, font preconnects, skip-link
 ├── package.json                 # Dependencies, project metadata, scripts
 ├── server.ts                    # Express 5 entry point, routes, static asset hosting
 ├── tsconfig.json                # Strict TypeScript configuration
+├── tsconfig.test.json           # Test TypeScript configuration (Vite & Node types)
 └── vite.config.ts               # Vite build configuration, proxy, Vitest setup
 ```
 
@@ -389,7 +401,7 @@ Access the application at `http://localhost:3001`.
 VAYORA maintains a multi-tier test suite executed via Vitest and Oxlint:
 
 ```bash
-# Run all 87 automated unit, DOM, rendering, and API tests
+# Run all 94 automated unit, DOM, rendering, and API tests
 npm run test:run
 
 # Run static code analysis with zero-warning enforcement
@@ -400,9 +412,9 @@ npm run build
 ```
 
 ### Verified Test Results Summary
-- **Test Suites:** 8 passed (8 total)
-- **Tests:** 87 passed (87 total)
-- **Execution Time:** ~3.6 seconds
+- **Test Suites:** 9 passed (9 total)
+- **Tests:** 94 passed (94 total)
+- **Execution Time:** ~3.3 seconds
 - **Pass Rate:** 100%
 
 ---

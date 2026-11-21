@@ -11,9 +11,26 @@ export interface InversionRiskResult {
   rationale: string;
 }
 
+function getActiveInversionRisk(lapseRate: number, windSpeedKmh: number): InversionRiskResult | null {
+  if (lapseRate > 2.0 && windSpeedKmh < 6) {
+    return {
+      isInversion: true,
+      severity: 'severe',
+      rationale: `Strong thermal cap (+${lapseRate.toFixed(1)}°C aloft) and stagnant winds (${windSpeedKmh} km/h) prevent vertical pollutant dispersion. Smog is trapped in ground breathing zone.`,
+    };
+  }
+  if (lapseRate > 0 && windSpeedKmh < 12) {
+    return {
+      isInversion: true,
+      severity: 'moderate',
+      rationale: `Mild thermal inversion (+${lapseRate.toFixed(1)}°C aloft) with calm winds (${windSpeedKmh} km/h). Expect elevated morning particulate concentrations.`,
+    };
+  }
+  return null;
+}
+
 /**
  * Analyzes meteorological conditions for winter temperature inversion risk.
- * Atmospheric inversion occurs when cold surface air is trapped beneath a warmer boundary layer with low wind.
  */
 export function evaluateInversionRisk(
   tempGroundC: number,
@@ -25,22 +42,8 @@ export function evaluateInversionRisk(
   assertFiniteNumber(windSpeedKmh, 'windSpeedKmh');
 
   const lapseRate = tempUpperC - tempGroundC;
-
-  if (lapseRate > 2.0 && windSpeedKmh < 6) {
-    return {
-      isInversion: true,
-      severity: 'severe',
-      rationale: `Strong thermal cap (+${lapseRate.toFixed(1)}°C aloft) and stagnant winds (${windSpeedKmh} km/h) prevent vertical pollutant dispersion. Smog is trapped in ground breathing zone.`,
-    };
-  }
-
-  if (lapseRate > 0 && windSpeedKmh < 12) {
-    return {
-      isInversion: true,
-      severity: 'moderate',
-      rationale: `Mild thermal inversion (+${lapseRate.toFixed(1)}°C aloft) with calm winds (${windSpeedKmh} km/h). Expect elevated morning particulate concentrations.`,
-    };
-  }
+  const active = getActiveInversionRisk(lapseRate, windSpeedKmh);
+  if (active) return active;
 
   return {
     isInversion: false,
@@ -57,6 +60,14 @@ const OFFSET_WEIGHTS: Record<string, { co2Kg: number; pm25Grams: number }> = {
   'vulnerable-care': { co2Kg: 0.5, pm25Grams: 5 },
 };
 
+function accumulateOffset(key: string, count: number, total: { co2: number; pm: number }) {
+  const weight = OFFSET_WEIGHTS[key];
+  if (typeof count === 'number' && count > 0 && weight) {
+    total.co2 += count * weight.co2Kg;
+    total.pm += count * weight.pm25Grams;
+  }
+}
+
 /**
  * Computes collective community carbon and particulate emission offset.
  */
@@ -64,18 +75,12 @@ export function calculateCommunityOffset(pledgeCounts: Record<string, number>): 
   totalCo2Kg: number;
   totalPm25Grams: number;
 } {
-  let totalCo2Kg = 0;
-  let totalPm25Grams = 0;
-
+  const total = { co2: 0, pm: 0 };
   for (const [key, count] of Object.entries(pledgeCounts)) {
-    if (typeof count === 'number' && count > 0 && OFFSET_WEIGHTS[key]) {
-      totalCo2Kg += count * OFFSET_WEIGHTS[key].co2Kg;
-      totalPm25Grams += count * OFFSET_WEIGHTS[key].pm25Grams;
-    }
+    accumulateOffset(key, count, total);
   }
-
   return {
-    totalCo2Kg: Math.round(totalCo2Kg * 10) / 10,
-    totalPm25Grams: Math.round(totalPm25Grams * 10) / 10,
+    totalCo2Kg: Math.round(total.co2 * 10) / 10,
+    totalPm25Grams: Math.round(total.pm * 10) / 10,
   };
 }
