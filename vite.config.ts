@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -30,11 +31,27 @@ export default defineConfig({
       },
     },
   },
-  // @ts-expect-error Vitest configuration support
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/test/**/*.{test,spec}.{ts,tsx}'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.{ts,tsx}', 'server/**/*.ts'],
+      exclude: [
+        'src/test/**',
+        'src/vite-env.d.ts',
+        'src/main.tsx',
+        'src/types/**',
+        'src/context/types.ts',
+      ],
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 70,
+      },
+    },
   },
 });

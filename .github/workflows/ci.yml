@@ -26,3 +26,6 @@ jobs:
 
       - name: Full Verification Suite (Lint, Typecheck, Test, Build)
         run: npm run verify
+
+      - name: Test Coverage Verification
+        run: npm run test:coverage

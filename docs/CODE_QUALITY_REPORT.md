@@ -15,8 +15,8 @@ VAYORA enforces a strict modular standard across all source code: **every TypeSc
 | File Path | Verified Line Count | Architectural Decomposition & Sub-Components |
 |---|---|---|
 | `server.ts` | **56 lines** | Express routers and middleware separated into `server/routes/`, `server/validators.ts`, `server/cache.ts`. |
-| `src/components/Dashboard/AirTelemetryDashboard.tsx` | **107 lines** | Sub-divided into `AqiGauge.tsx`, `PollutantSparklinesPanel.tsx`, `SidebarSectorCard.tsx`, and `SmogHeatmap.tsx`. |
-| `src/components/Navigation/Header.tsx` | **128 lines** | Nav controls and selector actions extracted into `NavControls.tsx`. |
+| `src/components/Dashboard/AirTelemetryDashboard.tsx` | **107 lines** | Sub-divided into `AqiGauge.tsx`, `PollutantSparklinesPanel.tsx`, and `SmogHeatmap.tsx`. |
+| `src/components/Navigation/Header.tsx` | **128 lines** | Sub-divided into `SidebarSectorCard.tsx` and `NavControls.tsx`. |
 | `src/components/Routine/DailyRoutineOptimizer.tsx` | **142 lines** | Persona selector and timeline view separated into `PersonaSelector.tsx` and `RoutineTimeline.tsx`. |
 | `src/components/IAQ/IAQCenter.tsx` | **117 lines** | Ventilations and purifier blueprints modularized into `DIYHackGrid.tsx` and `WindowSchedule.tsx`. |
 | `src/components/Community/CommunityHub.tsx` | **137 lines** | Modularized individual pledge actions into `PledgeCard.tsx`. |

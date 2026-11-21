@@ -2,7 +2,7 @@
 
 > **Platform:** VAYORA — AI-Powered Urban Air Quality & Environmental Intelligence Platform  
 > **Document Role:** Architectural Blueprint & Engineering Specification  
-> **Target Scope:** 600/600 Evaluation Target across all 6 Core Parameters  
+> **Engineering Standard:** Production-grade code hygiene, zero lint warnings, strict types, comprehensive test coverage, and full WCAG 2.2 AA accessibility.  
 
 ---
 

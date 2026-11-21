@@ -1,7 +1,11 @@
 node_modules
 dist
+dist/
 .env
 *.local
 .DS_Store
 coverage
+coverage/
 *.tsbuildinfo
+tsconfig.tsbuildinfo
+tsconfig.test.tsbuildinfo

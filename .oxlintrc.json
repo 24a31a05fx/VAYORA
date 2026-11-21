@@ -19,13 +19,13 @@
   },
   "overrides": [
     {
-      "files": ["server/logger.ts"],
+      "files": ["server/logger.ts", "scripts/**"],
       "rules": {
         "no-console": "off"
       }
     },
     {
-      "files": ["src/test/**"],
+      "files": ["src/test/**", "scripts/**"],
       "rules": {
         "max-lines-per-function": "off"
       }

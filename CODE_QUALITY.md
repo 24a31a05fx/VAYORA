@@ -35,7 +35,7 @@ vayora/
 │   ├── aiService.ts            # Gemini 3.1 Flash Lite integration & heuristic fallback (148 lines)
 │   ├── cache.ts                # In-memory SHA-256 LRU cache (32 lines)
 │   ├── cacheOrCompute.ts       # Shared cache-lookup, validation, compute orchestrator (32 lines)
-│   ├── logger.ts               # Standardized logging utility (25 lines)
+│   ├── logger.ts               # Standardized logging utility (23 lines)
 │   ├── middleware.ts           # Helmet, dynamic CORS, rate limiter, error handler (70 lines)
 │   ├── validators.ts           # Boundary type guards & input sanitization (98 lines)
 │   └── routes/                 # Segregated Express 5 API route handlers
