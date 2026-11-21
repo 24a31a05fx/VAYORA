@@ -4,13 +4,15 @@
 // ============================================================
 
 import React, { memo } from 'react';
-import { useAppContext } from '@/context/useAppContext';
+import { useUIContext } from '@/context/UIContext';
+import { useZoneContext } from '@/context/ZoneContext';
 import { TabId } from '@/types';
 import { TRANSLATIONS } from '@/lib/constants';
 import { getAQIColor } from '@/lib/compute';
 import { SidebarSectorCard } from './SidebarSectorCard';
 import { NavControls } from './NavControls';
 import { DashboardIcon, CalendarIcon, TransitIcon, LeafIcon, BroadcastIcon } from '@/components/shared/Icons';
+import { preloadTab } from '@/lib/tabPreload';
 
 interface TabItem {
   id: TabId;
@@ -104,25 +106,39 @@ function MobileHeader({ appTitle, aqi, aqiColor }: { appTitle: string; aqi: numb
   );
 }
 
+function TabButton({ tab, isSelected, onSelect }: { tab: TabItem; isSelected: boolean; onSelect: (id: TabId) => void }) {
+  const btnClass = isSelected ? 'bg-[#153C35] text-white font-bold shadow-sm' : 'text-[#73817B] hover:bg-[#F6F7F2] hover:text-[#202B29] font-medium';
+  return (
+    <button
+      id={`tab-${tab.id}`}
+      role="tab"
+      aria-selected={isSelected}
+      aria-controls="main-content"
+      tabIndex={isSelected ? 0 : -1}
+      onClick={() => onSelect(tab.id)}
+      onMouseEnter={() => preloadTab(tab.id)}
+      onFocus={() => preloadTab(tab.id)}
+      className={`group flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer text-left ${btnClass}`}
+    >
+      {getTabIcon(tab.id, isSelected)}
+      <span>{tab.label}</span>
+    </button>
+  );
+}
+
 function TabList({ tabs, activeTab, onSelect, onKeyDown }: { tabs: TabItem[]; activeTab: TabId; onSelect: (id: TabId) => void; onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void }) {
   return (
     <div role="tablist" aria-label="Main application sections" onKeyDown={onKeyDown} className="flex lg:flex-col overflow-x-auto lg:overflow-visible gap-1.5 p-3">
-      {tabs.map((tab) => {
-        const isSelected = activeTab === tab.id;
-        const btnClass = isSelected ? 'bg-[#153C35] text-white font-bold shadow-sm' : 'text-[#73817B] hover:bg-[#F6F7F2] hover:text-[#202B29] font-medium';
-        return (
-          <button key={tab.id} id={`tab-${tab.id}`} role="tab" aria-selected={isSelected} aria-controls="main-content" tabIndex={isSelected ? 0 : -1} onClick={() => onSelect(tab.id)} className={`group flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer text-left ${btnClass}`}>
-            {getTabIcon(tab.id, isSelected)}
-            <span>{tab.label}</span>
-          </button>
-        );
-      })}
+      {tabs.map((tab) => (
+        <TabButton key={tab.id} tab={tab} isSelected={activeTab === tab.id} onSelect={onSelect} />
+      ))}
     </div>
   );
 }
 
 export const Header = memo(function Header() {
-  const { activeTab, setActiveTab, selectedZone, zones, setSelectedZoneId, language, setLanguage, accessibilityMode, setAccessibilityMode } = useAppContext();
+  const { activeTab, setActiveTab, language, setLanguage, accessibilityMode, setAccessibilityMode } = useUIContext();
+  const { selectedZone, zones, setSelectedZoneId } = useZoneContext();
   const t = TRANSLATIONS[language] ?? TRANSLATIONS.en;
   const aqiColor = getAQIColor(selectedZone.aqi);
   const tabs = getTabs(t);

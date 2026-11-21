@@ -1,11 +1,12 @@
 // ============================================================
 // server.ts
 // Express 5 Backend Gateway for VAYORA
-// Enforces OWASP Top 10, CWE-209 safe error handling,
+// Enforces compression, caching headers, ETag, OWASP Top 10,
 // SHA-256 LRU cache (100-entries), rate limiting, and server-side AI
 // ============================================================
 
 import express, { type Request, type Response } from 'express';
+import compression from 'compression';
 import path from 'path';
 import dotenv from 'dotenv';
 import { insightCache, hashPayload } from './server/cache';
@@ -20,9 +21,10 @@ dotenv.config();
 
 export const app = express();
 app.disable('x-powered-by');
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
+app.set('etag', 'strong');
 
-// 1. Defensive Middleware Chain
+// 1. Compression and Defensive Middleware Chain
+app.use(compression());
 app.use(helmetMiddleware);
 app.use(corsMiddleware);
 app.use(express.json({ limit: '15kb' }));
@@ -35,9 +37,27 @@ app.use('/api/admin', adminRouter);
 
 // 3. Static Assets & Express 5 Named Splat Fallback
 const distPath = path.resolve(process.cwd(), 'dist');
-app.use(express.static(distPath));
+
+// Serve /assets with immutable 1-year cache
+app.use('/assets', express.static(path.join(distPath, 'assets'), {
+  maxAge: '1y',
+  immutable: true,
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  },
+}));
+
+// Other static files in dist with no-cache for HTML
+app.use(express.static(distPath, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  },
+}));
 
 app.get('*splat', (_req: Request, res: Response) => {
+  res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(distPath, 'index.html'), (err) => {
     if (err) {
       res.status(200).send('VAYORA Backend Running. Build frontend with `npm run build` to serve SPA.');
@@ -49,6 +69,7 @@ app.get('*splat', (_req: Request, res: Response) => {
 app.use(safeErrorHandler);
 
 // 5. Server Listener
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     logger.info(`Backend listening on port ${PORT}`);
