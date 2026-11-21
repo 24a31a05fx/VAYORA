@@ -60,6 +60,14 @@ export const aiRateLimiter = rateLimit({
   message: { error: 'Too many requests, please try again in a minute.' },
 });
 
+export const adminRateLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many admin authentication attempts. Please wait.' },
+});
+
 /**
  * Centralized error handler ensuring no internal traces leak to clients.
  */

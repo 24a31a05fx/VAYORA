@@ -11,12 +11,25 @@ export function isFiniteNumber(v: unknown): v is number {
 }
 
 /**
- * Sanitizes an incoming string by stripping ASCII control characters.
+ * Escapes sensitive HTML characters to mitigate Cross-Site Scripting (XSS).
+ */
+export function sanitizeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+/**
+ * Sanitizes an incoming string by stripping ASCII control characters and HTML tags.
  */
 export function sanitizeText(text: unknown, maxLen = 2000): string {
   if (typeof text !== 'string') return '';
   const controlCharPattern = new RegExp('[' + String.fromCharCode(0) + '-' + String.fromCharCode(31) + ']', 'g');
-  return text.replace(controlCharPattern, '').trim().slice(0, maxLen);
+  const tagPattern = /<[^>]*>/g;
+  return text.replace(controlCharPattern, '').replace(tagPattern, '').trim().slice(0, maxLen);
 }
 
 export interface ValidatedZone {

@@ -13,11 +13,13 @@ import { helmetMiddleware, corsMiddleware, aiRateLimiter, safeErrorHandler } fro
 import { healthRouter } from './server/routes/healthRoutes';
 import { routineRouter } from './server/routes/routineRoutes';
 import { advisoryRouter } from './server/routes/advisoryRoutes';
+import { adminRouter } from './server/routes/adminRoutes';
 import { logger } from './server/logger';
 
 dotenv.config();
 
 export const app = express();
+app.disable('x-powered-by');
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 
 // 1. Defensive Middleware Chain
@@ -29,6 +31,7 @@ app.use(express.json({ limit: '15kb' }));
 app.use('/api/health', healthRouter);
 app.use('/api/routine-insights', routineRouter);
 app.use('/api/emergency-advisory', advisoryRouter);
+app.use('/api/admin', adminRouter);
 
 // 3. Static Assets & Express 5 Named Splat Fallback
 const distPath = path.resolve(process.cwd(), 'dist');

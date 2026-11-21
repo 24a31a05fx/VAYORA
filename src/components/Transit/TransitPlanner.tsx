@@ -10,23 +10,23 @@ import { useAppContext } from '@/context/useAppContext';
 import type { TransitNode, TransitRouteComparison, UrbanZone } from '@/types';
 import type { DijkstraResult } from '@/lib/compute';
 import { TransitComparisonTable } from './TransitComparisonTable';
+import { MapPinIcon, TransitIcon, LeafIcon } from '@/components/shared/Icons';
 
 interface WaypointProps {
   id: string;
   label: string;
-  icon: string;
   value: string;
   onChange: (v: string) => void;
   nodes: TransitNode[];
   showCorridor?: boolean;
 }
 
-function WaypointSelector({ id, label, icon, value, onChange, nodes, showCorridor }: WaypointProps) {
+function WaypointSelector({ id, label, value, onChange, nodes, showCorridor }: WaypointProps) {
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-xs font-bold text-[#202B29] uppercase tracking-wider">{label}</label>
       <div className="bg-[#F6F7F2] border border-[#E5EAE4] rounded-2xl p-2.5 flex items-center gap-2 focus-within:border-[#153C35] focus-within:ring-2 focus-within:ring-[#153C35]/15 transition-all">
-        <span className="text-sm" aria-hidden="true">{icon}</span>
+        <MapPinIcon size={14} className="text-[#398F83] shrink-0" />
         <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className="bg-transparent text-xs font-semibold text-[#202B29] w-full focus:outline-none cursor-pointer">
           {nodes.map((node) => (
             <option key={node.id} value={node.id}>
@@ -45,10 +45,10 @@ function RouteBreadcrumbNodes({ nodes }: { nodes: TransitNode[] }) {
       {nodes.map((n, idx) => (
         <li key={n.id} className="flex items-center gap-2">
           <span className={`px-3.5 py-1.5 rounded-xl font-semibold border flex items-center gap-1.5 shadow-xs ${n.isMetro ? 'bg-[#FFFFFF] text-[#0369A1] border-[#BAE6FD]' : n.isCleanCorridor ? 'bg-[#FFFFFF] text-[#153C35] border-[#B8CDB8]' : 'bg-[#FFFFFF] text-[#202B29] border-[#E5EAE4]'}`}>
-            <span aria-hidden="true">{n.isMetro ? '🚇' : n.isCleanCorridor ? '🌲' : '📍'}</span>
+            <span aria-hidden="true" className="shrink-0">{n.isMetro ? <TransitIcon size={12} className="text-[#0369A1]" /> : n.isCleanCorridor ? <LeafIcon size={12} /> : <MapPinIcon size={12} />}</span>
             <span>{n.name}</span>
           </span>
-          {idx < nodes.length - 1 && <span className="text-[#398F83] font-bold" aria-hidden="true">➔</span>}
+          {idx < nodes.length - 1 && <span className="text-[#398F83] font-bold" aria-hidden="true">→</span>}
         </li>
       ))}
     </ol>
@@ -78,7 +78,7 @@ function TransitRouteComparisonSection({ selectedZone, routeDistanceKm, modalCom
     <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col gap-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2"><span aria-hidden="true">⚖️</span> Multi-Modal Exposure & Carbon Comparison</h3>
+          <h3 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2">Multi-Modal Exposure & Carbon Comparison</h3>
           <p className="text-xs text-[#73817B] mt-0.5">Evaluated against ambient air in <strong className="text-[#202B29]">{selectedZone.zoneName}</strong> (AQI {selectedZone.aqi})</p>
         </div>
         <span className="text-xs text-[#73817B] bg-[#F6F7F2] px-3 py-1 rounded-full border border-[#E5EAE4] w-fit">Trip Length: <strong className="text-[#202B29] font-bold tabular-nums">{routeDistanceKm} km</strong></span>
@@ -96,12 +96,12 @@ export const TransitPlanner = memo(function TransitPlanner() {
     <section aria-label="Low-Emission Commute & Transit Planner" className="flex flex-col gap-6 fade-in">
       <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col gap-6">
         <div>
-          <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2"><span aria-hidden="true">🚇</span> Low-Exposure Commute & Transit Path Optimizer</h2>
+          <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2">Low-Exposure Commute & Transit Path Optimizer</h2>
           <p className="text-xs text-[#73817B] mt-1 max-w-2xl leading-relaxed">Dijkstra-powered algorithm identifying subterranean and clean-air corridors to bypass surface smog hotspots.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <WaypointSelector id="origin-select" label="Commute Origin Waypoint:" icon="📍" value={originId} onChange={setOrigin} nodes={nodes} showCorridor />
-          <WaypointSelector id="destination-select" label="Destination Waypoint:" icon="🏁" value={destinationId} onChange={setDestination} nodes={nodes} />
+          <WaypointSelector id="origin-select" label="Commute Origin Waypoint:" value={originId} onChange={setOrigin} nodes={nodes} showCorridor />
+          <WaypointSelector id="destination-select" label="Destination Waypoint:" value={destinationId} onChange={setDestination} nodes={nodes} />
         </div>
         {lowestExposureResult && <OptimalTrajectoryBreadcrumbs result={lowestExposureResult} distance={routeDistanceKm} nodes={pathNodes} />}
       </div>

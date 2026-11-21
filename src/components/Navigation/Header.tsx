@@ -10,6 +10,7 @@ import { TRANSLATIONS } from '@/lib/constants';
 import { getAQIColor } from '@/lib/compute';
 import { SidebarSectorCard } from './SidebarSectorCard';
 import { NavControls } from './NavControls';
+import { DashboardIcon, CalendarIcon, TransitIcon, LeafIcon, BroadcastIcon } from '@/components/shared/Icons';
 
 interface TabItem {
   id: TabId;
@@ -24,6 +25,22 @@ function getTabs(t: Record<string, string>): TabItem[] {
     { id: TabId.IAQ, label: t.tabIAQ || 'Indoor Air & Hacks' },
     { id: TabId.Community, label: t.tabCommunity || 'Community Action' },
   ];
+}
+
+function getTabIcon(tabId: TabId, isSelected: boolean) {
+  const iconColor = isSelected ? 'text-white' : 'text-[#73817B] group-hover:text-[#153C35]';
+  switch (tabId) {
+    case TabId.Dashboard:
+      return <DashboardIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+    case TabId.Routine:
+      return <CalendarIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+    case TabId.Transit:
+      return <TransitIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+    case TabId.IAQ:
+      return <LeafIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+    case TabId.Community:
+      return <BroadcastIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+  }
 }
 
 function getTargetTabIndex(key: string, idx: number, total: number): number | null {
@@ -94,7 +111,8 @@ function TabList({ tabs, activeTab, onSelect, onKeyDown }: { tabs: TabItem[]; ac
         const isSelected = activeTab === tab.id;
         const btnClass = isSelected ? 'bg-[#153C35] text-white font-bold shadow-sm' : 'text-[#73817B] hover:bg-[#F6F7F2] hover:text-[#202B29] font-medium';
         return (
-          <button key={tab.id} id={`tab-${tab.id}`} role="tab" aria-selected={isSelected} aria-controls="main-content" tabIndex={isSelected ? 0 : -1} onClick={() => onSelect(tab.id)} className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer text-left ${btnClass}`}>
+          <button key={tab.id} id={`tab-${tab.id}`} role="tab" aria-selected={isSelected} aria-controls="main-content" tabIndex={isSelected ? 0 : -1} onClick={() => onSelect(tab.id)} className={`group flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer text-left ${btnClass}`}>
+            {getTabIcon(tab.id, isSelected)}
             <span>{tab.label}</span>
           </button>
         );

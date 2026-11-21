@@ -16,7 +16,7 @@ interface NavControlsProps {
 function LanguageSelect({ language, onChange }: { language: Language; onChange: (lang: Language) => void }) {
   return (
     <div className="flex-1 flex items-center gap-1.5 bg-[#F6F7F2] rounded-xl px-2.5 py-1.5 border border-[#E5EAE4]">
-      <span className="text-xs text-[#73817B]" aria-hidden="true">🌐</span>
+      <span className="text-[10px] font-bold text-[#73817B] uppercase" aria-hidden="true">LANG</span>
       <label htmlFor="language-select" className="sr-only">Select Language</label>
       <select id="language-select" value={language} onChange={(e) => onChange(e.target.value as Language)} className="bg-transparent text-xs text-[#202B29] font-semibold w-full focus:outline-none cursor-pointer">
         <option value={Language.English}>English (EN)</option>
@@ -31,7 +31,7 @@ function LanguageSelect({ language, onChange }: { language: Language; onChange: 
 function A11ySelect({ mode, onChange }: { mode: AccessibilityMode; onChange: (mode: AccessibilityMode) => void }) {
   return (
     <div className="flex-1 flex items-center gap-1.5 bg-[#F6F7F2] rounded-xl px-2.5 py-1.5 border border-[#E5EAE4]">
-      <span className="text-xs text-[#73817B]" aria-hidden="true">♿</span>
+      <span className="text-[10px] font-bold text-[#73817B] uppercase" aria-hidden="true">A11Y</span>
       <label htmlFor="a11y-select" className="sr-only">Accessibility Mode</label>
       <select id="a11y-select" value={mode} onChange={(e) => onChange(e.target.value as AccessibilityMode)} className="bg-transparent text-xs text-[#202B29] font-medium w-full focus:outline-none cursor-pointer">
         <option value={AccessibilityMode.Standard}>Default Mode</option>

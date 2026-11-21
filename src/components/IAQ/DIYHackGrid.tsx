@@ -16,7 +16,6 @@ function DIYHackCard({ hack }: { hack: DIYHack }) {
           <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#E8F0EA] text-[#153C35] border border-[#B8CDB8] shrink-0">{hack.costRating}</span>
         </div>
         <div className="text-xs text-[#398F83] font-bold mt-1.5 flex items-center gap-1.5">
-          <span aria-hidden="true">💨</span>
           <span>Clean Air Output: {hack.cadrDelivery}</span>
         </div>
         <div className="text-xs text-[#202B29] mt-2.5 bg-[#F6F7F2] p-2.5 rounded-xl border border-[#E5EAE4]">
@@ -25,8 +24,7 @@ function DIYHackCard({ hack }: { hack: DIYHack }) {
         <p className="text-xs text-[#73817B] mt-3 leading-relaxed">{hack.instructions}</p>
       </div>
       <div className="pt-3 border-t border-[#E5EAE4] text-xs text-[#153C35] font-semibold flex items-center gap-1.5">
-        <span>🎯</span>
-        <span>{hack.efficiencyBonus}</span>
+        <span>Efficiency: {hack.efficiencyBonus}</span>
       </div>
     </div>
   );
@@ -37,7 +35,7 @@ export const DIYHackGrid = memo(function DIYHackGrid() {
     <div className="flex flex-col gap-4">
       <div>
         <h3 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2">
-          <span aria-hidden="true">💡</span> Low-Cost & DIY Indoor Air Purification Hacks
+          Low-Cost & DIY Indoor Air Purification Hacks
         </h3>
         <p className="text-xs text-[#73817B] mt-0.5">
           Peer-reviewed open-source solutions proven to deliver high CADR at minimal household expense.

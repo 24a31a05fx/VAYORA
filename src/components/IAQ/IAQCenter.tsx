@@ -54,7 +54,7 @@ function DiagnosticMetricsGrid({ requiredCadr, roomVolume, ceilingHeight, effect
       <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-2xl p-4 flex flex-col justify-between shadow-xs">
         <span className="text-[10px] font-bold uppercase tracking-wider text-[#73817B]">Effective Air Changes</span>
         <div className="font-heading text-2xl font-black text-[#398F83] mt-2 tabular-nums">{effectiveAch} <span className="text-xs font-normal text-[#73817B]">ACH</span></div>
-        <p className="text-[11px] text-[#73817B] mt-2">{effectiveAch >= 4 ? '✅ Meets hospital-grade clean room target.' : '⚠️ Sub-optimal air recycling rate.'}</p>
+        <p className="text-[11px] text-[#73817B] mt-2">{effectiveAch >= 4 ? 'Meets hospital-grade clean room target.' : 'Sub-optimal air recycling rate.'}</p>
       </div>
       <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-2xl p-4 flex flex-col justify-between shadow-xs">
         <span className="text-[10px] font-bold uppercase tracking-wider text-[#73817B]">80% Clean Time</span>
@@ -70,7 +70,6 @@ function CadrDeficitBanner({ cadrDeficit }: { cadrDeficit: number }) {
   return (
     <div className="bg-[#FFFBEB] border border-[#FDE68A] rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#92400E]">
       <div className="flex items-center gap-3">
-        <span className="text-xl" aria-hidden="true">🛠️</span>
         <div><strong className="font-bold">CADR Deficit Detected:</strong> Your current setup is short by <strong className="text-[#78350F] tabular-nums font-black">{cadrDeficit} m³/h</strong>. Build a low-cost DIY Corsi-Rosenthal Box to achieve full 4 ACH protection!</div>
       </div>
     </div>
@@ -99,7 +98,7 @@ export const IAQCenter = memo(function IAQCenter() {
     <section aria-label="Indoor Air Quality and Low-Cost Hack Center" className="flex flex-col gap-6 fade-in">
       <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col gap-6">
         <div>
-          <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2"><span aria-hidden="true">💨</span> Room CADR & Indoor Air Quality (IAQ) Calculator</h2>
+          <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2">Room CADR & Indoor Air Quality (IAQ) Calculator</h2>
           <p className="text-xs text-[#73817B] mt-1 max-w-2xl leading-relaxed">Calculate Clean Air Delivery Rate (CADR) requirements, air changes per hour (ACH), and purification duration.</p>
         </div>
         <RoomSelectorTabs rooms={rooms} selectedRoomId={selectedRoomId} onSelect={setSelectedRoomId} />

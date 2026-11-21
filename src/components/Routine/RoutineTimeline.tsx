@@ -36,7 +36,7 @@ function TimelineHeader({ persona, zoneName }: { persona: string; zoneName: stri
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
       <div>
         <h3 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2">
-          <span aria-hidden="true">📅</span> Hour-by-Hour Exposure & Routine Timeline
+          Hour-by-Hour Exposure & Routine Timeline
         </h3>
         <p className="text-xs text-[#73817B] mt-0.5">
           Tailored for <strong className="text-[#202B29]">{persona}</strong> in <strong className="text-[#202B29]">{zoneName}</strong>
@@ -83,7 +83,7 @@ function TimelineSlotCard({ slot }: { slot: DailyRoutinePlan['hourlySchedule'][n
       <div className="flex-1">
         <h4 className="font-heading font-bold text-[#202B29] text-sm leading-snug">{slot.activity}</h4>
         <p className="text-xs text-[#73817B] mt-1 leading-relaxed">{slot.healthImpactNotes}</p>
-        {slot.environmentalOffsetNotes && <p className="text-[11px] text-[#398F83] font-medium mt-1">🌱 {slot.environmentalOffsetNotes}</p>}
+        {slot.environmentalOffsetNotes && <p className="text-[11px] text-[#398F83] font-medium mt-1"><span className="font-bold">•</span> {slot.environmentalOffsetNotes}</p>}
       </div>
       <SlotMetrics predictedAQI={slot.predictedAQI} inversionLikelihood={slot.inversionLikelihood} />
     </div>

@@ -5,6 +5,7 @@
 
 import { memo } from 'react';
 import type { CommunityAlert } from '@/types';
+import { WarningIcon, ShieldAlertIcon, CloseIcon } from '@/components/shared/Icons';
 
 interface AlertBannerProps {
   alerts: CommunityAlert[];
@@ -27,7 +28,7 @@ function DismissButton({ zone, onDismiss }: { zone: string; onDismiss: () => voi
       aria-label={`Dismiss alert for ${zone}`}
       className="text-[#73817B] hover:text-[#202B29] p-1 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#153C35] cursor-pointer"
     >
-      ✕
+      <CloseIcon size={14} />
     </button>
   );
 }
@@ -41,7 +42,7 @@ function AlertItem({ alert, onDismiss }: { alert: CommunityAlert; onDismiss: (id
     <div className={`pointer-events-auto p-4 rounded-2xl border shadow-xl backdrop-blur-md transition-all ${cardStyle}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-2.5">
-          <span className="text-xl animate-pulse shrink-0" aria-hidden="true">{isEmergency ? '🚨' : '⚠️'}</span>
+          <span className="shrink-0 mt-0.5" aria-hidden="true">{isEmergency ? <ShieldAlertIcon size={18} /> : <WarningIcon size={18} />}</span>
           <div>
             <AlertBadge zone={alert.zone} badgeStyle={badgeStyle} />
             <h4 className="font-heading font-bold text-sm text-[#202B29] mt-1 leading-snug">{alert.headline}</h4>

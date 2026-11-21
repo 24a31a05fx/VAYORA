@@ -11,6 +11,7 @@ import { apiService } from '@/services/apiService';
 import { TRANSLATIONS } from '@/lib/constants';
 import type { CommunityAlert, CommunityPledge } from '@/types';
 import { PledgeCard } from './PledgeCard';
+import { WarningIcon, ShieldAlertIcon, BroadcastIcon, LeafIcon } from '@/components/shared/Icons';
 
 function CollectiveResilienceBanner({ totalCo2Kg, totalPm25Grams }: { totalCo2Kg: number; totalPm25Grams: number }) {
   return (
@@ -19,7 +20,7 @@ function CollectiveResilienceBanner({ totalCo2Kg, totalPm25Grams }: { totalCo2Kg
       <div className="relative z-10">
         <span className="text-xs uppercase font-bold tracking-wider text-[#398F83]">Collective Neighborhood Resilience Impact</span>
         <h2 className="font-heading text-2xl font-black text-[#153C35] mt-1">Community Smog Abatement Dashboard</h2>
-        <p className="text-xs text-[#73817B] mt-1.5 max-w-xl leading-relaxed">When neighbors coordinate emission curbs—eliminating backyard burning, coordinating carpools, and wet-sweeping streets—local PM2.5 levels decrease by up to 28%.</p>
+        <p className="text-xs text-[#73817B] mt-1.5 max-w-xl leading-relaxed">When neighbors coordinate emission curbs (eliminating backyard burning, coordinating carpools, and wet-sweeping streets), local PM2.5 levels decrease by up to 28%.</p>
       </div>
       <div className="flex flex-wrap sm:flex-nowrap gap-4 relative z-10">
         <div className="bg-[#EBF2EC] border border-[#B8CDB8] rounded-2xl p-4 text-center min-w-[140px] flex-1 sm:flex-none shadow-xs">
@@ -42,7 +43,7 @@ function CommunityAlertCard({ alert, onDismiss }: { alert: CommunityAlert; onDis
   return (
     <div key={alert.id} role="alert" aria-live="assertive" className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${alertTheme}`}>
       <div className="flex items-start gap-3">
-        <span className="text-xl shrink-0" aria-hidden="true">{isEmergency ? '🚨' : '⚠️'}</span>
+        <span className="shrink-0 mt-0.5" aria-hidden="true">{isEmergency ? <ShieldAlertIcon size={18} /> : <WarningIcon size={18} />}</span>
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FFFFFF] border border-[#E5EAE4] text-[#202B29]">{alert.zone}</span>
@@ -61,7 +62,7 @@ function EmergencyAdvisorySection({ isGenerating, onGenerate, advisory, language
     <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col gap-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h3 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2"><span aria-hidden="true">📢</span> Multilingual Emergency Smog Advisories</h3>
+          <h3 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2"><BroadcastIcon /> Multilingual Emergency Smog Advisories</h3>
           <p className="text-xs text-[#73817B] mt-0.5">Live automated broadcast generation for neighborhood associations and school boards.</p>
         </div>
         <button type="button" onClick={onGenerate} disabled={isGenerating} className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#153C35] text-white hover:bg-[#0D2823] transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#153C35] disabled:opacity-50 shrink-0">
@@ -70,7 +71,7 @@ function EmergencyAdvisorySection({ isGenerating, onGenerate, advisory, language
       </div>
       {advisory && (
         <div role="region" aria-label="Generated community advisory" className={`p-4 bg-[#EBF2EC] border border-[#B8CDB8] rounded-2xl text-[#153C35] text-sm leading-relaxed ${language === 'ar' ? 'font-arabic text-right' : ''}`}>
-          <div className="flex items-center gap-2 text-xs font-bold text-[#153C35] mb-2"><span aria-hidden="true">📡</span><span>Official Air Resilience Broadcast ({language.toUpperCase()}):</span></div>
+          <div className="flex items-center gap-2 text-xs font-bold text-[#153C35] mb-2"><BroadcastIcon size={14} /><span>Official Air Resilience Broadcast ({language.toUpperCase()}):</span></div>
           <p className="text-[#202B29]">{advisory}</p>
         </div>
       )}
@@ -85,7 +86,7 @@ function PledgesGrid({ pledges, onToggle, pledgedLabel }: { pledges: CommunityPl
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h3 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2"><span aria-hidden="true">🤝</span> Neighborhood Emission Reduction Pledges</h3>
+        <h3 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2"><LeafIcon /> Neighborhood Emission Reduction Pledges</h3>
         <p className="text-xs text-[#73817B] mt-0.5">Join collective community pacts to eliminate localized winter pollution hotspots.</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -11,6 +11,7 @@ import { generateHeuristicRoutine } from '@/lib/compute';
 import type { DailyRoutinePlan } from '@/types';
 import { RoutineTimeline } from './RoutineTimeline';
 import { PersonaSelector } from './PersonaSelector';
+import { SparklesIcon, LightbulbIcon, WarningIcon, CheckIcon } from '@/components/shared/Icons';
 
 function GenerateButton({ isLoading, onGenerate }: { isLoading: boolean; onGenerate: () => void }) {
   return (
@@ -27,7 +28,7 @@ function GenerateButton({ isLoading, onGenerate }: { isLoading: boolean; onGener
         </>
       ) : (
         <>
-          <span aria-hidden="true">✨</span>
+          <SparklesIcon size={14} className="text-white" />
           <span>Generate Smart Schedule</span>
         </>
       )}
@@ -40,7 +41,7 @@ function OptimizerHeader({ isLoading, onGenerate }: { isLoading: boolean; onGene
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
       <div>
         <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2">
-          <span aria-hidden="true">🤖</span> GenAI Daily Routine & Smog Exposure Optimizer
+          GenAI Daily Routine & Smog Exposure Optimizer
         </h2>
         <p className="text-xs text-[#73817B] mt-1 max-w-2xl leading-relaxed">
           Select your family or lifestyle vulnerability profile to generate hour-by-hour exposure mitigation routines.
@@ -82,12 +83,12 @@ function DirectivesCard({ advice }: { advice: string[] }) {
   return (
     <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5">
       <h3 className="font-heading text-base font-bold text-[#153C35] flex items-center gap-2 mb-3">
-        <span aria-hidden="true">💡</span> Expert Smog Defense Directives
+        <LightbulbIcon size={16} /> Smog Defense Directives
       </h3>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-[#202B29]">
         {advice.map((item, i) => (
           <li key={i} className="flex items-start gap-2.5 bg-[#F6F7F2] p-3.5 rounded-2xl border border-[#E5EAE4]">
-            <span className="text-[#153C35] font-bold text-sm" aria-hidden="true">✔</span>
+            <CheckIcon size={14} className="text-[#398F83] shrink-0 mt-0.5" />
             <span className="leading-relaxed text-[#202B29]">{item}</span>
           </li>
         ))}
@@ -127,7 +128,7 @@ export const DailyRoutineOptimizer = memo(function DailyRoutineOptimizer() {
         <OptimizerHeader isLoading={isLoading} onGenerate={handleGenerate} />
         <PersonaSelector personas={personas} activePersona={activePersona} onSelectPersona={setActivePersona} />
         <div aria-live="polite" aria-busy={isLoading} className="sr-only">{isLoading ? 'Generating schedule with Gemini AI…' : 'Schedule ready.'}</div>
-        {errorMessage && <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs flex items-center gap-2"><span aria-hidden="true">⚠️</span><span>{errorMessage}</span></div>}
+        {errorMessage && <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs flex items-center gap-2"><span className="shrink-0"><WarningIcon size={16} /></span><span>{errorMessage}</span></div>}
       </div>
       {routinePlan && (
         <div className="flex flex-col gap-6 fade-in">

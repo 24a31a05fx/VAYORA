@@ -30,28 +30,33 @@ The application architecture enforces strict physical and conceptual separation 
 
 ```text
 vayora/
-├── server.ts                   # Express 5 entrypoint (56 lines)
+├── server.ts                   # Express 5 entrypoint (59 lines)
 ├── server/                     # Backend modular service architecture
 │   ├── aiService.ts            # Gemini 3.1 Flash Lite integration & heuristic fallback (148 lines)
+│   ├── auth.ts                 # Cryptographic PBKDF2/SHA-512 password hashing & auth (70 lines)
 │   ├── cache.ts                # In-memory SHA-256 LRU cache (32 lines)
 │   ├── cacheOrCompute.ts       # Shared cache-lookup, validation, compute orchestrator (32 lines)
 │   ├── logger.ts               # Standardized logging utility (23 lines)
-│   ├── middleware.ts           # Helmet, dynamic CORS, rate limiter, error handler (70 lines)
-│   ├── validators.ts           # Boundary type guards & input sanitization (98 lines)
+│   ├── middleware.ts           # Helmet, dynamic CORS, rate limiter, error handler (78 lines)
+│   ├── validators.ts           # Boundary type guards & XSS input sanitization (111 lines)
 │   └── routes/                 # Segregated Express 5 API route handlers
+│       ├── adminRoutes.ts      # Protected admin diagnostic and cache routes (52 lines)
 │       ├── advisoryRoutes.ts   # Emergency broadcast routes (35 lines)
 │       ├── healthRoutes.ts     # Health and telemetry diagnostics (21 lines)
 │       └── routineRoutes.ts    # GenAI schedule optimization routes (39 lines)
 ├── src/
 │   ├── components/             # Memoized React presentation components (React.memo)
-│   │   ├── Community/          # CommunityHub.tsx (137 lines), PledgeCard.tsx (64 lines)
-│   │   ├── Dashboard/          # AirTelemetryDashboard.tsx (107 lines), AqiGauge.tsx (62 lines),
-│   │   │                       # PollutantSparklinesPanel.tsx (69 lines), SmogHeatmap.tsx (125 lines)
-│   │   ├── IAQ/                # IAQCenter.tsx (117 lines), DIYHackGrid.tsx (54 lines), WindowSchedule.tsx (58 lines)
-│   │   ├── Navigation/         # Header.tsx (128 lines), NavControls.tsx (61 lines), SidebarSectorCard.tsx (52 lines)
-│   │   ├── Routine/            # DailyRoutineOptimizer.tsx (142 lines), PersonaSelector.tsx (58 lines), RoutineTimeline.tsx (105 lines)
+│   │   ├── Community/          # CommunityHub.tsx (138 lines), PledgeCard.tsx (64 lines)
+│   │   ├── Dashboard/          # AirTelemetryDashboard.tsx (136 lines), AqiGauge.tsx (99 lines),
+│   │   │                       # PollutantSparklinesPanel.tsx (71 lines), SmogHeatmap.tsx (146 lines),
+│   │   │                       # AtmosphericOverview.tsx (138 lines), AirForecastCard.tsx (87 lines),
+│   │   │                       # AtmosphericExposureReport.tsx (138 lines), EmissionSourceTreemap.tsx (80 lines)
+│   │   ├── IAQ/                # IAQCenter.tsx (116 lines), DIYHackGrid.tsx (52 lines), WindowSchedule.tsx (58 lines)
+│   │   ├── Legal/              # LegalModal.tsx (97 lines)
+│   │   ├── Navigation/         # Header.tsx (146 lines), NavControls.tsx (61 lines), SidebarSectorCard.tsx (52 lines)
+│   │   ├── Routine/            # DailyRoutineOptimizer.tsx (143 lines), PersonaSelector.tsx (58 lines), RoutineTimeline.tsx (105 lines)
 │   │   ├── Transit/            # TransitPlanner.tsx (112 lines), TransitComparisonTable.tsx (83 lines)
-│   │   └── shared/             # AlertBanner.tsx (73 lines), Sparkline.tsx (72 lines), ZoneCard.tsx (73 lines)
+│   │   └── shared/             # AlertBanner.tsx (74 lines), Icons.tsx (131 lines), Sparkline.tsx (72 lines), ZoneCard.tsx (74 lines)
 │   ├── context/                # Global state orchestrator and extracted hooks
 │   │   ├── AppContext.tsx       # Root provider wiring (39 lines)
 │   │   ├── appContextInstance.ts # Context instance (10 lines)
@@ -72,7 +77,7 @@ vayora/
 │   │   │   └── meteorology.ts          # Lapse-rate inversion modeling & emission offsets (87 lines)
 │   │   └── constants/          # Static baseline constants, translations, and graph nodes
 │   ├── services/               # Resilient storage (safeParse<T>) and client API wrappers
-│   ├── test/                   # 9 Vitest automated verification suites (94 tests)
+│   ├── test/                   # 10 Vitest automated verification suites (104 tests)
 │   └── types/                  # Centralized TypeScript declarations, enums, and unions
 ```
 
@@ -89,17 +94,17 @@ As established in **Architecture Decision Record 003 (ADR-003)** and **ADR-009**
 
 | File Path | Verified Line Count | Modular Decomposition Strategy |
 |---|---|---|
-| `src/components/Dashboard/AirTelemetryDashboard.tsx` | **107 lines** | Sub-divided into `AqiGauge.tsx`, `PollutantSparklinesPanel.tsx`, and `SmogHeatmap.tsx`. |
-| `src/components/Navigation/Header.tsx` | **128 lines** | Sub-divided into `SidebarSectorCard.tsx` and `NavControls.tsx`. |
-| `src/components/Routine/DailyRoutineOptimizer.tsx` | **142 lines** | Sub-divided into `PersonaSelector.tsx` and `RoutineTimeline.tsx`. |
-| `src/components/IAQ/IAQCenter.tsx` | **117 lines** | Sub-divided into `DIYHackGrid.tsx` and `WindowSchedule.tsx`. |
-| `src/components/Community/CommunityHub.tsx` | **137 lines** | Sub-divided into `PledgeCard.tsx`. |
+| `src/components/Dashboard/AirTelemetryDashboard.tsx` | **136 lines** | Sub-divided into `AqiGauge.tsx`, `AtmosphericOverview.tsx`, `AtmosphericExposureReport.tsx`, `EmissionSourceTreemap.tsx`, `AirForecastCard.tsx`. |
+| `src/components/Navigation/Header.tsx` | **146 lines** | Sub-divided into `SidebarSectorCard.tsx` and `NavControls.tsx`. |
+| `src/components/Routine/DailyRoutineOptimizer.tsx` | **143 lines** | Sub-divided into `PersonaSelector.tsx` and `RoutineTimeline.tsx`. |
+| `src/components/IAQ/IAQCenter.tsx` | **116 lines** | Sub-divided into `DIYHackGrid.tsx` and `WindowSchedule.tsx`. |
+| `src/components/Community/CommunityHub.tsx` | **138 lines** | Sub-divided into `PledgeCard.tsx`. |
 | `src/components/Transit/TransitPlanner.tsx` | **112 lines** | Sub-divided into `TransitComparisonTable.tsx`. |
 | `src/services/storageService.ts` | **193 lines** | Includes fallback storage engine and safe deserializers. |
 | `src/context/AppContext.tsx` | **39 lines** | State slices extracted into `src/context/hooks/` and types into `types.ts`. |
-| `server.ts` | **56 lines** | Express routers and middleware separated into `server/` submodules. |
+| `server.ts` | **59 lines** | Express routers and middleware separated into `server/` submodules. |
 
-**Compliance Result:** **100% of codebase files (77 of 77)** satisfy the line-count constraint ($\le$ 200 lines). Every single function satisfies $\le$ 25 lines and complexity $\le$ 10.
+**Compliance Result:** **100% of codebase files (93 of 93)** satisfy the line-count constraint ($\le$ 200 lines). Every single function satisfies $\le$ 25 lines and complexity $\le$ 10.
 
 ---
 

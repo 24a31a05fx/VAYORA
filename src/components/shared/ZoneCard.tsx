@@ -6,6 +6,7 @@
 import { memo } from 'react';
 import type { UrbanZone } from '@/types';
 import { getAQIColor } from '@/lib/compute';
+import { WarningIcon } from '@/components/shared/Icons';
 
 interface ZoneCardProps {
   zone: UrbanZone;
@@ -60,7 +61,7 @@ export const ZoneCard = memo(function ZoneCard({ zone, isSelected, onSelect }: Z
       <ZoneMetrics zone={zone} />
       {zone.inversionRisk && (
         <div className="flex items-center gap-1.5 text-xs text-[#E4A34A] bg-[#FFFBEB] px-2.5 py-1 rounded-lg border border-[#FDE68A]">
-          <span aria-hidden="true">⚠️</span>
+          <WarningIcon size={14} className="text-[#E4A34A] shrink-0" />
           <span className="font-semibold text-[#92400E]">Atmospheric Inversion Trap</span>
         </div>
       )}

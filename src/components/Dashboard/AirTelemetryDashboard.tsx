@@ -7,10 +7,15 @@ import { memo } from 'react';
 import { useAirAnalytics } from '@/hooks/useAirAnalytics';
 import { getPrimaryHealthAdvice, type HealthDirective, type InversionRiskResult } from '@/lib/compute';
 import { ZoneCard } from '@/components/shared/ZoneCard';
-import type { UrbanZone } from '@/types';
+import type { UrbanZone, PollutantReading } from '@/types';
 import { SmogHeatmap } from './SmogHeatmap';
 import { AqiGauge } from './AqiGauge';
 import { PollutantSparklinesPanel } from './PollutantSparklinesPanel';
+import { AtmosphericOverview } from './AtmosphericOverview';
+import { AtmosphericExposureReport } from './AtmosphericExposureReport';
+import { EmissionSourceTreemap } from './EmissionSourceTreemap';
+import { AirForecastCard } from './AirForecastCard';
+import { WarningIcon, LeafIcon, SparklesIcon } from '@/components/shared/Icons';
 
 function HealthDirectiveCard({ advice }: { advice: HealthDirective }) {
   return (
@@ -36,7 +41,7 @@ function InversionStatusCard({ currentZone, inversionStatus }: { currentZone: Ur
       <div>
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-bold uppercase tracking-wider text-[#73817B]">Inversion Mechanics</span>
-          <span aria-hidden="true" className="text-base">{isInv ? '⚠️' : '🍃'}</span>
+          <span aria-hidden="true" className="shrink-0">{isInv ? <WarningIcon size={16} /> : <LeafIcon size={16} />}</span>
         </div>
         <div className="font-heading font-bold text-sm mt-1 capitalize text-[#202B29]">{inversionStatus.severity} Risk Trap</div>
         <p className="text-[11px] text-[#73817B] mt-1 leading-snug line-clamp-2">{inversionStatus.rationale}</p>
@@ -54,7 +59,7 @@ function SimulationControls({ onSpike, onClean }: { onSpike: () => void; onClean
     <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm shadow-[#153C35]/5">
       <div>
         <h3 className="font-heading font-bold text-base text-[#153C35] flex items-center gap-2">
-          <span aria-hidden="true">🧪</span> Interactive Atmospheric Smog Simulation
+          <SparklesIcon size={16} className="text-[#398F83]" /> Interactive Atmospheric Smog Simulation
         </h3>
         <p className="text-xs text-[#73817B] mt-0.5">Test real-time system reaction to sudden inversion clamping or wind dispersion</p>
       </div>
@@ -80,25 +85,49 @@ function ZoneCardList({ zones, selectedZoneId, onSelect }: { zones: UrbanZone[];
   );
 }
 
+function PrimaryTelemetryHero({ currentZone, aqiColor, aqiCategory, advice, inversionStatus }: { currentZone: UrbanZone; aqiColor: string; aqiCategory: string; advice: HealthDirective; inversionStatus: InversionRiskResult }) {
+  return (
+    <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 relative overflow-hidden shadow-sm shadow-[#153C35]/5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center relative z-10">
+        <AqiGauge aqi={currentZone.aqi} aqiColor={aqiColor} aqiCategory={aqiCategory} zoneName={currentZone.zoneName} dominantPollutant={currentZone.dominantPollutant} />
+        <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <HealthDirectiveCard advice={advice} />
+          <InversionStatusCard currentZone={currentZone} inversionStatus={inversionStatus} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AnalyticsGrids({ zones, selectedZoneId, onSelectZone, currentZone, pollutantBreakdown }: { zones: UrbanZone[]; selectedZoneId: string; onSelectZone: (id: string) => void; currentZone: UrbanZone; pollutantBreakdown: PollutantReading[] }) {
+  return (
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <SmogHeatmap zones={zones} selectedZoneId={selectedZoneId} onSelectZone={onSelectZone} />
+        <PollutantSparklinesPanel zoneName={currentZone.zoneName} pollutantBreakdown={pollutantBreakdown} />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-7">
+          <AtmosphericExposureReport />
+        </div>
+        <div className="lg:col-span-5">
+          <AirForecastCard />
+        </div>
+      </div>
+      <EmissionSourceTreemap />
+    </>
+  );
+}
+
 export const AirTelemetryDashboard = memo(function AirTelemetryDashboard() {
   const { zones, currentZone, selectedZoneId, setSelectedZoneId, aqiCategory, aqiColor, inversionStatus, pollutantBreakdown, simulateSmogSpike, simulateCleanDispersion } = useAirAnalytics();
   const advice = getPrimaryHealthAdvice(currentZone.aqi);
 
   return (
     <section aria-label="Hyperlocal AQI Telemetry Dashboard" className="flex flex-col gap-6 fade-in">
-      <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 relative overflow-hidden shadow-sm shadow-[#153C35]/5">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center relative z-10">
-          <AqiGauge aqi={currentZone.aqi} aqiColor={aqiColor} aqiCategory={aqiCategory} zoneName={currentZone.zoneName} dominantPollutant={currentZone.dominantPollutant} />
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <HealthDirectiveCard advice={advice} />
-            <InversionStatusCard currentZone={currentZone} inversionStatus={inversionStatus} />
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <SmogHeatmap zones={zones} selectedZoneId={selectedZoneId} onSelectZone={setSelectedZoneId} />
-        <PollutantSparklinesPanel zoneName={currentZone.zoneName} pollutantBreakdown={pollutantBreakdown} />
-      </div>
+      <AtmosphericOverview currentZone={currentZone} onRefresh={simulateCleanDispersion} />
+      <PrimaryTelemetryHero currentZone={currentZone} aqiColor={aqiColor} aqiCategory={aqiCategory} advice={advice} inversionStatus={inversionStatus} />
+      <AnalyticsGrids zones={zones} selectedZoneId={selectedZoneId} onSelectZone={setSelectedZoneId} currentZone={currentZone} pollutantBreakdown={pollutantBreakdown} />
       <SimulationControls onSpike={simulateSmogSpike} onClean={simulateCleanDispersion} />
       <ZoneCardList zones={zones} selectedZoneId={selectedZoneId} onSelect={setSelectedZoneId} />
     </section>
