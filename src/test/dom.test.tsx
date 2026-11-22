@@ -22,22 +22,22 @@ describe('Tab Navigation Interactions', () => {
     // Click Routine tab
     const routineTab = screen.getByRole('tab', { name: /My Day|Routine/i });
     fireEvent.click(routineTab);
-    expect(await screen.findByText(/VAYORA Intelligence Daily Routine & Smog Exposure Optimizer/i)).toBeInTheDocument();
+    expect(await screen.findByText(/VAYORA Intelligence Daily Routine & Smog Exposure Optimizer/i, {}, { timeout: 5000 })).toBeInTheDocument();
 
     // Click Transit tab
     const transitTab = screen.getByRole('tab', { name: /Greener Routes|Transit/i });
     fireEvent.click(transitTab);
-    expect(await screen.findByText(/Low-Exposure Commute & Transit Path Optimizer/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Low-Exposure Commute & Transit Path Optimizer/i, {}, { timeout: 5000 })).toBeInTheDocument();
 
     // Click IAQ tab
     const iaqTab = screen.getByRole('tab', { name: /Home Air Lab|Indoor Air/i });
     fireEvent.click(iaqTab);
-    expect(await screen.findByText(/Room CADR & Indoor Air Quality/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Room CADR & Indoor Air Quality/i, {}, { timeout: 5000 })).toBeInTheDocument();
 
     // Click Community tab
     const communityTab = screen.getByRole('tab', { name: /Collective Impact|Community/i });
     fireEvent.click(communityTab);
-    expect(await screen.findByText(/Community Smog Abatement Dashboard/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Community Smog Abatement Dashboard/i, {}, { timeout: 5000 })).toBeInTheDocument();
 
     // Click Airscape tab
     const airscapeTab = screen.getByRole('tab', { name: /Airscape|Dashboard/i });

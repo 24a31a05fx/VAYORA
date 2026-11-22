@@ -57,7 +57,7 @@ export const apiService = {
       throw new Error(errorData.error || `HTTP ${res.status} failed to generate advisory`);
     }
 
-    const data = await res.json();
-    return data.advisory as string;
+    const data = (await res.json()) as { advisory?: string };
+    return data.advisory || '';
   },
 };
