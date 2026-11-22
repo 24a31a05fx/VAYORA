@@ -240,9 +240,8 @@ VAYORA is structured as a decoupled, multi-tiered architecture:
   - Strictly avoids generic tropes: zero leaves, clouds, shields, purple gradients, emoji icons, or standard AI badges.
   - Standalone symbol favicon (`favicon.svg`) designed for multi-resolution browser tabs.
 - **Typography Architecture:**
-  - **Headings & Display:** `Space Grotesk` (weights 600, 700, 900) providing modern geometric clarity.
-  - **Body & Controls:** `DM Sans` (weights 400, 500, 700) engineered for high-density reading comfort.
-  - **Telemetry & Metrics:** `IBM Plex Mono` (weights 500, 700) for fixed-width numerical readouts and tabular figures.
+  - **Headings & Body Text:** `Plus Jakarta Sans` (weights 400, 500, 600, 700, 800) providing modern geometric clarity and high-density reading comfort.
+  - **Telemetry & Numerical Metrics:** `JetBrains Mono` (weights 400, 500, 600, 700) for fixed-width numerical readouts, tabular figures, and precision AQI coordinates.
 - **Color Token Hierarchy:**
   - **Deep Botanical Greens:** `#11322B`, `#153C35`, `#1E4E45` (navigation, key headings, primary buttons).
   - **Eucalyptus & Mint Highlights:** `#3FB4A5`, `#398F83`, `#EBF2EC` (live badges, focus states, accents).

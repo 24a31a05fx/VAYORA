@@ -20,7 +20,7 @@ function CollectiveResilienceBanner({ totalCo2Kg, totalPm25Grams }: { totalCo2Kg
     <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden">
       <div className="absolute right-0 top-0 w-80 h-80 bg-gradient-to-bl from-[#EBF2EC] to-transparent rounded-full -mr-20 -mt-20 pointer-events-none opacity-70" />
       <div className="relative z-10">
-        <span className="text-xs uppercase font-bold tracking-wider text-[#398F83]">Collective Neighborhood Resilience Impact</span>
+        <span className="text-xs uppercase font-bold tracking-wider text-[#398F83]">Collective Impact: Neighborhood Resilience</span>
         <h2 className="font-heading text-2xl font-black text-[#153C35] mt-1">Community Smog Abatement Dashboard</h2>
         <p className="text-xs text-[#73817B] mt-1.5 max-w-xl leading-relaxed">When neighbors coordinate emission curbs (eliminating backyard burning, coordinating carpools, and wet-sweeping streets), local PM2.5 levels decrease by up to 28%.</p>
       </div>

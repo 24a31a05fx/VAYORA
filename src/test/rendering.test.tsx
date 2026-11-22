@@ -24,6 +24,9 @@ describe('App Root Layout Rendering', () => {
     expect(screen.getByRole('contentinfo', { name: /application footer/i })).toBeInTheDocument();
     expect(screen.getAllByText('VAYORA').length).toBeGreaterThan(0);
     expect(screen.getAllByText('LIVE').length).toBeGreaterThan(0);
+    expect(screen.getByText('Air. Awareness. Action.')).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /Airscape/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /My Day/i })).toBeInTheDocument();
   });
 });
 
@@ -36,8 +39,14 @@ describe('AirTelemetryDashboard Rendering', () => {
     );
 
     expect(screen.getByLabelText(/Hyperlocal AQI Telemetry Dashboard/i)).toBeInTheDocument();
-    expect(screen.getByText(/Urban Smog Heatmap/i)).toBeInTheDocument();
-    expect(screen.getByText(/Pollutant Trend Sparklines/i)).toBeInTheDocument();
+    expect(screen.getByText(/Area Explorer/i)).toBeInTheDocument();
+    expect(screen.getByText(/Sky Conditions/i)).toBeInTheDocument();
+    expect(screen.getByText(/Health Guidance/i)).toBeInTheDocument();
+    expect(screen.getByText(/Atmospheric Outlook/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pollution Landscape/i)).toBeInTheDocument();
+    expect(screen.getByText(/Air Quality Trends/i)).toBeInTheDocument();
+    expect(screen.getByText(/Personal Exposure/i)).toBeInTheDocument();
+    expect(screen.getByText(/Environmental Progress/i)).toBeInTheDocument();
   });
 
   it('renders screen reader twin (.sr-only) for SVG heatmap (WCAG Twin Representation)', () => {
@@ -86,6 +95,7 @@ describe('TransitPlanner Rendering', () => {
       </AppContextProvider>
     );
 
+    expect(screen.getByText(/Greener Routes/i)).toBeInTheDocument();
     expect(screen.getByText(/Low-Exposure Commute & Transit Path Optimizer/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Commute Origin Waypoint/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Destination Waypoint/i)).toBeInTheDocument();
@@ -102,6 +112,7 @@ describe('IAQCenter Rendering', () => {
       </AppContextProvider>
     );
 
+    expect(screen.getByText(/Home Air Lab/i)).toBeInTheDocument();
     expect(screen.getByText(/Room CADR & Indoor Air Quality/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Floor Area/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Purifier Clean Air Delivery Rate/i)).toBeInTheDocument();
@@ -117,6 +128,7 @@ describe('CommunityHub Rendering', () => {
       </AppContextProvider>
     );
 
+    expect(screen.getByText(/Collective Impact/i)).toBeInTheDocument();
     expect(screen.getByText(/Community Smog Abatement Dashboard/i)).toBeInTheDocument();
     expect(screen.getByText('CO₂ Prevented')).toBeInTheDocument();
     expect(screen.getByText('PM2.5 Averted')).toBeInTheDocument();
