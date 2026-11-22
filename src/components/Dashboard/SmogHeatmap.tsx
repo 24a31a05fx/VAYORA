@@ -133,7 +133,7 @@ export const SmogHeatmap = memo(function SmogHeatmap({ zones, selectedZoneId, on
     <div className="lg:col-span-7 bg-[#FFFFFF] rounded-3xl border border-[#E5EAE4] p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-sm shadow-[#153C35]/5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <h2 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2">
-          Urban Smog Heatmap & Dispersion Grid
+          Pollution Landscape — Urban Smog Heatmap & Dispersion Grid
         </h2>
         <span className="text-[11px] font-semibold text-[#398F83] bg-[#E8F0EA] px-2.5 py-1 rounded-full w-fit">5 Monitored Sectors</span>
       </div>

@@ -43,7 +43,10 @@ export const WindowSchedule = memo(function WindowSchedule({ currentAqi }: Windo
     <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col gap-4">
       <div>
         <h3 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2">
-          <span aria-hidden="true">🪟</span> Smart Inversion-Aware Window Ventilation Schedule
+          <svg className="w-5 h-5 text-[#398F83] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M3 3h18v18H3zM12 3v18M3 12h18" />
+          </svg>
+          Smart Inversion-Aware Window Ventilation Schedule
         </h3>
         <p className="text-xs text-[#73817B] mt-0.5">Tailored to current outdoor AQI ({currentAqi}) and meteorological boundary layer dynamics.</p>
       </div>

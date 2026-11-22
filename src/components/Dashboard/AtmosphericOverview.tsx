@@ -14,11 +14,11 @@ interface AtmosphericOverviewProps {
 }
 
 const REACTIONS = [
-  { id: 'clean', label: 'Crisp Air', icon: '🍃' },
-  { id: 'breezy', label: 'Breezy', icon: '💨' },
-  { id: 'moderate', label: 'Noticeable', icon: '⛅' },
-  { id: 'smog', label: 'Smoggy', icon: '⚠️' },
-  { id: 'heavy', label: 'Hazardous', icon: '🚨' },
+  { id: 'clean', label: 'Crisp' },
+  { id: 'breezy', label: 'Breezy' },
+  { id: 'moderate', label: 'Moderate' },
+  { id: 'smog', label: 'Smog' },
+  { id: 'heavy', label: 'Severe' },
 ];
 
 function DateActionPill({ onRefresh }: { onRefresh?: () => void }) {
@@ -82,19 +82,19 @@ function WeatherWindCard({ currentZone }: { currentZone: UrbanZone }) {
 
 function ReactionButtons({ selected, onSelect }: { selected: string; onSelect: (id: string) => void }) {
   return (
-    <div className="flex items-center justify-between gap-1 mt-3 pt-2 border-t border-white/15">
+    <div className="flex items-center justify-between gap-1.5 mt-3 pt-2 border-t border-white/15">
       {REACTIONS.map((r) => {
         const isSel = selected === r.id;
-        const selClass = isSel ? 'bg-white/20 ring-1 ring-white' : 'hover:bg-white/10 opacity-80';
+        const selClass = isSel ? 'bg-white text-[#153C35] font-bold shadow-xs' : 'bg-white/10 text-white/90 hover:bg-white/20 font-medium';
         return (
           <button
             key={r.id}
             type="button"
             onClick={() => onSelect(r.id)}
-            title={r.label}
-            className={`p-1.5 rounded-lg text-sm transition-all cursor-pointer ${selClass}`}
+            aria-pressed={isSel}
+            className={`flex-1 py-1 px-1.5 rounded-lg text-[10px] uppercase tracking-wider text-center transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white ${selClass}`}
           >
-            <span aria-hidden="true">{r.icon}</span>
+            {r.label}
           </button>
         );
       })}

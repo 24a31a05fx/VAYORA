@@ -96,7 +96,7 @@ export const TransitPlanner = memo(function TransitPlanner() {
     <section aria-label="Low-Emission Commute & Transit Planner" className="flex flex-col gap-6 fade-in">
       <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col gap-6">
         <div>
-          <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2">Low-Exposure Commute & Transit Path Optimizer</h2>
+          <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2">Greener Routes: Low-Exposure Commute & Transit Path Optimizer</h2>
           <p className="text-xs text-[#73817B] mt-1 max-w-2xl leading-relaxed">Dijkstra-powered algorithm identifying subterranean and clean-air corridors to bypass surface smog hotspots.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

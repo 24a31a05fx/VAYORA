@@ -128,3 +128,52 @@ export function CloseIcon({ className = 'w-4 h-4 text-[#73817B]', size = 16 }: I
     </svg>
   );
 }
+
+export function AirscapeIcon({ className = 'w-4 h-4 text-[#153C35]', size = 16 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M3 8c3.5-2 6.5-2 10 0s6.5 2 8 1" />
+      <path d="M3 13c4-1.5 7-1.5 11 0s5.5 1.5 7 .5" />
+      <path d="M3 18c3-1 6-1 9.5 0s5.5 1 8.5 0" />
+    </svg>
+  );
+}
+
+export function MyDayIcon({ className = 'w-4 h-4 text-[#153C35]', size = 16 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="5" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+    </svg>
+  );
+}
+
+export function RoutesIcon({ className = 'w-4 h-4 text-[#153C35]', size = 16 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <circle cx="6" cy="19" r="3" />
+      <path d="M9 19h8.5a4.5 4.5 0 0 0 0-9H6" />
+      <circle cx="18" cy="5" r="3" />
+      <path d="M6 10V5h9" />
+    </svg>
+  );
+}
+
+export function HomeLabIcon({ className = 'w-4 h-4 text-[#153C35]', size = 16 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <path d="M9 14v4M12 12v6M15 14v4" />
+    </svg>
+  );
+}
+
+export function ImpactIcon({ className = 'w-4 h-4 text-[#153C35]', size = 16 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M3 12a9 9 0 0 1 18 0M6 12a6 6 0 0 1 12 0" />
+      <path d="M12 3v3M12 18v3" />
+    </svg>
+  );
+}

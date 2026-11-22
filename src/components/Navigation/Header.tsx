@@ -11,7 +11,8 @@ import { TRANSLATIONS } from '@/lib/constants';
 import { getAQIColor } from '@/lib/compute';
 import { SidebarSectorCard } from './SidebarSectorCard';
 import { NavControls } from './NavControls';
-import { DashboardIcon, CalendarIcon, TransitIcon, LeafIcon, BroadcastIcon } from '@/components/shared/Icons';
+import { AirscapeIcon, MyDayIcon, RoutesIcon, HomeLabIcon, ImpactIcon } from '@/components/shared/Icons';
+import { VayoraLogo } from '@/components/shared/VayoraLogo';
 import { preloadTab } from '@/lib/tabPreload';
 
 interface TabItem {
@@ -21,27 +22,27 @@ interface TabItem {
 
 function getTabs(t: Record<string, string>): TabItem[] {
   return [
-    { id: TabId.Dashboard, label: t.tabDashboard || 'Air Telemetry' },
-    { id: TabId.Routine, label: t.tabRoutine || 'Routine Optimizer' },
-    { id: TabId.Transit, label: t.tabTransit || 'Low-Emission Transit' },
-    { id: TabId.IAQ, label: t.tabIAQ || 'Indoor Air & Hacks' },
-    { id: TabId.Community, label: t.tabCommunity || 'Community Action' },
+    { id: TabId.Dashboard, label: t.tabDashboard || 'Airscape' },
+    { id: TabId.Routine, label: t.tabRoutine || 'My Day' },
+    { id: TabId.Transit, label: t.tabTransit || 'Greener Routes' },
+    { id: TabId.IAQ, label: t.tabIAQ || 'Home Air Lab' },
+    { id: TabId.Community, label: t.tabCommunity || 'Collective Impact' },
   ];
 }
 
 function getTabIcon(tabId: TabId, isSelected: boolean) {
-  const iconColor = isSelected ? 'text-white' : 'text-[#73817B] group-hover:text-[#153C35]';
+  const iconColor = isSelected ? 'text-white' : 'text-[#73817B] group-hover:text-[#11322B]';
   switch (tabId) {
     case TabId.Dashboard:
-      return <DashboardIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+      return <AirscapeIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
     case TabId.Routine:
-      return <CalendarIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+      return <MyDayIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
     case TabId.Transit:
-      return <TransitIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+      return <RoutesIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
     case TabId.IAQ:
-      return <LeafIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+      return <HomeLabIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
     case TabId.Community:
-      return <BroadcastIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
+      return <ImpactIcon className={`w-4 h-4 shrink-0 ${iconColor}`} />;
   }
 }
 
@@ -64,41 +65,23 @@ function handleTabKey(e: React.KeyboardEvent<HTMLDivElement>, tabs: TabItem[], a
   }
 }
 
-function SidebarBrand({ appTitle, tagline }: { appTitle: string; tagline: string }) {
+function SidebarBrand({ tagline }: { tagline: string }) {
   return (
     <div className="p-5 border-b border-[#E5EAE4]">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#153C35] to-[#398F83] flex items-center justify-center text-white shadow-md">
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-          </svg>
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="font-heading font-black text-xl text-[#153C35] tracking-tight block">{appTitle}</span>
-            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E8F0EA] text-[#153C35] border border-[#B8CDB8]/60">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#398F83] animate-pulse" aria-hidden="true" />
-              LIVE
-            </span>
-          </div>
-          <span className="text-[11px] text-[#73817B] block -mt-0.5">{tagline}</span>
-        </div>
-      </div>
+      <VayoraLogo showTagline={false} size={36} />
+      <span className="text-[11px] text-[#73817B] font-medium tracking-tight block mt-2">
+        {tagline}
+      </span>
     </div>
   );
 }
 
-function MobileHeader({ appTitle, aqi, aqiColor }: { appTitle: string; aqi: number; aqiColor: string }) {
+function MobileHeader({ aqi, aqiColor }: { aqi: number; aqiColor: string }) {
   return (
     <div className="lg:hidden flex items-center justify-between p-4 border-b border-[#E5EAE4] bg-[#FFFFFF]">
-      <div className="flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#153C35] to-[#398F83] flex items-center justify-center text-white">
-          <span className="font-black text-sm">V</span>
-        </div>
-        <span className="font-heading font-black text-lg text-[#153C35]">{appTitle}</span>
-      </div>
+      <VayoraLogo showTagline={false} size={28} />
       <div className="flex items-center gap-2">
-        <span className="px-2.5 py-1 rounded-full text-xs font-black border" style={{ backgroundColor: `${aqiColor}15`, borderColor: `${aqiColor}40`, color: aqiColor }}>
+        <span className="px-2.5 py-1 rounded-full text-xs font-mono font-bold border" style={{ backgroundColor: `${aqiColor}15`, borderColor: `${aqiColor}40`, color: aqiColor }}>
           AQI {aqi}
         </span>
       </div>
@@ -107,7 +90,9 @@ function MobileHeader({ appTitle, aqi, aqiColor }: { appTitle: string; aqi: numb
 }
 
 function TabButton({ tab, isSelected, onSelect }: { tab: TabItem; isSelected: boolean; onSelect: (id: TabId) => void }) {
-  const btnClass = isSelected ? 'bg-[#153C35] text-white font-bold shadow-sm' : 'text-[#73817B] hover:bg-[#F6F7F2] hover:text-[#202B29] font-medium';
+  const btnClass = isSelected
+    ? 'bg-[#11322B] text-white font-bold shadow-sm shadow-[#11322B]/20 border-l-2 border-[#3FB4A5]'
+    : 'text-[#73817B] hover:bg-[#F7F8F4] hover:text-[#11322B] font-medium';
   return (
     <button
       id={`tab-${tab.id}`}
@@ -118,7 +103,7 @@ function TabButton({ tab, isSelected, onSelect }: { tab: TabItem; isSelected: bo
       onClick={() => onSelect(tab.id)}
       onMouseEnter={() => preloadTab(tab.id)}
       onFocus={() => preloadTab(tab.id)}
-      className={`group flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer text-left ${btnClass}`}
+      className={`group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm transition-all whitespace-nowrap cursor-pointer text-left ${btnClass}`}
     >
       {getTabIcon(tab.id, isSelected)}
       <span>{tab.label}</span>
@@ -146,8 +131,8 @@ export const Header = memo(function Header() {
   return (
     <header aria-label="Application Header" className="lg:fixed lg:top-0 lg:left-0 lg:h-screen lg:w-72 bg-[#FFFFFF] border-r border-[#E5EAE4] flex flex-col justify-between z-40">
       <div className="flex flex-col">
-        <MobileHeader appTitle={t.appTitle || 'VAYORA'} aqi={selectedZone.aqi} aqiColor={aqiColor} />
-        <SidebarBrand appTitle={t.appTitle || 'VAYORA'} tagline={t.tagline || 'Breathe better. Live smarter.'} />
+        <MobileHeader aqi={selectedZone.aqi} aqiColor={aqiColor} />
+        <SidebarBrand tagline={t.tagline || 'Air. Awareness. Action.'} />
         <nav aria-label="Main application tabs" className="mt-2">
           <TabList tabs={tabs} activeTab={activeTab} onSelect={setActiveTab} onKeyDown={(e) => handleTabKey(e, tabs, activeTab, setActiveTab)} />
         </nav>

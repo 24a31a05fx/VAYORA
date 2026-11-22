@@ -100,7 +100,7 @@ export const IAQCenter = memo(function IAQCenter() {
     <section aria-label="Indoor Air Quality and Low-Cost Hack Center" className="flex flex-col gap-6 fade-in">
       <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col gap-6">
         <div>
-          <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2">Room CADR & Indoor Air Quality (IAQ) Calculator</h2>
+          <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2">Home Air Lab: Room CADR & Indoor Air Quality (IAQ) Calculator</h2>
           <p className="text-xs text-[#73817B] mt-1 max-w-2xl leading-relaxed">Calculate Clean Air Delivery Rate (CADR) requirements, air changes per hour (ACH), and purification duration.</p>
         </div>
         <RoomSelectorTabs rooms={rooms} selectedRoomId={selectedRoomId} onSelect={setSelectedRoomId} />

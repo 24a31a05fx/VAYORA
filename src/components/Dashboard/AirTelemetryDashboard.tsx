@@ -22,7 +22,7 @@ function HealthDirectiveCard({ advice }: { advice: HealthDirective }) {
     <div className="bg-[#F6F7F2] border border-[#E5EAE4] rounded-2xl p-4 flex flex-col justify-between">
       <div>
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#73817B]">Primary Health Directive</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#73817B]">Health Guidance</span>
           <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border ${advice.badgeClass}`}>{advice.badge}</span>
         </div>
         <h3 className="font-heading font-bold text-sm text-[#202B29] mt-1.5 leading-snug">{advice.title}</h3>
@@ -40,7 +40,7 @@ function InversionStatusCard({ currentZone, inversionStatus }: { currentZone: Ur
     <div className={`rounded-2xl p-4 border flex flex-col justify-between transition-all ${style}`}>
       <div>
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#73817B]">Inversion Mechanics</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#73817B]">Sky Conditions</span>
           <span aria-hidden="true" className="shrink-0">{isInv ? <WarningIcon size={16} /> : <LeafIcon size={16} />}</span>
         </div>
         <div className="font-heading font-bold text-sm mt-1 capitalize text-[#202B29]">{inversionStatus.severity} Risk Trap</div>
@@ -59,7 +59,7 @@ function SimulationControls({ onSpike, onClean }: { onSpike: () => void; onClean
     <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm shadow-[#153C35]/5">
       <div>
         <h3 className="font-heading font-bold text-base text-[#153C35] flex items-center gap-2">
-          <SparklesIcon size={16} className="text-[#398F83]" /> Interactive Atmospheric Smog Simulation
+          <SparklesIcon size={16} className="text-[#398F83]" /> Environmental Progress & Simulation
         </h3>
         <p className="text-xs text-[#73817B] mt-0.5">Test real-time system reaction to sudden inversion clamping or wind dispersion</p>
       </div>
@@ -77,10 +77,16 @@ function SimulationControls({ onSpike, onClean }: { onSpike: () => void; onClean
 
 function ZoneCardList({ zones, selectedZoneId, onSelect }: { zones: UrbanZone[]; selectedZoneId: string; onSelect: (id: string) => void }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-      {zones.map((zone) => (
-        <ZoneCard key={zone.zoneId} zone={zone} isSelected={zone.zoneId === selectedZoneId} onSelect={onSelect} />
-      ))}
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <h3 className="font-heading font-bold text-base text-[#153C35]">Area Explorer: Municipal Sectors</h3>
+        <span className="text-xs text-[#73817B]">Select any sector to inspect hyperlocal telemetry</span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {zones.map((zone) => (
+          <ZoneCard key={zone.zoneId} zone={zone} isSelected={zone.zoneId === selectedZoneId} onSelect={onSelect} />
+        ))}
+      </div>
     </div>
   );
 }
