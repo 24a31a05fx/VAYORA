@@ -1,6 +1,6 @@
-# VAYORA — AI-Powered Urban Air Quality & Environmental Intelligence Platform
+# VAYORA: AI-Powered Urban Air Quality & Environmental Intelligence Platform
 
-> **"Breathe better. Live smarter."**  
+> **"Air. Awareness. Action."**  
 > An advanced environmental resilience system engineered to protect metropolitan communities and vulnerable populations from winter smog inversions, toxic particulate exposure, and urban atmospheric stagnation.
 
 ---
@@ -60,19 +60,24 @@ VAYORA translates complex environmental science into accessible, real-time civic
 
 ## 5. Main Application Capabilities
 
-### 5.1 Hyperlocal Telemetry Dashboard
-- Continuous monitoring across 5 distinct urban sectors:
-  1. **Central Business District** (Heavy commercial & fleet density)
-  2. **North Industrial Belt** (Manufacturing & point-source particulate)
-  3. **Eastern Residential** (High-density housing & localized heating)
+### 5.1 Airscape: Hyperlocal Telemetry Dashboard
+The **Airscape** module provides a real-time, multi-dimensional view of metropolitan atmospheric conditions:
+- **Area Explorer:** Instant sector switching across 5 distinct municipal zones:
+  1. **Central Business District** (Heavy commercial and fleet traffic density)
+  2. **North Industrial Belt** (Manufacturing and point-source particulate emissions)
+  3. **Eastern Residential** (High-density housing and localized biomass heating)
   4. **Riverside Park & Wetlands** (Eco-corridor with natural vegetation dispersion)
   5. **Transit Hub & Rail Depot** (Multi-modal transit intersection)
-- Circular AQI severity gauge with color-coded EPA categories and health directives.
-- Interactive SVG Smog Heatmap displaying dispersion corridors and atmospheric wind streamlines.
-- 7-hour pollutant trend sparklines with visual and screen-reader accessible representations.
-- Interactive telemetry simulation engine ("Simulate Winter Smog Spike" / "Simulate Solar Wind Cleansing").
+- **Sky Conditions:** Real-time atmospheric metrics including temperature lapse rates, boundary layer inversion capping, relative humidity, and wind velocity.
+- **Health Guidance:** Actionable, EPA-aligned public health directives tailored to active pollution severity.
+- **Atmospheric Outlook:** 7-day predictive photochemical dispersion forecast with day-by-day severity progression.
+- **Pollution Landscape:** Native SVG spatial smog heatmap displaying urban dispersion streamlines and hotspot nodes with full screen-reader text twins.
+- **Air Quality Trends:** 7-hour multi-parameter pollutant trend vectors tracking $\text{PM}_{2.5}$, $\text{PM}_{10}$, $\text{NO}_2$, $\text{CO}$, and $\text{O}_3$.
+- **Personal Exposure:** Bidirectional hourly exposure report contrasting solar ventilation windows with ground-level smog stagnation periods.
+- **Environmental Progress:** Interactive real-time simulation controls ("Simulate Winter Smog Spike" and "Simulate Solar Wind Cleansing").
 
-### 5.2 GenAI Daily Routine & Exposure Optimizer
+### 5.2 My Day: GenAI Daily Routine & Exposure Optimizer
+The **My Day** module synthesizes personalized, hour-by-hour exposure mitigation schedules:
 - Six lifestyle vulnerability personas:
   - *Asthmatic Child & Family* (High respiratory sensitivity)
   - *Newborn Infant & Nursing Mother* (Critical indoor filtration focus)
@@ -84,7 +89,8 @@ VAYORA translates complex environmental science into accessible, real-time civic
 - Deterministic local heuristic calculation engine providing 100% offline uptime.
 - Identification of the optimal outdoor activity window (typically 1:00 PM – 4:00 PM) when solar radiation breaks the inversion cap.
 
-### 5.3 Low-Emission Commute & Transit Planner
+### 5.3 Greener Routes: Low-Emission Commute & Transit Planner
+The **Greener Routes** module guides urban commuters through cleaner transit paths:
 - Graph-based Dijkstra pathfinding across urban waypoints to identify lowest-exposure trajectories.
 - Multi-modal comparison matrix evaluating 7 transit modes:
   - **Underground Metro** (75% cabin filtration protection)
@@ -96,14 +102,16 @@ VAYORA translates complex environmental science into accessible, real-time civic
   - **Gasoline Car** (Elevated $\text{NO}_2$ contribution)
 - Dynamic calculation of inhaled particulate dose ($\mu\text{g}$) and $\text{CO}_2$ emissions ($\text{kg}$).
 
-### 5.4 Indoor Air Quality (IAQ) & CADR Center
+### 5.4 Home Air Lab: Indoor Air Quality (IAQ) & CADR Center
+The **Home Air Lab** translates indoor air quality physics into practical household solutions:
 - Room-by-room Clean Air Delivery Rate (CADR) sizing calculator targeting 4 to 5 Air Changes per Hour (ACH).
 - First-order differential decay modeling for 80% indoor air clearance duration.
 - Detection of CADR deficits with contextual recommendations.
 - Meteorological window ventilation schedule warning against morning inversion ventilation (6:00 AM – 10:30 AM) and advising afternoon solar flush windows (1:30 PM – 3:30 PM).
 - Open-source fabrication blueprints for the DIY Corsi-Rosenthal Box ($40 build producing ~350 m³/h CADR).
 
-### 5.5 Community Action & Collective Impact Hub
+### 5.5 Collective Impact: Community Action & Smog Abatement Hub
+The **Collective Impact** hub coordinates neighborhood-level civic action:
 - Neighborhood emission reduction pledges across 5 categories: carpooling, clean heating, dust wet-sweeping, clean waste management, and vulnerable neighbor wellness check-ins.
 - Live collective impact calculator aggregating total $\text{CO}_2$ ($\text{kg}$) and $\text{PM}_{2.5}$ ($\text{g}$) averted.
 - Automated multilingual emergency smog advisories generated in English, Hindi, Arabic (with native RTL layout), and Spanish.
@@ -222,6 +230,24 @@ VAYORA is structured as a decoupled, multi-tiered architecture:
 | **Test Framework** | Vitest + JSDOM | 3.2.7 | Multi-tier unit, DOM, rendering, and API test execution (109 tests) |
 | **DOM Testing** | Testing Library | 16.2.0 | User-centric DOM testing and accessibility assertions |
 
+### 8.1 Brand Identity & Design System
+
+- **Brand Personality:** Intelligent, calm, contemporary, trustworthy, and environmentally conscious.
+- **Brand Tagline:** *"Air. Awareness. Action."*
+- **Visual Identity & Logo:**
+  - Abstract geometric symbol (`VayoraSymbol`) inspired by fluid atmospheric streamline motion and micro-current dynamics.
+  - Paired with the modern `VAYORA` wordmark.
+  - Strictly avoids generic tropes: zero leaves, clouds, shields, purple gradients, emoji icons, or standard AI badges.
+  - Standalone symbol favicon (`favicon.svg`) designed for multi-resolution browser tabs.
+- **Typography Architecture:**
+  - **Headings & Display:** `Space Grotesk` (weights 600, 700, 900) providing modern geometric clarity.
+  - **Body & Controls:** `DM Sans` (weights 400, 500, 700) engineered for high-density reading comfort.
+  - **Telemetry & Metrics:** `IBM Plex Mono` (weights 500, 700) for fixed-width numerical readouts and tabular figures.
+- **Color Token Hierarchy:**
+  - **Deep Botanical Greens:** `#11322B`, `#153C35`, `#1E4E45` (navigation, key headings, primary buttons).
+  - **Eucalyptus & Mint Highlights:** `#3FB4A5`, `#398F83`, `#EBF2EC` (live badges, focus states, accents).
+  - **Warm Stone Canvas:** `#F7F8F4`, `#F6F7F2` (glare-free neutral background surfaces).
+
 ---
 
 ## 9. Project Directory Structure
@@ -274,7 +300,9 @@ vayora/
 │   │   │   └── RoutineTimeline.tsx # Hour-by-hour exposure schedule
 │   │   ├── shared/
 │   │   │   ├── AlertBanner.tsx  # Assertive emergency smog notification banner
+│   │   │   ├── Icons.tsx        # Custom accessible SVG iconography (zero emojis)
 │   │   │   ├── Sparkline.tsx    # Native SVG sparkline with sr-only twin
+│   │   │   ├── VayoraLogo.tsx   # Atmospheric airflow symbol and brand wordmark
 │   │   │   └── ZoneCard.tsx     # Urban sector status card
 │   │   └── Transit/
 │   │       ├── TransitComparisonTable.tsx # Multi-modal health risk table

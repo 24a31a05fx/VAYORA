@@ -56,7 +56,7 @@ function ReportHeader() {
       <div>
         <div className="flex items-center gap-2">
           <h3 className="font-heading font-bold text-base text-[#153C35]">
-            Atmospheric Exposure & Dispersion Report
+            Personal Exposure — Atmospheric Exposure & Dispersion Report
           </h3>
           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E8F0EA] text-[#153C35] border border-[#B8CDB8]/60">
             -10.2% Trap Risk

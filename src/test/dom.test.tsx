@@ -19,22 +19,22 @@ describe('Tab Navigation Interactions', () => {
     render(<App />);
 
     // Click Routine tab
-    const routineTab = screen.getByRole('tab', { name: /Routine Optimizer/i });
+    const routineTab = screen.getByRole('tab', { name: /My Day|Routine/i });
     fireEvent.click(routineTab);
     expect(await screen.findByText(/VAYORA Intelligence Daily Routine & Smog Exposure Optimizer/i)).toBeInTheDocument();
 
     // Click Transit tab
-    const transitTab = screen.getByRole('tab', { name: /Low-Emission Transit/i });
+    const transitTab = screen.getByRole('tab', { name: /Greener Routes|Transit/i });
     fireEvent.click(transitTab);
     expect(await screen.findByText(/Low-Exposure Commute & Transit Path Optimizer/i)).toBeInTheDocument();
 
     // Click IAQ tab
-    const iaqTab = screen.getByRole('tab', { name: /Indoor Air & Hacks/i });
+    const iaqTab = screen.getByRole('tab', { name: /Home Air Lab|Indoor Air/i });
     fireEvent.click(iaqTab);
     expect(await screen.findByText(/Room CADR & Indoor Air Quality/i)).toBeInTheDocument();
 
     // Click Community tab
-    const communityTab = screen.getByRole('tab', { name: /Community Action/i });
+    const communityTab = screen.getByRole('tab', { name: /Collective Impact|Community/i });
     fireEvent.click(communityTab);
     expect(await screen.findByText(/Community Smog Abatement Dashboard/i)).toBeInTheDocument();
   });

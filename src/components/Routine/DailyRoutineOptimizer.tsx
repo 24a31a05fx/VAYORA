@@ -43,7 +43,7 @@ function OptimizerHeader({ isLoading, onGenerate }: { isLoading: boolean; onGene
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
       <div>
         <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2">
-          VAYORA Intelligence Daily Routine & Smog Exposure Optimizer
+          My Day: VAYORA Intelligence Daily Routine & Smog Exposure Optimizer
         </h2>
         <p className="text-xs text-[#73817B] mt-1 max-w-2xl leading-relaxed">
           Select your family or lifestyle vulnerability profile to generate hour-by-hour exposure mitigation routines.

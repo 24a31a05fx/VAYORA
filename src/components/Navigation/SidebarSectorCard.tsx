@@ -16,8 +16,8 @@ interface SidebarSectorCardProps {
 function SectorBadge({ selectedZone, aqiColor }: { selectedZone: UrbanZone; aqiColor: string }) {
   return (
     <div className="flex items-center justify-between text-xs">
-      <span className="text-[#73817B] font-medium">Selected Sector:</span>
-      <span className="px-2 py-0.5 rounded-full text-[11px] font-black border" style={{ backgroundColor: `${aqiColor}15`, borderColor: `${aqiColor}50`, color: aqiColor }}>
+      <span className="text-[#73817B] font-semibold text-[11px] uppercase tracking-wider">Area Explorer</span>
+      <span className="px-2 py-0.5 rounded-full text-[11px] font-mono font-bold border" style={{ backgroundColor: `${aqiColor}15`, borderColor: `${aqiColor}50`, color: aqiColor }}>
         AQI {selectedZone.aqi}
       </span>
     </div>

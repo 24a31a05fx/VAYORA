@@ -69,7 +69,7 @@ export const AirForecastCard = memo(function AirForecastCard() {
     <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-sm shadow-[#153C35]/5">
       <div>
         <h3 className="font-heading font-bold text-base text-[#153C35]">
-          7-Day Atmospheric & Air Forecast
+          Atmospheric Outlook — 7-Day Forecast
         </h3>
         <p className="text-xs text-[#73817B] mt-0.5">
           Predictive multi-day photochemical dispersion and meteorological model

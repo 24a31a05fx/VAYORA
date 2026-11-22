@@ -52,7 +52,7 @@ export const PollutantSparklinesPanel = memo(function PollutantSparklinesPanel({
     <div className="lg:col-span-5 bg-[#FFFFFF] rounded-3xl border border-[#E5EAE4] p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-sm shadow-[#153C35]/5">
       <div>
         <h2 className="font-heading text-lg font-bold text-[#153C35] flex items-center gap-2">
-          Pollutant Trend Sparklines
+          Air Quality Trends — Pollutant Trend Sparklines
         </h2>
         <p className="text-xs text-[#73817B] mt-0.5">Multi-parameter gas and particle telemetry ({zoneName})</p>
       </div>
