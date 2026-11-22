@@ -7,22 +7,6 @@
 }
 
 @layer base {
-  :root {
-    --color-bg-primary: #F6F7F2;
-    --color-bg-surface: #FFFFFF;
-    --color-brand-forest: #153C35;
-    --color-brand-forest-dark: #0D2823;
-    --color-brand-teal: #398F83;
-    --color-accent-amber: #E4A34A;
-    --color-accent-sage: #B8CDB8;
-    --color-accent-sage-light: #EBF2EC;
-    --color-accent-sage-tint: #F2F7F3;
-    --color-text-primary: #202B29;
-    --color-text-secondary: #73817B;
-    --color-border-natural: #E5EAE4;
-    --color-border-strong: #CDD6CC;
-  }
-
   body {
     background-color: #F6F7F2;
     color: #202B29;

@@ -11,17 +11,10 @@ import type {
   Language,
 } from '@/types';
 
-export interface RoutineRequestPayload {
+interface RoutineRequestPayload {
   persona: PersonaProfile;
   zone: UrbanZone;
   language: Language;
-}
-
-export interface CommuteRequestPayload {
-  originZone: string;
-  destZone: string;
-  distanceKm: number;
-  currentAQI: number;
 }
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL as string) || '';

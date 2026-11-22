@@ -9,7 +9,7 @@ import { validateZone } from '../validators';
 import { getEmergencyAdvisoryText } from '../aiService';
 import { cacheOrCompute } from '../cacheOrCompute';
 
-export interface AdvisoryRequestBody {
+interface AdvisoryRequestBody {
   zone?: unknown;
   language?: unknown;
 }

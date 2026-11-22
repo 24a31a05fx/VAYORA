@@ -4,7 +4,6 @@
 // ============================================================
 
 import { createContext } from 'react';
-import type { AppContextValue } from './types';
 import type { TabId, Language, AccessibilityMode, UrbanZone, PersonaProfile, DailyRoutinePlan, IAQRoomConfig, CommunityPledge, CommunityAlert } from '@/types';
 
 export interface UIContextValue {
@@ -46,7 +45,7 @@ export interface CommunityContextValue {
   dismissAlert: (id: string) => void;
 }
 
-export const AppContext = createContext<AppContextValue | null>(null);
+export { AppContext } from './appContextInstance';
 export const UIContext = createContext<UIContextValue | null>(null);
 export const ZoneContext = createContext<ZoneContextValue | null>(null);
 export const ProfileContext = createContext<ProfileContextValue | null>(null);

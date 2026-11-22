@@ -6,7 +6,7 @@
 /**
  * Validates whether an unknown value is a finite number.
  */
-export function isFiniteNumber(v: unknown): v is number {
+function isFiniteNumber(v: unknown): v is number {
   return typeof v === 'number' && Number.isFinite(v);
 }
 

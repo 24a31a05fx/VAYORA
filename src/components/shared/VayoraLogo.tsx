@@ -23,7 +23,7 @@ function StreamlinePaths() {
   );
 }
 
-export function VayoraSymbol({ size = 36, className = '' }: { size?: number; className?: string }) {
+function VayoraSymbol({ size = 36, className = '' }: { size?: number; className?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 36 36" fill="none" className={`shrink-0 ${className}`} aria-hidden="true">
       <rect width="36" height="36" rx="10" fill="#11322B" />

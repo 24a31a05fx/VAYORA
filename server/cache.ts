@@ -5,7 +5,7 @@
 
 import { createHash } from 'crypto';
 
-export interface CacheEntry {
+interface CacheEntry {
   data: unknown;
   cachedAt: number;
 }

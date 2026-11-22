@@ -6,7 +6,7 @@
 import { insightCache, hashPayload, pruneCache } from './cache';
 import { sanitizeText } from './validators';
 
-export interface CacheOrComputeOptions<T> {
+interface CacheOrComputeOptions<T> {
   keyPayload: Record<string, unknown>;
   language?: unknown;
   compute: (cleanLang: string) => Promise<T>;

@@ -9,7 +9,7 @@ import { validateZone, validatePersona } from '../validators';
 import { getAiRoutineInsights } from '../aiService';
 import { cacheOrCompute } from '../cacheOrCompute';
 
-export interface RoutineRequestBody {
+interface RoutineRequestBody {
   persona?: unknown;
   zone?: unknown;
   language?: unknown;
