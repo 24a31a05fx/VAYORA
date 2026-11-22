@@ -21,7 +21,7 @@ describe('Tab Navigation Interactions', () => {
     // Click Routine tab
     const routineTab = screen.getByRole('tab', { name: /Routine Optimizer/i });
     fireEvent.click(routineTab);
-    expect(await screen.findByText(/GenAI Daily Routine & Smog Exposure Optimizer/i)).toBeInTheDocument();
+    expect(await screen.findByText(/VAYORA Intelligence Daily Routine & Smog Exposure Optimizer/i)).toBeInTheDocument();
 
     // Click Transit tab
     const transitTab = screen.getByRole('tab', { name: /Low-Emission Transit/i });

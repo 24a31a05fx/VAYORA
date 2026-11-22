@@ -71,7 +71,7 @@ describe('DailyRoutineOptimizer Rendering', () => {
       </AppContextProvider>
     );
 
-    expect(screen.getByText(/GenAI Daily Routine & Smog Exposure Optimizer/i)).toBeInTheDocument();
+    expect(screen.getByText(/VAYORA Intelligence Daily Routine & Smog Exposure Optimizer/i)).toBeInTheDocument();
     expect(screen.getByText('Asthmatic Child & Family')).toBeInTheDocument();
     expect(screen.getByText('Newborn Infant & Nursing Mother')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Generate Smart Schedule/i })).toBeInTheDocument();

@@ -26,7 +26,7 @@ function GenerateButton({ isLoading, onGenerate }: { isLoading: boolean; onGener
       {isLoading ? (
         <>
           <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true" />
-          <span>Optimizing with Gemini AI…</span>
+          <span>Optimizing with VAYORA Intelligence…</span>
         </>
       ) : (
         <>
@@ -43,7 +43,7 @@ function OptimizerHeader({ isLoading, onGenerate }: { isLoading: boolean; onGene
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
       <div>
         <h2 className="font-heading text-xl font-black text-[#153C35] flex items-center gap-2">
-          GenAI Daily Routine & Smog Exposure Optimizer
+          VAYORA Intelligence Daily Routine & Smog Exposure Optimizer
         </h2>
         <p className="text-xs text-[#73817B] mt-1 max-w-2xl leading-relaxed">
           Select your family or lifestyle vulnerability profile to generate hour-by-hour exposure mitigation routines.
@@ -146,11 +146,11 @@ export const DailyRoutineOptimizer = memo(function DailyRoutineOptimizer() {
   const { personas, activePersona, setActivePersona, selectedZone, routinePlan, isLoading, errorMessage, handleGenerate } = useRoutineOptimizer();
 
   return (
-    <section aria-label="GenAI Daily Routine and Exposure Optimizer" className="flex flex-col gap-6 fade-in">
+    <section aria-label="VAYORA Intelligence Daily Routine and Exposure Optimizer" className="flex flex-col gap-6 fade-in">
       <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col gap-6">
         <OptimizerHeader isLoading={isLoading} onGenerate={handleGenerate} />
         <PersonaSelector personas={personas} activePersona={activePersona} onSelectPersona={setActivePersona} />
-        <div aria-live="polite" aria-busy={isLoading} className="sr-only">{isLoading ? 'Generating schedule with Gemini AI…' : 'Schedule ready.'}</div>
+        <div aria-live="polite" aria-busy={isLoading} className="sr-only">{isLoading ? 'Generating schedule with VAYORA Intelligence…' : 'Schedule ready.'}</div>
         {errorMessage && <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs flex items-center gap-2"><span className="shrink-0"><WarningIcon size={16} /></span><span>{errorMessage}</span></div>}
       </div>
       {routinePlan && (

@@ -1,6 +1,6 @@
 // ============================================================
 // src/types/routine.ts
-// Persona profiles, hourly schedules, and GenAI routine plans
+// Persona profiles, hourly schedules, and VAYORA Intelligence routine plans
 // ============================================================
 
 export interface PersonaProfile {
