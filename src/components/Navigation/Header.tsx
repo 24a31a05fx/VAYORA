@@ -6,7 +6,7 @@
 import React, { memo } from 'react';
 import { useUIContext } from '@/context/UIContext';
 import { useZoneContext } from '@/context/ZoneContext';
-import { TabId } from '@/types';
+import { TabId, type TelemetryDataSource } from '@/types';
 import { TRANSLATIONS } from '@/lib/constants';
 import { getAQIColor } from '@/lib/compute';
 import { SidebarSectorCard } from './SidebarSectorCard';
@@ -65,10 +65,10 @@ function handleTabKey(e: React.KeyboardEvent<HTMLDivElement>, tabs: TabItem[], a
   }
 }
 
-function SidebarBrand({ tagline }: { tagline: string }) {
+function SidebarBrand({ tagline, dataSource }: { tagline: string; dataSource: TelemetryDataSource }) {
   return (
     <div className="p-5 border-b border-[#E5EAE4]">
-      <VayoraLogo showTagline={false} size={36} />
+      <VayoraLogo showTagline={false} size={36} dataSource={dataSource} />
       <span className="text-[11px] text-[#73817B] font-medium tracking-tight block mt-2">
         {tagline}
       </span>
@@ -76,10 +76,10 @@ function SidebarBrand({ tagline }: { tagline: string }) {
   );
 }
 
-function MobileHeader({ aqi, aqiColor }: { aqi: number; aqiColor: string }) {
+function MobileHeader({ aqi, aqiColor, dataSource }: { aqi: number; aqiColor: string; dataSource: TelemetryDataSource }) {
   return (
     <div className="lg:hidden flex items-center justify-between p-4 border-b border-[#E5EAE4] bg-[#FFFFFF]">
-      <VayoraLogo showTagline={false} size={28} />
+      <VayoraLogo showTagline={false} size={28} dataSource={dataSource} />
       <div className="flex items-center gap-2">
         <span className="px-2.5 py-1 rounded-full text-xs font-mono font-bold border" style={{ backgroundColor: `${aqiColor}15`, borderColor: `${aqiColor}40`, color: aqiColor }}>
           AQI {aqi}
@@ -123,7 +123,7 @@ function TabList({ tabs, activeTab, onSelect, onKeyDown }: { tabs: TabItem[]; ac
 
 export const Header = memo(function Header() {
   const { activeTab, setActiveTab, language, setLanguage, accessibilityMode, setAccessibilityMode } = useUIContext();
-  const { selectedZone, zones, setSelectedZoneId } = useZoneContext();
+  const { selectedZone, zones, setSelectedZoneId, dataSource } = useZoneContext();
   const t = TRANSLATIONS[language] ?? TRANSLATIONS.en;
   const aqiColor = getAQIColor(selectedZone.aqi);
   const tabs = getTabs(t);
@@ -131,8 +131,8 @@ export const Header = memo(function Header() {
   return (
     <header aria-label="Application Header" className="lg:fixed lg:top-0 lg:left-0 lg:h-screen lg:w-72 bg-[#FFFFFF] border-r border-[#E5EAE4] flex flex-col justify-between z-40">
       <div className="flex flex-col">
-        <MobileHeader aqi={selectedZone.aqi} aqiColor={aqiColor} />
-        <SidebarBrand tagline={t.tagline || 'Air. Awareness. Action.'} />
+        <MobileHeader aqi={selectedZone.aqi} aqiColor={aqiColor} dataSource={dataSource} />
+        <SidebarBrand tagline={t.tagline || 'Air. Awareness. Action.'} dataSource={dataSource} />
         <nav aria-label="Main application tabs" className="mt-2">
           <TabList tabs={tabs} activeTab={activeTab} onSelect={setActiveTab} onKeyDown={(e) => handleTabKey(e, tabs, activeTab, setActiveTab)} />
         </nav>

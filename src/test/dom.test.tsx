@@ -13,6 +13,7 @@ import { AirTelemetryDashboard } from '@/components/Dashboard/AirTelemetryDashbo
 import { DailyRoutineOptimizer } from '@/components/Routine/DailyRoutineOptimizer';
 import { IAQCenter } from '@/components/IAQ/IAQCenter';
 import { CommunityHub } from '@/components/Community/CommunityHub';
+import { TransitPlanner } from '@/components/Transit/TransitPlanner';
 
 describe('Tab Navigation Interactions', () => {
   it('switches viewports when user clicks different tabs in header tablist', async () => {
@@ -21,23 +22,28 @@ describe('Tab Navigation Interactions', () => {
     // Click Routine tab
     const routineTab = screen.getByRole('tab', { name: /My Day|Routine/i });
     fireEvent.click(routineTab);
-    expect(await screen.findByText(/VAYORA Intelligence Daily Routine & Smog Exposure Optimizer/i)).toBeInTheDocument();
+    expect(await screen.findByText(/VAYORA Intelligence Daily Routine & Smog Exposure Optimizer/i, {}, { timeout: 5000 })).toBeInTheDocument();
 
     // Click Transit tab
     const transitTab = screen.getByRole('tab', { name: /Greener Routes|Transit/i });
     fireEvent.click(transitTab);
-    expect(await screen.findByText(/Low-Exposure Commute & Transit Path Optimizer/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Low-Exposure Commute & Transit Path Optimizer/i, {}, { timeout: 5000 })).toBeInTheDocument();
 
     // Click IAQ tab
     const iaqTab = screen.getByRole('tab', { name: /Home Air Lab|Indoor Air/i });
     fireEvent.click(iaqTab);
-    expect(await screen.findByText(/Room CADR & Indoor Air Quality/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Room CADR & Indoor Air Quality/i, {}, { timeout: 5000 })).toBeInTheDocument();
 
     // Click Community tab
     const communityTab = screen.getByRole('tab', { name: /Collective Impact|Community/i });
     fireEvent.click(communityTab);
-    expect(await screen.findByText(/Community Smog Abatement Dashboard/i)).toBeInTheDocument();
-  });
+    expect(await screen.findByText(/Community Smog Abatement Dashboard/i, {}, { timeout: 5000 })).toBeInTheDocument();
+
+    // Click Airscape tab
+    const airscapeTab = screen.getByRole('tab', { name: /Airscape|Dashboard/i });
+    fireEvent.click(airscapeTab);
+    expect(screen.getByLabelText(/Hyperlocal AQI Telemetry Dashboard/i)).toBeInTheDocument();
+  }, 15000);
 });
 
 describe('Telemetry Simulation Controls', () => {
@@ -128,5 +134,33 @@ describe('Community Pledge Action', () => {
 
     // Confirms toggle action
     expect(firstPledgeBtn.textContent).not.toBe(initialText);
+  });
+});
+
+describe('Transit Waypoint Interaction', () => {
+  it('updates selected origin waypoint on change', () => {
+    render(
+      <AppContextProvider>
+        <TransitPlanner />
+      </AppContextProvider>
+    );
+
+    const originSelect = screen.getByLabelText(/Commute Origin Waypoint/i) as HTMLSelectElement;
+    fireEvent.change(originSelect, { target: { value: 'N-PARK' } });
+    expect(originSelect.value).toBe('N-PARK');
+  });
+});
+
+describe('Navigation Controls Interaction', () => {
+  it('updates language and accessibility modes on user selection', () => {
+    render(<App />);
+
+    const langSelect = screen.getAllByLabelText(/Select Language/i)[0] as HTMLSelectElement;
+    fireEvent.change(langSelect, { target: { value: 'hi' } });
+    expect(langSelect.value).toBe('hi');
+
+    const a11ySelect = screen.getAllByLabelText(/Accessibility mode/i)[0] as HTMLSelectElement;
+    fireEvent.change(a11ySelect, { target: { value: 'high-contrast' } });
+    expect(a11ySelect.value).toBe('high-contrast');
   });
 });

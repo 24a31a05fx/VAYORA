@@ -31,11 +31,11 @@ function TreemapHeader() {
             Urban Smog Emission Attribution
           </h3>
           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E8F0EA] text-[#153C35] border border-[#B8CDB8]/60">
-            ↓ 23% Offset
+            Illustrative Weights
           </span>
         </div>
         <p className="text-xs text-[#73817B] mt-0.5">
-          Breakdown of primary particulate and aerosol emission drivers
+          Typical urban winter particulate source categories for household prioritization
         </p>
       </div>
     </div>
@@ -57,9 +57,9 @@ function TreemapTile({ source }: { source: EmissionSource }) {
 
 function TreemapFooter() {
   return (
-    <div className="bg-[#F6F7F2] border border-[#E5EAE4] rounded-2xl p-3 text-xs text-[#73817B] flex items-center justify-between">
-      <span>Verified by Urban Atmospheric Chemistry Sensor Mesh</span>
-      <span className="font-bold text-[#153C35]">100% Accounted</span>
+    <div className="bg-[#F6F7F2] border border-[#E5EAE4] rounded-2xl p-3 text-xs text-[#73817B] flex items-center justify-between gap-2">
+      <span>Reference urban emission inventory breakdown (illustrative model weights)</span>
+      <span className="font-bold text-[#153C35] shrink-0">Reference Model</span>
     </div>
   );
 }

@@ -7,6 +7,7 @@
 import {
   type UrbanZone,
   type PersonaProfile,
+  type HouseholdProfile,
   type DailyRoutinePlan,
   type IAQRoomConfig,
   type CommunityPledge,
@@ -16,6 +17,7 @@ import {
 import {
   DEFAULT_ZONES,
   DEFAULT_PERSONAS,
+  DEFAULT_HOUSEHOLD_PROFILE,
   DEFAULT_ROOMS,
   DEFAULT_PLEDGES,
 } from '@/lib/constants';
@@ -33,6 +35,7 @@ const STORAGE_KEYS = {
   ZONES: 'vayora_zones_v1',
   SELECTED_ZONE: 'vayora_selected_zone_id_v1',
   PERSONA: 'vayora_active_persona_v1',
+  HOUSEHOLD: 'vayora_household_profile_v1',
   ROUTINE: 'vayora_routine_plan_v1',
   ROOMS: 'vayora_iaq_rooms_v1',
   PLEDGES: 'vayora_community_pledges_v1',
@@ -61,132 +64,47 @@ function getStorage(): Storage {
   return fallbackStorage;
 }
 
+function getItem<T>(key: string, fallback: T): T {
+  const storage = getStorage();
+  if (!storage) return fallback;
+  return safeParse<T>(storage.getItem(key), fallback);
+}
+
+function setItem<T>(key: string, value: T): void {
+  const storage = getStorage();
+  if (!storage) return;
+  try {
+    storage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Storage quota or sandboxed iframe
+  }
+}
+
 export const storageService = {
-  getZones(): UrbanZone[] {
-    const storage = getStorage();
-    if (!storage) return DEFAULT_ZONES;
-    return safeParse<UrbanZone[]>(storage.getItem(STORAGE_KEYS.ZONES), DEFAULT_ZONES);
-  },
+  getZones: (): UrbanZone[] => getItem(STORAGE_KEYS.ZONES, DEFAULT_ZONES),
+  saveZones: (zones: UrbanZone[]): void => setItem(STORAGE_KEYS.ZONES, zones),
 
-  saveZones(zones: UrbanZone[]): void {
-    const storage = getStorage();
-    if (!storage) return;
-    try {
-      storage.setItem(STORAGE_KEYS.ZONES, JSON.stringify(zones));
-    } catch {
-      // Storage quota or sandboxed iframe
-    }
-  },
+  getSelectedZoneId: (): string => getItem(STORAGE_KEYS.SELECTED_ZONE, DEFAULT_ZONES[0].zoneId),
+  saveSelectedZoneId: (zoneId: string): void => setItem(STORAGE_KEYS.SELECTED_ZONE, zoneId),
 
-  getSelectedZoneId(): string {
-    const storage = getStorage();
-    if (!storage) return DEFAULT_ZONES[0].zoneId;
-    return safeParse<string>(storage.getItem(STORAGE_KEYS.SELECTED_ZONE), DEFAULT_ZONES[0].zoneId);
-  },
+  getActivePersona: (): PersonaProfile => getItem(STORAGE_KEYS.PERSONA, DEFAULT_PERSONAS[0]),
+  saveActivePersona: (persona: PersonaProfile): void => setItem(STORAGE_KEYS.PERSONA, persona),
 
-  saveSelectedZoneId(zoneId: string): void {
-    const storage = getStorage();
-    if (!storage) return;
-    try {
-      storage.setItem(STORAGE_KEYS.SELECTED_ZONE, JSON.stringify(zoneId));
-    } catch {
-      // Ignored
-    }
-  },
+  getHouseholdProfile: (): HouseholdProfile => getItem(STORAGE_KEYS.HOUSEHOLD, DEFAULT_HOUSEHOLD_PROFILE),
+  saveHouseholdProfile: (profile: HouseholdProfile): void => setItem(STORAGE_KEYS.HOUSEHOLD, profile),
 
-  getActivePersona(): PersonaProfile {
-    const storage = getStorage();
-    if (!storage) return DEFAULT_PERSONAS[0];
-    return safeParse<PersonaProfile>(storage.getItem(STORAGE_KEYS.PERSONA), DEFAULT_PERSONAS[0]);
-  },
+  getRoutinePlan: (): DailyRoutinePlan | null => getItem<DailyRoutinePlan | null>(STORAGE_KEYS.ROUTINE, null),
+  saveRoutinePlan: (plan: DailyRoutinePlan): void => setItem(STORAGE_KEYS.ROUTINE, plan),
 
-  saveActivePersona(persona: PersonaProfile): void {
-    const storage = getStorage();
-    if (!storage) return;
-    try {
-      storage.setItem(STORAGE_KEYS.PERSONA, JSON.stringify(persona));
-    } catch {
-      // Ignored
-    }
-  },
+  getRooms: (): IAQRoomConfig[] => getItem(STORAGE_KEYS.ROOMS, DEFAULT_ROOMS),
+  saveRooms: (rooms: IAQRoomConfig[]): void => setItem(STORAGE_KEYS.ROOMS, rooms),
 
-  getRoutinePlan(): DailyRoutinePlan | null {
-    const storage = getStorage();
-    if (!storage) return null;
-    return safeParse<DailyRoutinePlan | null>(storage.getItem(STORAGE_KEYS.ROUTINE), null);
-  },
+  getPledges: (): CommunityPledge[] => getItem(STORAGE_KEYS.PLEDGES, DEFAULT_PLEDGES),
+  savePledges: (pledges: CommunityPledge[]): void => setItem(STORAGE_KEYS.PLEDGES, pledges),
 
-  saveRoutinePlan(plan: DailyRoutinePlan): void {
-    const storage = getStorage();
-    if (!storage) return;
-    try {
-      storage.setItem(STORAGE_KEYS.ROUTINE, JSON.stringify(plan));
-    } catch {
-      // Ignored
-    }
-  },
+  getLanguage: (): Language => getItem(STORAGE_KEYS.LANGUAGE, Language.English),
+  saveLanguage: (language: Language): void => setItem(STORAGE_KEYS.LANGUAGE, language),
 
-  getRooms(): IAQRoomConfig[] {
-    const storage = getStorage();
-    if (!storage) return DEFAULT_ROOMS;
-    return safeParse<IAQRoomConfig[]>(storage.getItem(STORAGE_KEYS.ROOMS), DEFAULT_ROOMS);
-  },
-
-  saveRooms(rooms: IAQRoomConfig[]): void {
-    const storage = getStorage();
-    if (!storage) return;
-    try {
-      storage.setItem(STORAGE_KEYS.ROOMS, JSON.stringify(rooms));
-    } catch {
-      // Ignored
-    }
-  },
-
-  getPledges(): CommunityPledge[] {
-    const storage = getStorage();
-    if (!storage) return DEFAULT_PLEDGES;
-    return safeParse<CommunityPledge[]>(storage.getItem(STORAGE_KEYS.PLEDGES), DEFAULT_PLEDGES);
-  },
-
-  savePledges(pledges: CommunityPledge[]): void {
-    const storage = getStorage();
-    if (!storage) return;
-    try {
-      storage.setItem(STORAGE_KEYS.PLEDGES, JSON.stringify(pledges));
-    } catch {
-      // Ignored
-    }
-  },
-
-  getLanguage(): Language {
-    const storage = getStorage();
-    if (!storage) return Language.English;
-    return safeParse<Language>(storage.getItem(STORAGE_KEYS.LANGUAGE), Language.English);
-  },
-
-  saveLanguage(language: Language): void {
-    const storage = getStorage();
-    if (!storage) return;
-    try {
-      storage.setItem(STORAGE_KEYS.LANGUAGE, JSON.stringify(language));
-    } catch {
-      // Ignored
-    }
-  },
-
-  getAccessibilityMode(): AccessibilityMode {
-    const storage = getStorage();
-    if (!storage) return AccessibilityMode.Standard;
-    return safeParse<AccessibilityMode>(storage.getItem(STORAGE_KEYS.ACCESSIBILITY_MODE), AccessibilityMode.Standard);
-  },
-
-  saveAccessibilityMode(mode: AccessibilityMode): void {
-    const storage = getStorage();
-    if (!storage) return;
-    try {
-      storage.setItem(STORAGE_KEYS.ACCESSIBILITY_MODE, JSON.stringify(mode));
-    } catch {
-      // Ignored
-    }
-  },
+  getAccessibilityMode: (): AccessibilityMode => getItem(STORAGE_KEYS.ACCESSIBILITY_MODE, AccessibilityMode.Standard),
+  saveAccessibilityMode: (mode: AccessibilityMode): void => setItem(STORAGE_KEYS.ACCESSIBILITY_MODE, mode),
 };

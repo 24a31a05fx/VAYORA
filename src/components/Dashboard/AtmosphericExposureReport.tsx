@@ -59,11 +59,11 @@ function ReportHeader() {
             Personal Exposure — Atmospheric Exposure & Dispersion Report
           </h3>
           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E8F0EA] text-[#153C35] border border-[#B8CDB8]/60">
-            -10.2% Trap Risk
+            Diurnal Model Curve
           </span>
         </div>
         <p className="text-xs text-[#73817B] mt-0.5">
-          Bidirectional hourly comparison of solar ventilation vs ground smog stagnation
+          Illustrative hourly pattern comparing midday solar mixing vs nocturnal ground trapping
         </p>
       </div>
       <ReportLegend />

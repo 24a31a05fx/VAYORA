@@ -4,8 +4,19 @@
 // ============================================================
 
 import { createContext } from 'react';
-import type { AppContextValue } from './types';
-import type { TabId, Language, AccessibilityMode, UrbanZone, PersonaProfile, DailyRoutinePlan, IAQRoomConfig, CommunityPledge, CommunityAlert } from '@/types';
+import type {
+  TabId,
+  Language,
+  AccessibilityMode,
+  UrbanZone,
+  TelemetryDataSource,
+  PersonaProfile,
+  HouseholdProfile,
+  DailyRoutinePlan,
+  IAQRoomConfig,
+  CommunityPledge,
+  CommunityAlert,
+} from '@/types';
 
 export interface UIContextValue {
   activeTab: TabId;
@@ -23,13 +34,21 @@ export interface ZoneContextValue {
   selectedZoneId: string;
   selectedZone: UrbanZone;
   setSelectedZoneId: (id: string) => void;
-  updateZone: (zoneId: string, updates: Partial<UrbanZone>) => void;
+  updateZone: (zoneId: string, updates: Partial<UrbanZone>, nextSource?: TelemetryDataSource) => void;
+  dataSource: TelemetryDataSource;
+  lastSyncedAt: number | null;
+  isSyncingLive: boolean;
+  syncError: string | null;
+  refreshLiveTelemetry: () => Promise<void>;
 }
 
 export interface ProfileContextValue {
   personas: PersonaProfile[];
   activePersona: PersonaProfile;
   setActivePersona: (persona: PersonaProfile) => void;
+  householdProfile: HouseholdProfile;
+  setHouseholdProfile: (profile: HouseholdProfile) => void;
+  updateHouseholdField: <K extends keyof HouseholdProfile>(key: K, val: HouseholdProfile[K]) => void;
   routinePlan: DailyRoutinePlan | null;
   setRoutinePlan: (plan: DailyRoutinePlan | null) => void;
 }
@@ -46,7 +65,7 @@ export interface CommunityContextValue {
   dismissAlert: (id: string) => void;
 }
 
-export const AppContext = createContext<AppContextValue | null>(null);
+export { AppContext } from './appContextInstance';
 export const UIContext = createContext<UIContextValue | null>(null);
 export const ZoneContext = createContext<ZoneContextValue | null>(null);
 export const ProfileContext = createContext<ProfileContextValue | null>(null);

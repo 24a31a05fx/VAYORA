@@ -1,6 +1,6 @@
 // ============================================================
 // src/components/Routine/DailyRoutineOptimizer.tsx
-// GenAI-powered personalized daily schedule & exposure minimizer
+// End-to-End Family Workflow: Household -> Local Air -> AI Plan -> Action Steps
 // Per PROBLEM_ALIGNMENT.md §1.2 & ACCESSIBILITY.md §6
 // ============================================================
 
@@ -10,9 +10,12 @@ import { useZoneContext } from '@/context/ZoneContext';
 import { useUIContext } from '@/context/UIContext';
 import { apiService } from '@/services/apiService';
 import { generateHeuristicRoutine } from '@/lib/compute';
-import type { DailyRoutinePlan, PersonaProfile, UrbanZone, Language } from '@/types';
+import type { DailyRoutinePlan, PersonaProfile, HouseholdProfile, UrbanZone, Language } from '@/types';
 import { RoutineTimeline } from './RoutineTimeline';
 import { PersonaSelector } from './PersonaSelector';
+import { HouseholdContextForm } from './HouseholdContextForm';
+import { ActionPlanRecommendations } from './ActionPlanRecommendations';
+import { ActionPlanChecklists } from './ActionPlanChecklists';
 import { SparklesIcon, LightbulbIcon, WarningIcon, CheckIcon } from '@/components/shared/Icons';
 
 function GenerateButton({ isLoading, onGenerate }: { isLoading: boolean; onGenerate: () => void }) {
@@ -46,7 +49,7 @@ function OptimizerHeader({ isLoading, onGenerate }: { isLoading: boolean; onGene
           My Day: VAYORA Intelligence Daily Routine & Smog Exposure Optimizer
         </h2>
         <p className="text-xs text-[#73817B] mt-1 max-w-2xl leading-relaxed">
-          Select your family or lifestyle vulnerability profile to generate hour-by-hour exposure mitigation routines.
+          Configure your household profile and neighborhood conditions to generate personalized routines, indoor air actions, and commute advice.
         </p>
       </div>
       <GenerateButton isLoading={isLoading} onGenerate={onGenerate} />
@@ -75,8 +78,8 @@ function HighlightMetrics({ plan }: { plan: DailyRoutinePlan }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <MetricHighlightCard label="Optimal Outdoor Window" value={windowTime} sub={plan.optimalOutdoorWindow.rationale} isGreen />
-      <MetricHighlightCard label="Predicted PM2.5 Inhaled Dose" value={`${plan.totalExposureScore} µg·h`} sub="Avoiding morning inversion peaks reduces pulmonary particulate intake by ~42%." />
-      <MetricHighlightCard label="Estimated Carbon Abatement" value={`${plan.carbonOffsetKg} kg CO₂`} sub="Achieved by consolidating errands and shifting peak motorized transit trips." />
+      <MetricHighlightCard label="Modelled Exposure Index (Estimate)" value={`${plan.totalExposureScore} µg·h`} sub="Calculated scenario index based on zone PM2.5 and sensitivity tier; not a clinical reading." />
+      <MetricHighlightCard label="Commute Shift CO₂ Estimate" value={`${plan.carbonOffsetKg} kg / day`} sub="Illustrative comparison vs. a 10 km solo gasoline car round trip based on your selected habit." />
     </div>
   );
 }
@@ -101,6 +104,7 @@ function DirectivesCard({ advice }: { advice: string[] }) {
 
 async function executeRoutineGeneration(
   persona: PersonaProfile,
+  household: HouseholdProfile,
   zone: UrbanZone,
   language: Language,
   signal: AbortSignal,
@@ -108,18 +112,18 @@ async function executeRoutineGeneration(
   setError: (msg: string) => void
 ) {
   try {
-    const plan = await apiService.generateDailyRoutine({ persona, zone, language }, signal);
+    const plan = await apiService.generateDailyRoutine({ persona, zone, household, language }, signal);
     setPlan(plan);
   } catch (err: unknown) {
     if (err instanceof Error && err.name === 'AbortError') return;
-    setPlan(generateHeuristicRoutine(persona, zone, language));
-    setError('Local telemetry fallback: Smart schedule generated from real-time meteorological sensor data.');
+    setPlan(generateHeuristicRoutine(persona, zone, language, household));
+    setError('Offline / Demo Fallback: Personalized plan generated locally using deterministic EPA & ASHRAE meteorology equations.');
   }
 }
 
 function useRoutineOptimizer() {
-  const { personas, activePersona, setActivePersona, routinePlan, setRoutinePlan } = useProfileContext();
-  const { selectedZone } = useZoneContext();
+  const profile = useProfileContext();
+  const zoneCtx = useZoneContext();
   const { language } = useUIContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -133,33 +137,49 @@ function useRoutineOptimizer() {
     setIsLoading(true);
     setErrorMessage(null);
     try {
-      await executeRoutineGeneration(activePersona, selectedZone, language, abortRef.current.signal, setRoutinePlan, setErrorMessage);
+      await executeRoutineGeneration(profile.activePersona, profile.householdProfile, zoneCtx.selectedZone, language, abortRef.current.signal, profile.setRoutinePlan, setErrorMessage);
     } finally {
       setIsLoading(false);
     }
-  }, [activePersona, selectedZone, language, setRoutinePlan]);
+  }, [profile.activePersona, profile.householdProfile, profile.setRoutinePlan, zoneCtx.selectedZone, language]);
 
-  return { personas, activePersona, setActivePersona, selectedZone, routinePlan, isLoading, errorMessage, handleGenerate };
+  return { ...profile, ...zoneCtx, isLoading, errorMessage, handleGenerate };
+}
+
+function EmptyPlanBanner() {
+  return (
+    <div className="bg-[#FFFFFF] border border-dashed border-[#B8CDB8] rounded-3xl p-6 text-center text-xs text-[#73817B]">
+      <strong className="text-[#153C35] block text-sm mb-1">Ready to Build Your Personalized Air Action Plan</strong>
+      Select your neighborhood and household profile above, then click <strong>Generate Smart Schedule</strong> to receive low-emission routine timing, indoor air checklist steps, and commute recommendations.
+    </div>
+  );
+}
+
+function PlanResultsView({ plan, zone, household, dataSource }: { plan: DailyRoutinePlan; zone: UrbanZone; household: HouseholdProfile; dataSource: ReturnType<typeof useZoneContext>['dataSource'] }) {
+  return (
+    <div className="flex flex-col gap-6 fade-in">
+      <HighlightMetrics plan={plan} />
+      <ActionPlanRecommendations recommendations={plan.priorityRecommendations} />
+      <ActionPlanChecklists plan={plan} zone={zone} household={household} dataSource={dataSource} />
+      <RoutineTimeline routinePlan={plan} zoneName={zone.zoneName} />
+      <DirectivesCard advice={plan.generalAdvice} />
+    </div>
+  );
 }
 
 export const DailyRoutineOptimizer = memo(function DailyRoutineOptimizer() {
-  const { personas, activePersona, setActivePersona, selectedZone, routinePlan, isLoading, errorMessage, handleGenerate } = useRoutineOptimizer();
-
+  const state = useRoutineOptimizer();
   return (
     <section aria-label="VAYORA Intelligence Daily Routine and Exposure Optimizer" className="flex flex-col gap-6 fade-in">
       <div className="bg-[#FFFFFF] border border-[#E5EAE4] rounded-3xl p-6 sm:p-7 shadow-sm shadow-[#153C35]/5 flex flex-col gap-6">
-        <OptimizerHeader isLoading={isLoading} onGenerate={handleGenerate} />
-        <PersonaSelector personas={personas} activePersona={activePersona} onSelectPersona={setActivePersona} />
-        <div aria-live="polite" aria-busy={isLoading} className="sr-only">{isLoading ? 'Generating schedule with VAYORA Intelligence…' : 'Schedule ready.'}</div>
-        {errorMessage && <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs flex items-center gap-2"><span className="shrink-0"><WarningIcon size={16} /></span><span>{errorMessage}</span></div>}
+        <OptimizerHeader isLoading={state.isLoading} onGenerate={state.handleGenerate} />
+        <PersonaSelector personas={state.personas} activePersona={state.activePersona} onSelectPersona={state.setActivePersona} />
+        <HouseholdContextForm zones={state.zones} selectedZone={state.selectedZone} dataSource={state.dataSource} onSelectZone={state.setSelectedZoneId} household={state.householdProfile} onUpdateField={state.updateHouseholdField} />
+        <div aria-live="polite" aria-busy={state.isLoading} className="sr-only">{state.isLoading ? 'Generating schedule with VAYORA Intelligence…' : 'Schedule ready.'}</div>
+        {state.errorMessage && <div role="status" className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs flex items-center gap-2"><span className="shrink-0"><WarningIcon size={16} /></span><span>{state.errorMessage}</span></div>}
       </div>
-      {routinePlan && (
-        <div className="flex flex-col gap-6 fade-in">
-          <HighlightMetrics plan={routinePlan} />
-          <RoutineTimeline routinePlan={routinePlan} zoneName={selectedZone.zoneName} />
-          <DirectivesCard advice={routinePlan.generalAdvice} />
-        </div>
-      )}
+      {!state.routinePlan && !state.isLoading && <EmptyPlanBanner />}
+      {state.routinePlan && <PlanResultsView plan={state.routinePlan} zone={state.selectedZone} household={state.householdProfile} dataSource={state.dataSource} />}
     </section>
   );
 });

@@ -51,7 +51,7 @@ export const WindowSchedule = memo(function WindowSchedule({ currentAqi }: Windo
         <p className="text-xs text-[#73817B] mt-0.5">Tailored to current outdoor AQI ({currentAqi}) and meteorological boundary layer dynamics.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs mt-1">
-        <WindowSlotCard category="Morning Inversion Lock (6:00 AM – 10:30 AM)" action="Windows Tightly Latched" detail="Cold nocturnal air traps ground-level vehicular soot. Opening windows increases indoor PM2.5 by 300%." status="Hazard Window: Closed" variant="rose" />
+        <WindowSlotCard category="Morning Inversion Lock (6:00 AM – 10:30 AM)" action="Windows Tightly Latched" detail="Cold calm morning air traps street-level vehicular exhaust near ground level, allowing outdoor PM2.5 to infiltrate quickly if windows open." status="Hazard Window: Closed" variant="rose" />
         <WindowSlotCard category="Optimal Flush Window (1:30 PM – 3:30 PM)" action="Crack Opposing Windows (15 mins)" detail="Solar radiation breaks the surface inversion, maximizing natural vertical air mixing and flushing stale CO2." status="Recommended Air Flush" variant="emerald" />
         <WindowSlotCard category="Evening Rush Trap (5:30 PM – 9:00 PM)" action="Seal Perimeter & Run HEPA" detail="Commuter traffic and cooling surface temperatures cause toxic secondary particulate settling." status="Active Filtration Required" variant="amber" />
       </div>

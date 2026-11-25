@@ -22,7 +22,7 @@ function getSlotBadgeClass(recommendation: string): string {
   if (recommendation === 'indoor-only') return 'bg-rose-100 text-rose-800 border-rose-200';
   if (recommendation === 'safe-outdoor') return 'bg-emerald-100 text-emerald-800 border-emerald-200';
   if (recommendation === 'moderate-caution') return 'bg-amber-100 text-amber-800 border-amber-200';
-  return 'bg-purple-100 text-purple-800 border-purple-200';
+  return 'bg-sky-100 text-sky-900 border-sky-200';
 }
 
 function getInversionClass(likelihood: string): string {

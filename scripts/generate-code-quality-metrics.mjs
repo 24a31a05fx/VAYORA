@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const TARGET_DIRS = ['src', 'server'];
+const TARGET_DIRS = ['src', 'server', 'api'];
 const CONFIG_FILES = [
   'server.ts',
   'vite.config.ts',

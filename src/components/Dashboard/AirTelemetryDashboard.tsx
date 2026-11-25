@@ -5,9 +5,10 @@
 
 import { memo } from 'react';
 import { useAirAnalytics } from '@/hooks/useAirAnalytics';
+import { useUIContext } from '@/context/UIContext';
 import { getPrimaryHealthAdvice, type HealthDirective, type InversionRiskResult } from '@/lib/compute';
 import { ZoneCard } from '@/components/shared/ZoneCard';
-import type { UrbanZone, PollutantReading } from '@/types';
+import { TabId, type UrbanZone, type PollutantReading } from '@/types';
 import { SmogHeatmap } from './SmogHeatmap';
 import { AqiGauge } from './AqiGauge';
 import { PollutantSparklinesPanel } from './PollutantSparklinesPanel';
@@ -117,7 +118,7 @@ function AnalyticsGrids({ zones, selectedZoneId, onSelectZone, currentZone, poll
           <AtmosphericExposureReport />
         </div>
         <div className="lg:col-span-5">
-          <AirForecastCard />
+          <AirForecastCard currentZone={currentZone} />
         </div>
       </div>
       <EmissionSourceTreemap />
@@ -126,16 +127,24 @@ function AnalyticsGrids({ zones, selectedZoneId, onSelectZone, currentZone, poll
 }
 
 export const AirTelemetryDashboard = memo(function AirTelemetryDashboard() {
-  const { zones, currentZone, selectedZoneId, setSelectedZoneId, aqiCategory, aqiColor, inversionStatus, pollutantBreakdown, simulateSmogSpike, simulateCleanDispersion } = useAirAnalytics();
-  const advice = getPrimaryHealthAdvice(currentZone.aqi);
+  const analytics = useAirAnalytics();
+  const { setActiveTab } = useUIContext();
+  const advice = getPrimaryHealthAdvice(analytics.currentZone.aqi);
 
   return (
     <section aria-label="Hyperlocal AQI Telemetry Dashboard" className="flex flex-col gap-6 fade-in">
-      <AtmosphericOverview currentZone={currentZone} onRefresh={simulateCleanDispersion} />
-      <PrimaryTelemetryHero currentZone={currentZone} aqiColor={aqiColor} aqiCategory={aqiCategory} advice={advice} inversionStatus={inversionStatus} />
-      <AnalyticsGrids zones={zones} selectedZoneId={selectedZoneId} onSelectZone={setSelectedZoneId} currentZone={currentZone} pollutantBreakdown={pollutantBreakdown} />
-      <SimulationControls onSpike={simulateSmogSpike} onClean={simulateCleanDispersion} />
-      <ZoneCardList zones={zones} selectedZoneId={selectedZoneId} onSelect={setSelectedZoneId} />
+      <AtmosphericOverview
+        currentZone={analytics.currentZone}
+        dataSource={analytics.dataSource}
+        isSyncingLive={analytics.isSyncingLive}
+        syncError={analytics.syncError}
+        onSyncLive={analytics.refreshLiveTelemetry}
+        onStartActionPlan={() => setActiveTab(TabId.Routine)}
+      />
+      <PrimaryTelemetryHero currentZone={analytics.currentZone} aqiColor={analytics.aqiColor} aqiCategory={analytics.aqiCategory} advice={advice} inversionStatus={analytics.inversionStatus} />
+      <AnalyticsGrids zones={analytics.zones} selectedZoneId={analytics.selectedZoneId} onSelectZone={analytics.setSelectedZoneId} currentZone={analytics.currentZone} pollutantBreakdown={analytics.pollutantBreakdown} />
+      <SimulationControls onSpike={analytics.simulateSmogSpike} onClean={analytics.simulateCleanDispersion} />
+      <ZoneCardList zones={analytics.zones} selectedZoneId={analytics.selectedZoneId} onSelect={analytics.setSelectedZoneId} />
     </section>
   );
 });

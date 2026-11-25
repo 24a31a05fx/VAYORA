@@ -15,7 +15,7 @@ export interface DijkstraResult {
   totalExposure: number;
 }
 
-export interface ResolvableTransitNode {
+interface ResolvableTransitNode {
   id: string;
   name: string;
   zoneId: string;

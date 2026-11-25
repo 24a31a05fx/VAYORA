@@ -6,7 +6,7 @@
 /**
  * Validates whether an unknown value is a finite number.
  */
-export function isFiniteNumber(v: unknown): v is number {
+function isFiniteNumber(v: unknown): v is number {
   return typeof v === 'number' && Number.isFinite(v);
 }
 
@@ -107,4 +107,39 @@ export function validatePersona(p: unknown): p is ValidatedPersona {
   if (typeof p !== 'object' || p === null) return false;
   const obj = p as Record<string, unknown>;
   return validatePersonaStrings(obj) && validatePersonaHours(obj);
+}
+
+export interface ValidatedHousehold {
+  householdComposition: string;
+  hasChildren: boolean;
+  hasElderly: boolean;
+  sensitivities: string;
+  commuteMode: 'metro' | 'bus' | 'car' | 'walk-bike' | 'remote';
+  outdoorActivity: 'school-run' | 'exercise' | 'errands' | 'outdoor-work';
+  indoorPurifier: 'hepa' | 'diy-box' | 'none';
+}
+
+const VALID_COMMUTES = new Set(['metro', 'bus', 'car', 'walk-bike', 'remote']);
+const VALID_ACTIVITIES = new Set(['school-run', 'exercise', 'errands', 'outdoor-work']);
+const VALID_PURIFIERS = new Set(['hepa', 'diy-box', 'none']);
+
+function pickEnum<T extends string>(raw: unknown, allowed: Set<string>, fallback: T): T {
+  return typeof raw === 'string' && allowed.has(raw) ? (raw as T) : fallback;
+}
+
+/**
+ * Sanitizes optional household profile fields into bounded, safe values.
+ */
+export function sanitizeHousehold(raw: unknown): ValidatedHousehold | undefined {
+  if (typeof raw !== 'object' || raw === null) return undefined;
+  const obj = raw as Record<string, unknown>;
+  return {
+    householdComposition: sanitizeText(obj.householdComposition, 120) || 'Urban household',
+    hasChildren: Boolean(obj.hasChildren),
+    hasElderly: Boolean(obj.hasElderly),
+    sensitivities: sanitizeText(obj.sensitivities, 200),
+    commuteMode: pickEnum(obj.commuteMode, VALID_COMMUTES, 'metro'),
+    outdoorActivity: pickEnum(obj.outdoorActivity, VALID_ACTIVITIES, 'errands'),
+    indoorPurifier: pickEnum(obj.indoorPurifier, VALID_PURIFIERS, 'none'),
+  };
 }

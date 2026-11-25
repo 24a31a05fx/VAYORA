@@ -3,7 +3,31 @@
 // Persona vulnerability profiles for smog mitigation scheduling
 // ============================================================
 
-import type { PersonaProfile } from '@/types';
+import type { PersonaProfile, HouseholdProfile } from '@/types';
+
+export const DEFAULT_HOUSEHOLD_PROFILE: HouseholdProfile = {
+  householdComposition: 'Family with child & elder',
+  hasChildren: true,
+  hasElderly: false,
+  sensitivities: 'Asthma / respiratory airway sensitivity',
+  commuteMode: 'metro',
+  outdoorActivity: 'school-run',
+  indoorPurifier: 'hepa',
+};
+
+const PERSONA_DEFAULTS: Record<PersonaProfile['subCategory'], Partial<HouseholdProfile>> = {
+  asthmatic: { householdComposition: 'Family with child', hasChildren: true, hasElderly: false, sensitivities: 'Pediatric asthma', commuteMode: 'metro', outdoorActivity: 'school-run' },
+  infant: { householdComposition: 'Parents & newborn infant', hasChildren: true, hasElderly: false, sensitivities: 'Infant pulmonary vulnerability', commuteMode: 'car', outdoorActivity: 'errands' },
+  elderly: { householdComposition: 'Multi-generational with elder', hasChildren: false, hasElderly: true, sensitivities: 'Cardiopulmonary sensitivity', commuteMode: 'bus', outdoorActivity: 'errands' },
+  'transit-rider': { householdComposition: 'Working adult / couple', hasChildren: false, hasElderly: false, sensitivities: '', commuteMode: 'metro', outdoorActivity: 'exercise' },
+  'school-run': { householdComposition: 'School-run household', hasChildren: true, hasElderly: false, sensitivities: 'Morning traffic corridor exposure', commuteMode: 'bus', outdoorActivity: 'school-run' },
+  cyclist: { householdComposition: 'Active adult commuter', hasChildren: false, hasElderly: false, sensitivities: 'High exercise breathing rate', commuteMode: 'walk-bike', outdoorActivity: 'exercise' },
+  'neighborhood-lead': { householdComposition: 'Community household', hasChildren: true, hasElderly: true, sensitivities: 'Monitoring neighborhood risk', commuteMode: 'metro', outdoorActivity: 'outdoor-work' },
+};
+
+export function deriveHouseholdFromPersona(persona: PersonaProfile, current: HouseholdProfile): HouseholdProfile {
+  return { ...current, ...PERSONA_DEFAULTS[persona.subCategory] };
+}
 
 export const DEFAULT_PERSONAS: [PersonaProfile, ...PersonaProfile[]] = [
   {
