@@ -14,8 +14,9 @@ VAYORA enforces a strict modular standard across source code: **every TypeScript
 
 | File Path | Verified Line Count | Architectural Decomposition & Sub-Components |
 |---|---|---|
-| `api/index.ts` | **10 lines** | Vercel serverless bridge re-exporting Express `app` without binding a TCP port. |
-| `server.ts` | **82 lines** | Express routers, compression, static caching, and middleware separated into `server/` submodules. |
+| `api/index.ts` | **9 lines** | Vercel serverless bridge re-exporting shared Express `app` from `server/app.ts`. |
+| `server.ts` | **17 lines** | Standalone TCP server launcher importing shared `server/app.ts` (skips listen on Vercel/test). |
+| `server/app.ts` | **65 lines** | Express 5 application pipeline with compression, Helmet CSP, static assets, and API routers. |
 | `server/airQualityService.ts` | **143 lines** | Fixed-host Open-Meteo Air Quality + Weather fetcher with unit conversions and demo fallback. |
 | `server/aiService.ts` | **165 lines** | Gemini gateway, prompt construction, and deterministic heuristic entrypoints. |
 | `server/routineSchema.ts` | **180 lines** | Household recommendation builders and runtime incomplete-AI JSON normalizer. |
@@ -29,7 +30,7 @@ VAYORA enforces a strict modular standard across source code: **every TypeScript
 | `src/services/storageService.ts` | **111 lines** | Generic safe JSON deserialization (`getItem<T>`, `setItem<T>`) with memory fallback. |
 | `src/context/AppContext.tsx` | **30 lines** | Composes 5 focused domain providers (`UIProvider`, `ZoneProvider`, `ProfileProvider`, `IAQProvider`, `CommunityProvider`). |
 
-**Result:** **100% of scanned codebase files (122 of 122)** satisfy the 200-line limit. Zero functions exceed 25 lines.
+**Result:** **100% of scanned codebase files (123 of 123)** satisfy the 200-line limit. Zero functions exceed 25 lines.
 
 ---
 
@@ -40,7 +41,7 @@ $ npm run lint
 > oxlint --deny-warnings
 
 Found 0 warnings and 0 errors.
-Finished in 104ms on 118 files with 152 rules using 12 threads.
+Finished in 115ms on 119 files with 152 rules using 12 threads.
 ```
 
 ---

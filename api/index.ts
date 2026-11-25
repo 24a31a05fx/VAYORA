@@ -1,9 +1,8 @@
 // ============================================================
 // api/index.ts
-// Vercel Serverless Function bridge wrapping the Express 5 application
-// Routes /api/* calls securely without starting a standalone TCP listener
+// Vercel Serverless Function bridge exporting Express 5 application
 // ============================================================
 
-import { app } from '../server';
+import { app } from '../server/app';
 
 export default app;
