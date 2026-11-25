@@ -15,6 +15,7 @@ import { healthRouter } from './server/routes/healthRoutes';
 import { routineRouter } from './server/routes/routineRoutes';
 import { advisoryRouter } from './server/routes/advisoryRoutes';
 import { adminRouter } from './server/routes/adminRoutes';
+import { airQualityRouter } from './server/routes/airQualityRoutes';
 import { logger } from './server/logger';
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use(express.json({ limit: '15kb' }));
 
 // 2. Mount API Routers
 app.use('/api/health', healthRouter);
+app.use('/api/air-quality', airQualityRouter);
 app.use('/api/routine-insights', routineRouter);
 app.use('/api/emergency-advisory', advisoryRouter);
 app.use('/api/admin', adminRouter);
@@ -68,9 +70,9 @@ app.get('*splat', (_req: Request, res: Response) => {
 // 4. Safe Error Handler
 app.use(safeErrorHandler);
 
-// 5. Server Listener
+// 5. Server Listener (Disabled in unit tests and Vercel Serverless runtimes)
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
   app.listen(PORT, () => {
     logger.info(`Backend listening on port ${PORT}`);
   });

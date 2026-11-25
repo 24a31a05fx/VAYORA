@@ -7,6 +7,7 @@
 import {
   type UrbanZone,
   type PersonaProfile,
+  type HouseholdProfile,
   type DailyRoutinePlan,
   type IAQRoomConfig,
   type CommunityPledge,
@@ -16,6 +17,7 @@ import {
 import {
   DEFAULT_ZONES,
   DEFAULT_PERSONAS,
+  DEFAULT_HOUSEHOLD_PROFILE,
   DEFAULT_ROOMS,
   DEFAULT_PLEDGES,
 } from '@/lib/constants';
@@ -33,6 +35,7 @@ const STORAGE_KEYS = {
   ZONES: 'vayora_zones_v1',
   SELECTED_ZONE: 'vayora_selected_zone_id_v1',
   PERSONA: 'vayora_active_persona_v1',
+  HOUSEHOLD: 'vayora_household_profile_v1',
   ROUTINE: 'vayora_routine_plan_v1',
   ROOMS: 'vayora_iaq_rooms_v1',
   PLEDGES: 'vayora_community_pledges_v1',
@@ -86,6 +89,9 @@ export const storageService = {
 
   getActivePersona: (): PersonaProfile => getItem(STORAGE_KEYS.PERSONA, DEFAULT_PERSONAS[0]),
   saveActivePersona: (persona: PersonaProfile): void => setItem(STORAGE_KEYS.PERSONA, persona),
+
+  getHouseholdProfile: (): HouseholdProfile => getItem(STORAGE_KEYS.HOUSEHOLD, DEFAULT_HOUSEHOLD_PROFILE),
+  saveHouseholdProfile: (profile: HouseholdProfile): void => setItem(STORAGE_KEYS.HOUSEHOLD, profile),
 
   getRoutinePlan: (): DailyRoutinePlan | null => getItem<DailyRoutinePlan | null>(STORAGE_KEYS.ROUTINE, null),
   saveRoutinePlan: (plan: DailyRoutinePlan): void => setItem(STORAGE_KEYS.ROUTINE, plan),

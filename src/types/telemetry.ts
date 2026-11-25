@@ -62,6 +62,26 @@ export interface PollutantReading {
   status: string;
 }
 
+export type TelemetryDataSource = 'open-meteo-live' | 'demonstration-baseline' | 'simulated-scenario';
+
+export interface LiveTelemetryPayload {
+  zoneId: string;
+  aqi: number;
+  category: AQICategory;
+  dominantPollutant: PollutantType;
+  pm25: number;
+  pm10: number;
+  no2: number;
+  co: number;
+  o3: number;
+  temperatureC: number;
+  humidityPercent: number;
+  windSpeedKmh: number;
+  inversionRisk: boolean;
+  source: TelemetryDataSource;
+  fetchedAt: number;
+}
+
 export interface UrbanZone {
   zoneId: string;
   zoneName: string;

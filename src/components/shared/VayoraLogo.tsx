@@ -1,15 +1,17 @@
 // ============================================================
 // src/components/shared/VayoraLogo.tsx
 // Distinctive VAYORA atmospheric airflow monogram & wordmark
-// Inspired by fluid dynamics, laminar airflow, and vortex currents
+// Shows truthful Live API vs Demonstration Mode telemetry indicator
 // ============================================================
 
 import { memo } from 'react';
+import type { TelemetryDataSource } from '@/types';
 
 interface VayoraLogoProps {
   className?: string;
   size?: number;
   showTagline?: boolean;
+  dataSource?: TelemetryDataSource;
 }
 
 function StreamlinePaths() {
@@ -32,25 +34,34 @@ function VayoraSymbol({ size = 36, className = '' }: { size?: number; className?
   );
 }
 
-export const VayoraLogo = memo(function VayoraLogo({ className = '', size = 36, showTagline = true }: VayoraLogoProps) {
+function StatusPill({ dataSource }: { dataSource?: TelemetryDataSource }) {
+  const isLive = dataSource === 'open-meteo-live';
+  const label = isLive ? 'LIVE DATA' : dataSource === 'simulated-scenario' ? 'SIMULATED' : 'DEMO MODE';
+  const dotClass = isLive ? 'bg-[#3FB4A5] animate-pulse' : 'bg-[#D97706]';
+
+  return (
+    <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[#EBF2EC] text-[#11322B] border border-[#B8CDB8]/60 tracking-wider">
+      <span className={`w-1.5 h-1.5 rounded-full ${dotClass}`} aria-hidden="true" />
+      {label}
+    </span>
+  );
+}
+
+export const VayoraLogo = memo(function VayoraLogo({
+  className = '',
+  size = 36,
+  showTagline = true,
+  dataSource = 'demonstration-baseline',
+}: VayoraLogoProps) {
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <VayoraSymbol size={size} />
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
-          <span className="font-heading font-black text-xl tracking-tight text-[#11322B] leading-none">
-            VAYORA
-          </span>
-          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[#EBF2EC] text-[#11322B] border border-[#B8CDB8]/60 tracking-wider">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#3FB4A5] animate-pulse" aria-hidden="true" />
-            LIVE
-          </span>
+          <span className="font-heading font-black text-xl tracking-tight text-[#11322B] leading-none">VAYORA</span>
+          <StatusPill dataSource={dataSource} />
         </div>
-        {showTagline && (
-          <span className="text-[10px] text-[#73817B] font-medium tracking-tight mt-1">
-            Air. Awareness. Action.
-          </span>
-        )}
+        {showTagline && <span className="text-[10px] text-[#73817B] font-medium tracking-tight mt-1">Air. Awareness. Action.</span>}
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ describe('App Root Layout Rendering', () => {
     expect(screen.getByRole('tabpanel')).toBeInTheDocument();
     expect(screen.getByRole('contentinfo', { name: /application footer/i })).toBeInTheDocument();
     expect(screen.getAllByText('VAYORA').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('LIVE').length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/LIVE DATA|DEMO MODE/i).length).toBeGreaterThan(0);
     expect(screen.getByText('Air. Awareness. Action.')).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /Airscape/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /My Day/i })).toBeInTheDocument();

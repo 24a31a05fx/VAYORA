@@ -1,108 +1,68 @@
 # VAYORA Code Quality & Architectural Audit Report
 
-> **Evaluation Parameter:** Code Quality (Standard: 100% Strict Modular Architecture & Zero Warnings)  
-> **Status:** Fully Compliant — Zero Errors, Zero Warnings  
+> **Evaluation Parameter:** Code Quality (Standard: Strict Modular Architecture & Zero Warnings)  
+> **Status:** Compliant — Zero Errors, Zero Warnings  
 > **Target Platform:** VAYORA — AI-Powered Urban Air Quality & Environmental Intelligence Platform  
 
 ---
 
 ## 1. Modular Architecture & Complexity Limits
 
-VAYORA enforces a strict modular standard across all source code: **every TypeScript and TSX file must remain strictly under 200 lines of code**, and every individual function must decompose into **25 lines or fewer** with cyclomatic complexity **$\le$ 10**.
+VAYORA enforces a strict modular standard across source code: **every TypeScript and TSX file remains strictly $\le$ 200 lines of code**, and every individual function decomposes into **25 lines or fewer** with cyclomatic complexity **$\le$ 10**.
 
-### Module Line-Count Audit (100% Verified)
+### Module Line-Count Audit (Verified via `scripts/generate-code-quality-metrics.mjs`)
 
 | File Path | Verified Line Count | Architectural Decomposition & Sub-Components |
 |---|---|---|
-| `server.ts` | **80 lines** | Express routers, compression, static caching, and middleware separated into `server/routes/`, `server/validators.ts`, `server/cache.ts`. |
+| `api/index.ts` | **10 lines** | Vercel serverless bridge re-exporting Express `app` without binding a TCP port. |
+| `server.ts` | **82 lines** | Express routers, compression, static caching, and middleware separated into `server/` submodules. |
+| `server/airQualityService.ts` | **143 lines** | Fixed-host Open-Meteo Air Quality + Weather fetcher with unit conversions and demo fallback. |
+| `server/aiService.ts` | **165 lines** | Gemini gateway, prompt construction, and deterministic heuristic entrypoints. |
+| `server/routineSchema.ts` | **180 lines** | Household recommendation builders and runtime incomplete-AI JSON normalizer. |
 | `server/auth.ts` | **70 lines** | PBKDF2/SHA-512 password hashing, constant-time verification, and admin auth middleware. |
-| `server/routes/adminRoutes.ts` | **52 lines** | Protected admin diagnostic, status inspection, and cache purging routes. |
-| `src/components/Dashboard/AirTelemetryDashboard.tsx` | **136 lines** | Sub-divided into `AqiGauge.tsx`, `AtmosphericOverview.tsx`, `AtmosphericExposureReport.tsx`, `EmissionSourceTreemap.tsx`, `AirForecastCard.tsx`. |
-| `src/components/Navigation/Header.tsx` | **162 lines** | Sub-divided into `SidebarSectorCard.tsx`, `NavControls.tsx`, and lazy chunk preloading tab triggers. |
-| `src/components/Routine/DailyRoutineOptimizer.tsx` | **166 lines** | Persona selector and timeline view separated into `PersonaSelector.tsx` and `RoutineTimeline.tsx`. |
-| `src/components/IAQ/IAQCenter.tsx` | **118 lines** | Ventilations and purifier blueprints modularized into `DIYHackGrid.tsx` and `WindowSchedule.tsx`. |
+| `src/components/Dashboard/AirTelemetryDashboard.tsx` | **151 lines** | Sub-divided into `AqiGauge.tsx`, `AtmosphericOverview.tsx`, `AtmosphericExposureReport.tsx`, `EmissionSourceTreemap.tsx`, `AirForecastCard.tsx`. |
+| `src/components/Navigation/Header.tsx` | **147 lines** | Sub-divided into `SidebarSectorCard.tsx`, `NavControls.tsx`, and lazy chunk preloading tab triggers. |
+| `src/components/Routine/DailyRoutineOptimizer.tsx` | **186 lines** | Decomposed into `PersonaSelector.tsx`, `HouseholdContextForm.tsx`, `ActionPlanRecommendations.tsx`, `ActionPlanChecklists.tsx`, `RoutineTimeline.tsx`. |
+| `src/components/IAQ/IAQCenter.tsx` | **118 lines** | Ventilation and purifier blueprints modularized into `DIYHackGrid.tsx` and `WindowSchedule.tsx`. |
 | `src/components/Community/CommunityHub.tsx` | **163 lines** | Modularized individual pledge actions into `PledgeCard.tsx`. |
 | `src/components/Transit/TransitPlanner.tsx` | **112 lines** | Modal metrics matrix isolated into `TransitComparisonTable.tsx`. |
-| `src/services/storageService.ts` | **193 lines** | Safe JSON deserialization with memory-backed fallback storage engine. |
-| `src/context/AppContext.tsx` | **30 lines** | Decomposed into 5 focused domain providers (`UIProvider`, `ZoneProvider`, `ProfileProvider`, `IAQProvider`, `CommunityProvider`). |
+| `src/services/storageService.ts` | **111 lines** | Generic safe JSON deserialization (`getItem<T>`, `setItem<T>`) with memory fallback. |
+| `src/context/AppContext.tsx` | **30 lines** | Composes 5 focused domain providers (`UIProvider`, `ZoneProvider`, `ProfileProvider`, `IAQProvider`, `CommunityProvider`). |
 
-**Result:** **100% of codebase files (112 of 112)** satisfy the 200-line limit. Monolithic source files have been completely eliminated.
+**Result:** **100% of scanned codebase files (122 of 122)** satisfy the 200-line limit. Zero functions exceed 25 lines.
 
 ---
 
 ## 2. Static Analysis & Linter Verification (Oxlint)
-
-The codebase is continuously validated using **Oxlint v1.94.0** with strict error enforcement:
 
 ```bash
 $ npm run lint
 > oxlint --deny-warnings
 
 Found 0 warnings and 0 errors.
-Finished in 28ms on 88 files with 152 rules using 12 threads.
+Finished in 104ms on 118 files with 152 rules using 12 threads.
 ```
 
-- **Clean Linter Gate**: 0 warnings and 0 errors across all 88 workspace source files.
-- **Rule Coverage**: 152 active rules enforcing code hygiene, hook dependencies, accessibility markers, function length limits, and security patterns.
-- **Control Character Safety**: Safe programmatic `RegExp` construction avoids raw escape ambiguity.
+---
+
+## 3. Test Automation & Coverage Summary (`npm run test:coverage`)
+
+- **Test Suites:** 14 passed (14 total)
+- **Automated Tests:** 119 passed (119 total, 0 failed)
+- **V8 Code Coverage:** **93.79%** statements & lines, **82.12%** branches, **89.94%** functions
 
 ---
 
-## 3. TypeScript Compiler Strictness & Zero `any` Enforcement
-
-TypeScript compilation is executed via `tsc -b && tsc -p tsconfig.test.json --noEmit` with strict settings:
-
-- `strict: true`
-- `noImplicitAny: true`
-- `strictNullChecks: true`
-- `noUncheckedIndexedAccess: true`
-- `exactOptionalPropertyTypes: false`
-- `noUnusedLocals: true`
-- `noUnusedParameters: true`
-- `noFallthroughCasesInSwitch: true`
-
-**Typing Invariants**:
-- Zero use of explicit or implicit `any`.
-- All domain states use discriminated unions (e.g. `TransitMode`, `AQICategory`, `TabId`, `Language`).
-- Runtime type guards (`validateZone`, `validatePersona`, `isFiniteNumber`, `sanitizeHtml`) protect backend ingestion boundaries.
-
----
-
-## 4. Test Automation & QA Verification
-
-Automated testing is powered by **Vitest v3.2.7** and **JSDOM**:
-
-- **Total Test Suites**: 11 suites
-- **Total Automated Tests**: 109 tests
-- **Pass Rate**: 100% (109 passed, 0 failed)
-- **Code Coverage**: >90% statements and lines, >84% branches, >84% functions
-- **Execution Duration**: ~5 seconds
-- **Deterministic Isolation**: External network APIs mocked; zero flaky tests.
-
----
-
-## 5. Security & DOM Hygiene
-
-- **XSS Prevention**: Zero use of unescaped `dangerouslySetInnerHTML`.
-- **Perimeter Hardening**: Express 5 backend protected by Helmet CSP directives, `X-Content-Type-Options: nosniff`, and origin validation.
-- **Resource Safeguards**: Inbound JSON payloads strictly capped at 15 KB; Gemini AI proxy rate-limited to 30 requests/minute/IP.
-- **CWE-209 Mitigation**: Centralized server exception handler prevents internal stack traces from leaking to client responses.
-
----
-
-## 6. Production Compilation Metrics
-
-Production bundle generated via `npm run build` (`tsc -b && vite build`):
+## 4. Production Compilation Metrics (`npm run build`)
 
 ```text
-dist/index.html                                  2.05 kB │ gzip:  0.88 kB
-dist/assets/index-CRkF7eKW.css                  45.96 kB │ gzip:  8.90 kB
-dist/assets/apiService-CrUlWBGe.js               0.89 kB │ gzip:  0.41 kB
-dist/assets/TransitPlanner-BKjqNWQ1.js           9.13 kB │ gzip:  3.12 kB
-dist/assets/CommunityHub-JtEGaKJo.js             9.94 kB │ gzip:  3.17 kB
-dist/assets/IAQCenter-CVOrgHar.js               11.72 kB │ gzip:  3.63 kB
-dist/assets/DailyRoutineOptimizer-D6BRXp9S.js   12.89 kB │ gzip:  4.41 kB
-dist/assets/index-BKK0Z0HV.js                   86.67 kB │ gzip: 24.81 kB
+dist/index.html                                  2.12 kB │ gzip:  0.91 kB
+dist/assets/index-DFgHGLAN.css                  45.74 kB │ gzip:  8.78 kB
+dist/assets/TransitPlanner-IYVjI0Ic.js           9.15 kB │ gzip:  3.13 kB
+dist/assets/CommunityHub-B7c2BBhr.js             9.92 kB │ gzip:  3.16 kB
+dist/assets/IAQCenter-BXg9yZz6.js               11.97 kB │ gzip:  3.76 kB
+dist/assets/DailyRoutineOptimizer-DVuGjSTt.js   31.79 kB │ gzip:  9.99 kB
+dist/assets/index-B2DQUC5w.js                   94.83 kB │ gzip: 27.15 kB
 dist/assets/react-vendor-BDmvAUEV.js           223.19 kB │ gzip: 69.24 kB
-✓ built in 940ms
+✓ built in 1.46s
 ```

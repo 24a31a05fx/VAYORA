@@ -8,7 +8,9 @@ import {
   Language,
   AccessibilityMode,
   type UrbanZone,
+  type TelemetryDataSource,
   type PersonaProfile,
+  type HouseholdProfile,
   type DailyRoutinePlan,
   type IAQRoomConfig,
   type CommunityPledge,
@@ -22,10 +24,18 @@ export interface AppContextValue {
   selectedZoneId: string;
   selectedZone: UrbanZone;
   setSelectedZoneId: (id: string) => void;
-  updateZone: (zoneId: string, updates: Partial<UrbanZone>) => void;
+  updateZone: (zoneId: string, updates: Partial<UrbanZone>, nextSource?: TelemetryDataSource) => void;
+  dataSource: TelemetryDataSource;
+  lastSyncedAt: number | null;
+  isSyncingLive: boolean;
+  syncError: string | null;
+  refreshLiveTelemetry: () => Promise<void>;
   personas: PersonaProfile[];
   activePersona: PersonaProfile;
   setActivePersona: (persona: PersonaProfile) => void;
+  householdProfile: HouseholdProfile;
+  setHouseholdProfile: (profile: HouseholdProfile) => void;
+  updateHouseholdField: <K extends keyof HouseholdProfile>(key: K, val: HouseholdProfile[K]) => void;
   language: Language;
   setLanguage: (lang: Language) => void;
   accessibilityMode: AccessibilityMode;

@@ -40,7 +40,7 @@ The following matrix documents the complete technical realization of all twelve 
 |---|---|---|---|---|---|---|
 | **REQ-01** | Real-time multi-pollutant monitoring ($\text{PM}_{2.5}$, $\text{PM}_{10}$, $\text{NO}_2$, $\text{CO}$, $\text{O}_3$) across diverse urban sectors | `Must` | Families, Commuters | `src/components/Dashboard/AirTelemetryDashboard.tsx`<br>`src/components/Dashboard/AqiGauge.tsx` | `src/test/aqiBreakpoints.test.ts`<br>`src/test/rendering.test.tsx` | ✅ Verified (100%) |
 | **REQ-02** | Spatial pollution visualization & temporal trend sparklines with twin screen-reader accessibility | `Must` | Visually Impaired, Public Health Analysts | `src/components/Dashboard/SmogHeatmap.tsx`<br>`src/components/shared/Sparkline.tsx`<br>`src/components/Dashboard/PollutantSparklinesPanel.tsx` | `src/test/rendering.test.tsx`<br>`src/test/dom.test.tsx` | ✅ Verified (100%) |
-| **REQ-03** | Server-side GenAI routine scheduling tailored to household physiological vulnerability profiles | `Must` | Sensitive Cohorts, Parents, Elderly | `server/routes/routineRoutes.ts`<br>`src/components/Routine/DailyRoutineOptimizer.tsx`<br>`src/lib/compute/heuristicRoutine.ts` | `src/test/api.test.ts`<br>`src/test/routineStorage.test.ts` | ✅ Verified (100%) |
+| **REQ-03** | Server-side GenAI routine scheduling tailored to household context and vulnerability profiles | `Must` | Sensitive Cohorts, Parents, Elderly | `server/routes/routineRoutes.ts`<br>`server/routineSchema.ts`<br>`src/components/Routine/DailyRoutineOptimizer.tsx`<br>`src/components/Routine/HouseholdContextForm.tsx`<br>`src/lib/compute/heuristicRoutine.ts` | `src/test/api.test.ts`<br>`src/test/workflowAndLiveApi.test.ts`<br>`src/test/workflowJourney.test.tsx`<br>`src/test/routineStorage.test.ts` | ✅ Verified (100%) |
 | **REQ-04** | Atmospheric lapse rate calculation, inversion risk forecasting, and solar dispersion window recommendation | `Must` | Asthmatics, Outdoor Workers | `src/lib/compute/meteorology.ts`<br>`src/components/Navigation/SidebarSectorCard.tsx` | `src/test/aqiIaq.test.ts` | ✅ Verified (100%) |
 | **REQ-05** | Multi-modal transit exposure assessment (Metro, Bus, EV, Bike, Walk) computing inhaled particulate dose ($\mu\text{g}$) and carbon impact | `Must` | Daily Commuters, Urban Travelers | `src/lib/compute/commuteDose.ts`<br>`src/components/Transit/TransitPlanner.tsx`<br>`src/components/Transit/TransitComparisonTable.tsx` | `src/test/aqiCommute.test.ts`<br>`src/test/rendering.test.tsx` | ✅ Verified (100%) |
 | **REQ-06** | Graph-theoretic Dijkstra pathfinding navigating through low-smog subway and greenway corridors | `Must` | Urban Travelers, Active Commuters | `src/lib/compute/dijkstraRouter.ts`<br>`src/hooks/useExposureRouting.ts` | `src/test/routing.test.ts` | ✅ Verified (100%) |
@@ -111,7 +111,7 @@ The following matrix documents the complete technical realization of all twelve 
 
 ## 4. Verification & Validation Protocol
 
-All twelve functional parameters are systematically protected against regressions through an automated test suite comprising 94 tests across 9 suites:
+All twelve functional parameters are systematically protected against regressions through an automated test suite comprising 119 tests across 14 suites:
 - `src/test/aqiBreakpoints.test.ts`: Mathematical rigor of EPA sub-index and concentration calculations.
 - `src/test/aqiCommute.test.ts`: Commute dose equations and transit modal emission metrics.
 - `src/test/aqiIaq.test.ts`: CADR volume requirements, clearance times, and atmospheric lapse rate modeling.

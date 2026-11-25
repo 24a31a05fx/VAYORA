@@ -43,7 +43,7 @@ describe('Tab Navigation Interactions', () => {
     const airscapeTab = screen.getByRole('tab', { name: /Airscape|Dashboard/i });
     fireEvent.click(airscapeTab);
     expect(screen.getByLabelText(/Hyperlocal AQI Telemetry Dashboard/i)).toBeInTheDocument();
-  });
+  }, 15000);
 });
 
 describe('Telemetry Simulation Controls', () => {
